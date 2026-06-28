@@ -7,7 +7,7 @@ const addCategory = async (req, res) => {
 
     try {
 
-        const { name, description } = req.body;
+        const { name, description, imageUrl } = req.body;
 
         const categoryExists = await Category.findOne({
             name
@@ -21,7 +21,8 @@ const addCategory = async (req, res) => {
 
         const category = await Category.create({
             name,
-            description
+            description,
+            imageUrl
         });
 
         res.status(201).json({

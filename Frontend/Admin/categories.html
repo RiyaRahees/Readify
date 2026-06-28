@@ -101,6 +101,18 @@
                     placeholder="Category description"></textarea>
             </div>
 
+            <div class="mb-4">
+                <label class="block text-sm font-semibold mb-2">
+                    Category Background Image URL (Optional)
+                </label>
+
+                <input
+                    type="url"
+                    id="categoryImageUrl"
+                    class="w-full border rounded-lg p-3"
+                    placeholder="e.g. https://images.unsplash.com/photo-...">
+            </div>
+
             <button
                 type="submit"
                 class="w-full bg-blue-950 text-white py-3 rounded-lg font-semibold">
@@ -410,6 +422,9 @@ document.getElementById("categoryForm")
     const description =
         document.getElementById("categoryDescription").value;
 
+    const imageUrl =
+        document.getElementById("categoryImageUrl").value;
+
     try {
 
         const response = await fetch(
@@ -421,7 +436,8 @@ document.getElementById("categoryForm")
                 },
                 body: JSON.stringify({
                     name,
-                    description
+                    description,
+                    imageUrl
                 })
             }
         );

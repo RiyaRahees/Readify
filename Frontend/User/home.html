@@ -121,7 +121,7 @@
                 <img src="images/readify_logo.png" alt="Readify Logo">
             </a>
 
-            <nav class="main-nav">
+            <nav class="main-nav" id="mainNav">
                 <a href="home.html" class="nav-link active">Home</a>
                 <a href="shop.html" class="nav-link">Shop</a>
                 <a href="contact.html" class="nav-link">Contact</a>
@@ -153,6 +153,15 @@
                     </svg>
                     <span class="cart-badge">3</span>
                 </a>
+                
+                <!-- Mobile Menu Toggle Button -->
+                <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle Menu">
+                    <svg class="hamburger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12" class="line-mid"></line>
+                        <line x1="3" y1="6" x2="21" y2="6" class="line-top"></line>
+                        <line x1="3" y1="18" x2="21" y2="18" class="line-bot"></line>
+                    </svg>
+                </button>
             </div>
         </div>
     </header>
@@ -457,24 +466,43 @@ if (token) {
                 grid.innerHTML = "";
 
                 const categoryImages = {
-                    "Fiction": "https://images.unsplash.com/photo-1474932430478-367dbb6832c1?auto=format&fit=crop&q=80&w=600",
-                    "Self-Help": "https://images.unsplash.com/photo-1491841573634-28140fc7ced7?auto=format&fit=crop&q=80&w=600",
-                    "Business": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600",
-                    "Technology": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=600"
+                    "fiction": "https://images.unsplash.com/photo-1474932430478-367dbb6832c1?auto=format&fit=crop&q=80&w=600",
+                    "self-help": "https://images.unsplash.com/photo-1491841573634-28140fc7ced7?auto=format&fit=crop&q=80&w=600",
+                    "business": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=600",
+                    "technology": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=600",
+                    "love": "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&q=80&w=600",
+                    "romantic": "https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?auto=format&fit=crop&q=80&w=600",
+                    "romance": "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&q=80&w=600",
+                    "novel": "https://images.unsplash.com/photo-1495640388908-05fa85288e61?auto=format&fit=crop&q=80&w=600",
+                    "novels": "https://images.unsplash.com/photo-1495640388908-05fa85288e61?auto=format&fit=crop&q=80&w=600"
                 };
                 const defaultCategoryImage = "https://images.unsplash.com/photo-1513001900722-370f803f498d?auto=format&fit=crop&q=80&w=600";
 
                 function getCategorySubtext(name, count) {
                     const countStr = count !== undefined ? `${count}+` : "Many";
-                    if (name.toLowerCase().includes("fiction")) return `${countStr} Masterpieces`;
-                    if (name.toLowerCase().includes("self-help")) return `${countStr} Curated`;
-                    if (name.toLowerCase().includes("business")) return `${countStr} Insights`;
-                    if (name.toLowerCase().includes("technology")) return `${countStr} Innovations`;
+                    const lower = name.toLowerCase();
+                    if (lower.includes("fiction")) return `${countStr} Masterpieces`;
+                    if (lower.includes("self-help")) return `${countStr} Curated`;
+                    if (lower.includes("business")) return `${countStr} Insights`;
+                    if (lower.includes("technology")) return `${countStr} Innovations`;
+                    if (lower.includes("love") || lower.includes("romance") || lower.includes("romantic")) return `${countStr} Stories`;
+                    if (lower.includes("novel")) return `${countStr} Literatures`;
                     return `${countStr} Books`;
                 }
 
                 categories.forEach(category => {
-                    const imgUrl = categoryImages[category.name] || defaultCategoryImage;
+                    let imgUrl = defaultCategoryImage;
+                    if (category.imageUrl && category.imageUrl.trim() !== "") {
+                        imgUrl = category.imageUrl.trim();
+                    } else {
+                        const normName = category.name.trim().toLowerCase();
+                        for (const key in categoryImages) {
+                            if (normName.includes(key)) {
+                                imgUrl = categoryImages[key];
+                                break;
+                            }
+                        }
+                    }
                     const subtext = getCategorySubtext(category.name, category.productCount);
 
                     grid.innerHTML += `
@@ -642,6 +670,25 @@ if (token) {
                 console.error(error);
                 alert("Something went wrong");
             }
+        }
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+        if (mobileMenuBtn && mainNav) {
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mainNav.classList.toggle('active');
+                mobileMenuBtn.classList.toggle('active');
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    mainNav.classList.remove('active');
+                    mobileMenuBtn.classList.remove('active');
+                }
+            });
         }
 
         // Run on load
