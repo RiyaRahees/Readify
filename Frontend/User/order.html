@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readify - My Orders</title>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Dashboard Core CSS -->
+    <link rel="stylesheet" href="nav_footer.css">
+    <link rel="stylesheet" href="dashboard.css">
+
+    <style>
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 100px;
+            /* Synced with sidebar top */
+            z-index: 10;
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover {
+            background: #f1f5f9;
+            color: var(--text-main);
+        }
+
+        .filter-btn.active {
+            background: var(--primary-gradient);
+            color: #fff;
+        }
+
+
+
+        /* Order Tracking Timeline */
+        .tracking-timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-top: 30px;
+            padding: 0 10px;
+        }
+
+        .tracking-timeline::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .step-dot {
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+        }
+
+        .step.completed .step-dot {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .step.completed::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: -50%;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-color);
+            z-index: -1;
+        }
+
+        .step:first-child::after {
+            display: none;
+        }
+
+        .step-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .step.completed .step-label {
+            color: var(--text-main);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sticky Header -->
+    <header>
+        <div class="container header-top">
+            <a href="home.html" class="logo">
+                <img src="images/readify_logo.png" alt="Readify Logo">
+            </a>
+
+            <nav class="main-nav">
+                <a href="home.html" class="nav-link">Home</a>
+                <a href="shop.html" class="nav-link">Shop</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="blog.html" class="nav-link">Blog</a>
+            </nav>
+
+            <div class="header-actions">
+                <a href="profile.html" class="action-item" aria-label="Account">
+                    <i data-lucide="user"></i>
+                </a>
+                <a href="wishlist.html" class="action-item" aria-label="Wishlist">
+                    <i data-lucide="heart"></i>
+                </a>
+                <a href="cart.html" class="action-item" aria-label="Cart">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-badge">3</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="dash-container">
+        <div class="dashboard-layout">
+
+            <!-- Fixed Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-user">
+                    <div class="user-avatar-wrapper">
+                        <img src="https://ui-avatars.com/api/?name=Riya+Rahees&background=6366f1&color=fff&size=128"
+                            alt="Riya Rahees">
+                        <div class="status-dot"></div>
+                    </div>
+                    <h5>Riya Rahees</h5>
+                    <p>Premium Member</p>
+                </div>
+
+                <nav class="sidebar-menu">
+                    <a href="profile.html" class="menu-item">
+                        <i data-lucide="user"></i> My Profile
+                    </a>
+                    <a href="order.html" class="menu-item active">
+                        <i data-lucide="package"></i> Orders
+                    </a>
+                    <a href="wishlist.html" class="menu-item">
+                        <i data-lucide="heart"></i> Wishlist
+                    </a>
+                    <a href="address.html" class="menu-item">
+                        <i data-lucide="map-pin"></i> Address Book
+                    </a>
+                    <a href="wallet.html" class="menu-item">
+                        <i data-lucide="wallet"></i> Wallet
+                    </a>
+                    <a href="coupons.html" class="menu-item">
+                        <i data-lucide="ticket"></i> Coupons
+                    </a>
+                    <a href="login.html" class="menu-item logout-item">
+                        <i data-lucide="log-out"></i> Logout
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="container-fluid">
+
+                    <div class="d-flex justify-content-between align-items-end mb-4">
+                        <div>
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-2">
+                                    <li class="breadcrumb-item"><a href="home.html"
+                                            class="text-decoration-none text-muted">Home</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">My Orders</li>
+                                </ol>
+                            </nav>
+                            <h2 class="fw-bold mb-0">Track Your Orders</h2>
+                        </div>
+                    </div>
+
+                    <!-- Sticky Filter Bar -->
+                    <div class="filter-bar">
+                        <button class="filter-btn active" onclick="filterOrders(this, 'all')">All Orders</button>
+                        <button class="filter-btn" onclick="filterOrders(this, 'pending')">Pending</button>
+                        <button class="filter-btn" onclick="filterOrders(this, 'delivered')">Delivered</button>
+                        <button class="filter-btn" onclick="filterOrders(this, 'cancelled')">Cancelled</button>
+                    </div>
+
+                    <!-- Order Cards Container -->
+                    <div class="orders-list" id="ordersContainer">
+
+    <div class="text-center p-5">
+        Loading Orders...
+    </div>
+
+</div>
+
+
+
+                </div>
+            </main>
+        </div>
+    </main>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Initialize Lucide -->
+    <script>
+        lucide.createIcons();
+    </script>
+
+    <script>
+
+const userId =
+    localStorage.getItem("userId");
+
+let allOrdersList = [];
+
+async function loadOrders() {
+    try {
+        const response = await fetch(
+            `http://localhost:5000/api/orders/user/${userId}`
+        );
+        allOrdersList = await response.json();
+        renderOrders(allOrdersList);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function renderOrders(orders) {
+    const container = document.getElementById("ordersContainer");
+    if (!container) return;
+
+    if (!orders.length) {
+        container.innerHTML = `
+            <div class="premium-card p-5 text-center">
+                <h4>No Orders Found</h4>
+                <a href="shop.html" class="btn-premium mt-3">
+                    Start Shopping
+                </a>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = orders.map(order => {
+        const firstItem = order.items[0];
+        const image = firstItem?.product?.image || "";
+        const productName = firstItem?.product?.name || "Product";
+        const orderDate = new Date(order.createdAt).toLocaleDateString();
+
+        let badgeClass = "status-pending";
+        if (order.orderStatus === "Delivered") {
+            badgeClass = "status-delivered";
+        }
+        if (order.orderStatus === "Cancelled") {
+            badgeClass = "status-cancelled";
+        }
+
+        return `
+            <div class="premium-card order-card">
+                <div class="order-header">
+                    <div>
+                        <span class="order-id">
+                            Order #${order._id.slice(-6).toUpperCase()}
+                        </span>
+                        <span class="mx-2 text-muted">•</span>
+                        <span class="order-date">
+                            ${orderDate}
+                        </span>
+                    </div>
+                    <span class="order-status-badge ${badgeClass}">
+                        ${order.orderStatus}
+                    </span>
+                </div>
+                <div class="order-body">
+                    <img src="${image}" class="order-product-img">
+                    <div class="order-product-info flex-grow-1">
+                        <h5>${productName}</h5>
+                        <p>${order.items.length} item(s)</p>
+                        <p class="fw-bold text-dark mt-2">₹${order.total}</p>
+                    </div>
+                    <div class="order-actions d-flex flex-column gap-2">
+                        <button class="btn-premium" onclick="viewOrder('${order._id}')">
+                            View Order
+                        </button>
+                    </div>
+                </div>
+                ${generateTimeline(order.orderStatus)}
+            </div>
+        `;
+    }).join("");
+}
+
+function filterOrders(btn, status) {
+    // 1. Toggle active classes on tab buttons
+    const buttons = document.querySelectorAll(".filter-btn");
+    buttons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    // 2. Filter list based on selected state
+    if (status === "all") {
+        renderOrders(allOrdersList);
+    } else {
+        const filtered = allOrdersList.filter(order => {
+            const orderStatusLower = order.orderStatus.toLowerCase();
+            return orderStatusLower === status.toLowerCase();
+        });
+        renderOrders(filtered);
+    }
+}
+
+function generateTimeline(status) {
+
+    const steps = [
+
+        "Pending",
+        "Processed",
+        "Shipped",
+        "Delivered"
+
+    ];
+
+    let current = 0;
+
+    if(status === "Processed")
+        current = 1;
+
+    if(status === "Shipped")
+        current = 2;
+
+    if(status === "Delivered")
+        current = 3;
+
+    return `
+
+    <div class="tracking-timeline">
+
+        ${steps.map((step,index)=>`
+
+            <div
+            class="step
+            ${index <= current
+            ? "completed"
+            : ""}">
+
+                <div
+                class="step-dot">
+
+                </div>
+
+                <div
+                class="step-label">
+
+                    ${step}
+
+                </div>
+
+            </div>
+
+        `).join("")}
+
+    </div>
+
+    `;
+}
+
+function viewOrder(orderId){
+
+    window.location.href =
+    `order-details.html?orderId=${orderId}`;
+
+}
+
+loadOrders();
+
+</script>
+</body>
+
+</html>

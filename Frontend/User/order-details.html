@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Readify - Order Details</title>
+
+    <link rel="stylesheet" href="nav_footer.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", sans-serif;
+        }
+
+        body {
+            background: #f6f7fb;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1300px;
+            margin: auto;
+        }
+
+        .page-title {
+            margin: 40px 0 20px;
+        }
+
+        .page-title h1 {
+            font-size: 40px;
+            color: #1e293b;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.05);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .order-header h2 {
+            font-size: 30px;
+        }
+
+        .status {
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+        }
+
+        .Pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .Processed {
+            background: #DBEAFE;
+            color: #1D4ED8;
+        }
+
+        .Shipped {
+            background: #E0E7FF;
+            color: #4338CA;
+        }
+
+        .Delivered {
+            background: #DCFCE7;
+            color: #15803D;
+        }
+
+        .tracking {
+            display: flex;
+            justify-content: space-between;
+            margin: 50px 0;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .step::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: #e5e7eb;
+            top: 18px;
+            left: 50%;
+            z-index: 1;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .dot {
+            width: 40px;
+            height: 40px;
+            background: #d1d5db;
+            border-radius: 50%;
+            margin: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .completed .dot {
+            background: #4F46E5;
+        }
+
+        .step p {
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .products {
+            margin-top: 30px;
+        }
+
+        .product {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .product img {
+            width: 90px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .product-info h4 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .box {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .box h3 {
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .total {
+            margin-top: 20px;
+            border-top: 2px dashed #ddd;
+            padding-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #4F46E5;
+        }
+
+        .actions {
+            margin-top: 40px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .primary {
+            background: #4F46E5;
+            color: white;
+        }
+
+        .secondary {
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        @media(max-width:768px){
+
+            .grid{
+                grid-template-columns:1fr;
+            }
+
+            .tracking{
+                flex-wrap:wrap;
+                gap:20px;
+            }
+
+            .order-header{
+                flex-direction:column;
+                gap:15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+ <!-- Sticky Header -->
+    <header>
+        <div class="container header-top">
+            <a href="home.html" class="logo">
+                <img src="images/readify_logo.png" alt="Readify Logo">
+            </a>
+
+            <nav class="main-nav">
+                <a href="home.html" class="nav-link">Home</a>
+                <a href="shop.html" class="nav-link">Shop</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="blog.html" class="nav-link">Blog</a>
+            </nav>
+
+            <div class="header-actions">
+                <a href="profile.html" class="action-item" aria-label="Account">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+                <a href="wishlist.html" class="action-item" aria-label="Wishlist">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                        </path>
+                    </svg>
+                </a>
+                <a href="cart.html" class="action-item" aria-label="Cart">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-badge">3</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+
+<section class="container">
+
+    <div class="page-title">
+        <h1>Order Details</h1>
+    </div>
+
+    <div class="order-card">
+
+        <div class="order-header">
+
+            <div>
+
+                <h2 id="orderNumber">
+                    Order #----
+                </h2>
+
+                <p id="orderDate">
+                    Loading...
+                </p>
+
+            </div>
+
+            <span
+                id="orderStatus"
+                class="status">
+
+                Pending
+
+            </span>
+
+        </div>
+
+        <div
+            id="tracking"
+            class="tracking">
+
+        </div>
+
+        <h2>
+            Ordered Items
+        </h2>
+
+        <div
+            id="productsContainer"
+            class="products">
+
+        </div>
+
+        <div class="grid">
+
+            <div class="box">
+
+                <h3>
+                    Delivery Address
+                </h3>
+
+                <div id="addressBox">
+
+                </div>
+
+            </div>
+
+            <div class="box">
+
+                <h3>
+                    Order Summary
+                </h3>
+
+                <div id="summaryBox">
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="actions">
+
+    <button
+        onclick="window.location.href='order.html'"
+        class="btn primary">
+        Back To Orders
+    </button>
+
+    <!-- <button
+        onclick="cancelOrder()"
+        id="cancelBtn"
+        class="btn"
+        style="background:#dc2626;color:white;">
+        Cancel Order
+    </button> -->
+
+    <button
+        onclick="window.location.href='shop.html'"
+        class="btn secondary">
+        Continue Shopping
+    </button>
+
+</div>
+
+    </div>
+
+</section>
+
+  <!-- Modern Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="home.html" class="logo">
+                        <img src="images/readify_logo.png" alt="Readify Logo">
+                    </a>
+                    <p class="footer-text">Your one-stop destination for discovering, reading, and buying the best books
+                        across all genres with unbeatable prices.</p>
+
+                    <div class="trust-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        Secure Checkout Guaranteed
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-heading">Company</h4>
+                    <div class="footer-links">
+                        <a href="blog.html">About Us</a>
+                        <a href="info.html">Delivery Information</a>
+                        <a href="info.html">Privacy Policy</a>
+                        <a href="info.html">Terms & Conditions</a>
+                        <a href="contact.html">Contact Us</a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-heading">Categories</h4>
+                    <div class="footer-links">
+                        <a href="shop.html">Fiction</a>
+                        <a href="shop.html">Self-Help</a>
+                        <a href="shop.html">Business & Finance</a>
+                        <a href="shop.html">Technology</a>
+                        <a href="shop.html">Romance</a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-heading">Contact Info</h4>
+                    <div class="contact-list">
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            51 Green St. Huntington, NY 11746, USA
+                        </div>
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                </path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            support@readify.com
+                        </div>
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                </path>
+                            </svg>
+                            +1 (555) 123-4567
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </footer>
+
+<script>
+
+const orderId =
+new URLSearchParams(
+window.location.search
+).get("orderId");
+
+async function loadOrder(){
+
+    try{
+
+        const response =
+        await fetch(
+        `http://localhost:5000/api/orders/${orderId}`
+        );
+
+        const order =
+        await response.json();
+
+        document.getElementById(
+        "orderNumber"
+        ).innerText =
+        `Order #${order._id.slice(-6).toUpperCase()}`;
+
+        document.getElementById(
+        "orderDate"
+        ).innerText =
+        new Date(
+        order.createdAt
+        ).toLocaleDateString();
+
+        document.getElementById(
+        "orderStatus"
+        ).innerText =
+        order.orderStatus;
+
+        if (
+    order.orderStatus === "Delivered" ||
+    order.orderStatus === "Cancelled"
+) {
+    document.getElementById("cancelBtn").style.display = "none";
+}
+
+        document.getElementById(
+        "orderStatus"
+        ).classList.add(
+        order.orderStatus
+        );
+
+        loadTracking(
+        order.orderStatus
+        );
+
+        document.getElementById(
+        "productsContainer"
+        ).innerHTML =
+
+        order.items.map(item => `
+
+            <div class="product">
+
+    <img src="${item.product.image}">
+
+    <div class="product-info">
+
+        <h4>
+            ${item.product.name}
+        </h4>
+
+        <p>
+            Quantity : ${item.quantity}
+        </p>
+
+        <p>
+            ₹${item.price}
+        </p>
+
+        ${
+            item.status === "Cancelled"
+            ?
+            `<span style="
+                color:red;
+                font-weight:bold;
+            ">
+                Cancelled
+            </span>`
+            :
+            `
+            <button
+                onclick="showCancelReason(
+                    '${order._id}',
+                    '${item.product._id}'
+                )"
+                style="
+                    margin-top:10px;
+                    background:#dc2626;
+                    color:white;
+                    border:none;
+                    padding:8px 16px;
+                    border-radius:8px;
+                    cursor:pointer;
+                "
+            >
+                Cancel Item
+            </button>
+            `
+        }
+
+    </div>
+
+</div>
+
+
+        `).join("");
+
+        document.getElementById(
+        "addressBox"
+        ).innerHTML = `
+
+            <p>
+                ${order.address.fullName}
+            </p>
+
+            <p>
+                ${order.address.fullAddress}
+            </p>
+
+            <p>
+                ${order.address.city},
+                ${order.address.state}
+            </p>
+
+            <p>
+                PIN :
+                ${order.address.zip}
+            </p>
+
+            <p>
+                ${order.address.phone}
+            </p>
+
+        `;
+
+        document.getElementById(
+        "summaryBox"
+        ).innerHTML = `
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span>₹${order.subtotal}</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Shipping</span>
+                <span>₹${order.shipping}</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Tax</span>
+                <span>₹${order.tax}</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Discount</span>
+                <span style="color:green">
+                -₹${order.discount}
+                </span>
+            </div>
+
+            <div class="summary-row">
+                <span>Payment</span>
+                <span>
+                ${order.paymentMethod}
+                </span>
+            </div>
+
+            <div class="summary-row">
+                <span>Delivery</span>
+                <span>
+                ${order.deliveryMethod}
+                </span>
+            </div>
+
+            <div class="total">
+                ₹${order.total}
+            </div>
+
+        `;
+
+    }catch(error){
+
+        console.log(error);
+
+    }
+
+}
+
+
+function loadTracking(status){
+
+    const steps = [
+        "Pending",
+        "Processed",
+        "Shipped",
+        "Delivered"
+    ];
+
+    let current = 0;
+
+    if(status === "Processed")
+    current = 1;
+
+    if(status === "Shipped")
+    current = 2;
+
+    if(status === "Delivered")
+    current = 3;
+
+    document.getElementById(
+    "tracking"
+    ).innerHTML =
+
+    steps.map((step,index)=>`
+
+        <div class="step
+        ${index <= current
+        ? "completed"
+        : ""}">
+
+            <div class="dot">
+
+            </div>
+
+            <p>
+                ${step}
+            </p>
+
+        </div>
+
+    `).join("");
+
+}
+async function cancelOrder() {
+
+    const confirmCancel = confirm(
+        "Are you sure you want to cancel this order?"
+    );
+
+    if (!confirmCancel) return;
+
+    try {
+
+        const response = await fetch(
+            `http://localhost:5000/api/orders/${orderId}/cancel`,
+            {
+                method: "PATCH"
+            }
+        );
+
+        const data = await response.json();
+
+        if (data.success) {
+
+            alert("Order cancelled successfully");
+
+            location.reload();
+
+        } else {
+
+            alert(data.message);
+
+        }
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+}
+
+loadOrder();
+
+
+
+</script>
+
+<div
+    id="reasonModal"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.5);
+        z-index:9999;
+    "
+>
+
+    <div
+        style="
+            width:450px;
+            background:white;
+            padding:25px;
+            border-radius:15px;
+            margin:120px auto;
+        "
+    >
+
+        <h3>Why are you cancelling?</h3>
+
+        <select
+            id="cancelReason"
+            style="
+                width:100%;
+                padding:10px;
+                margin-top:15px;
+            "
+        >
+            <option value="">
+                Select Reason
+            </option>
+
+            <option value="Ordered by mistake">
+                Ordered by mistake
+            </option>
+
+            <option value="Found better price">
+                Found better price
+            </option>
+
+            <option value="Delivery too slow">
+                Delivery too slow
+            </option>
+
+            <option value="Changed my mind">
+                Changed my mind
+            </option>
+
+        </select>
+
+        <textarea
+            id="cancelComment"
+            placeholder="Additional comments"
+            style="
+                width:100%;
+                height:100px;
+                margin-top:15px;
+                padding:10px;
+            "
+        ></textarea>
+
+        <div
+            style="
+                display:flex;
+                justify-content:end;
+                gap:10px;
+                margin-top:15px;
+            "
+        >
+
+            <button onclick="closeReasonModal()">
+                Close
+            </button>
+
+            <button
+                onclick="confirmCancelItem()"
+                style="
+                    background:red;
+                    color:white;
+                    border:none;
+                    padding:10px 20px;
+                "
+            >
+                Confirm
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    let selectedOrder = "";
+let selectedProduct = "";
+
+function showCancelReason(
+    orderId,
+    productId
+){
+
+    selectedOrder = orderId;
+    selectedProduct = productId;
+
+    document
+        .getElementById("reasonModal")
+        .style.display = "block";
+}
+
+function closeReasonModal(){
+
+    document
+        .getElementById("reasonModal")
+        .style.display = "none";
+}
+
+
+    async function confirmCancelItem(){
+
+    const reason =
+        document.getElementById(
+            "cancelReason"
+        ).value;
+
+    const comment =
+        document.getElementById(
+            "cancelComment"
+        ).value;
+
+    if(!reason){
+
+        alert(
+            "Please select a reason"
+        );
+
+        return;
+    }
+
+    const response = await fetch(
+        `http://localhost:5000/api/orders/${selectedOrder}/cancel-item`,
+        {
+            method:"PATCH",
+
+            headers:{
+                "Content-Type":
+                "application/json"
+            },
+
+            body:JSON.stringify({
+
+                productId:selectedProduct,
+
+                reason,
+
+                comment
+
+            })
+        }
+    );
+
+    const data =
+        await response.json();
+
+    if(data.success){
+
+        alert(
+            "Item cancelled successfully"
+        );
+
+        location.reload();
+    }
+}
+</script>
+</body>
+</html>

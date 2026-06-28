@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paradox - Readify Bookstore</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="nav_footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --text-dark: #2D2926;
+            --text-light: #7D7C7A;
+            --border-color: #E5E4E2;
+            --bg-light: #FAF9F6;
+            --white: #ffffff;
+            --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Access Denied Blocker modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            max-width: 450px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+        .modal-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(91, 75, 255, 0.1);
+            margin: 0 auto;
+        }
+        .btn-modal-primary {
+            background-color: #5B4BFF !important;
+            border-color: #5B4BFF !important;
+            color: #fff !important;
+            transition: all 0.3s ease;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 600;
+            display: block;
+            text-align: center;
+            text-decoration: none;
+        }
+        .btn-modal-primary:hover {
+            background-color: #4338CA !important;
+            border-color: #4338CA !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(91, 75, 255, 0.3);
+        }
+        .btn-modal-secondary {
+            background-color: transparent !important;
+            border: 2px solid #e2e8f0 !important;
+            color: #64748b !important;
+            transition: all 0.3s ease;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 600;
+            display: block;
+            text-align: center;
+            cursor: pointer;
+        }
+        .btn-modal-secondary:hover {
+            background-color: #f8fafc !important;
+            border-color: #cbd5e1 !important;
+            color: #1e293b !important;
+            transform: translateY(-2px);
+        }
+
+        /* Premium Toast Notification styling */
+        .toast-notification {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: white;
+            border-left: 4px solid #10b981;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0,0,0,0.05);
+            padding: 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 9999;
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            max-width: 320px;
+        }
+        .toast-notification.show {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .toast-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .toast-success {
+            border-left-color: #10b981;
+        }
+        .toast-success .toast-icon {
+            background-color: #ecfdf5;
+            color: #10b981;
+        }
+        .toast-error {
+            border-left-color: #ef4444;
+        }
+        .toast-error .toast-icon {
+            background-color: #fef2f2;
+            color: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- PRODUCT LAYOUT --- */
+        .product-section {
+            padding: 20px 0;
+        }
+
+        .product-card-container {
+            background: var(--white);
+            border-radius: 40px;
+            padding: 30px;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.05);
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 50px;
+            align-items: start;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Image Side */
+        .product-gallery {
+            position: sticky;
+            top: 120px;
+        }
+
+        .main-image-wrapper {
+            width: 100%;
+            max-height: 480px;
+            border-radius: 24px;
+            overflow: hidden;
+            background: var(--bg-light);
+            box-shadow: var(--shadow-premium);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-image-wrapper img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: var(--transition);
+        }
+
+        .thumbnail-grid {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .thumbnail-item {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--bg-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+        }
+
+        .thumbnail-item:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .thumbnail-item.active {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .thumbnail-item img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* Info Side */
+        .product-info-side {
+            padding-top: 10px;
+        }
+
+        .product-badge {
+            display: inline-block;
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 100px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .product-title {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 4px;
+            letter-spacing: -0.02em;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .product-author {
+            font-size: 16px;
+            color: var(--text-light);
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .rating-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .stars {
+            color: #FFB400;
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+
+        .review-count {
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .price-container {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .current-price {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .old-price {
+            font-size: 24px;
+            color: var(--text-light);
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding: 24px;
+            background: var(--bg-light);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .spec-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .spec-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .spec-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .purchase-zone {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            background: var(--bg-light);
+            border-radius: 16px;
+            padding: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .qty-btn {
+            width: 44px;
+            height: 44px;
+            border: none;
+            background: transparent;
+            font-size: 20px;
+            color: var(--text-dark);
+            cursor: pointer;
+            border-radius: 12px;
+            transition: var(--transition);
+        }
+
+        .qty-btn:hover {
+            background: var(--white);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .qty-number {
+            width: 50px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 18px;
+            border: none;
+            background: transparent;
+            outline: none;
+        }
+
+        .btn-add-cart {
+            flex: 1;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 18px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-add-cart:hover {
+            background: var(--primary-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-wishlist {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            border: 1px solid var(--border-color);
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-light);
+        }
+
+        .btn-wishlist:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        /* Tabs Section */
+        .tabs-section {
+            margin-top: 80px;
+        }
+
+        .tabs-nav {
+            display: flex;
+            gap: 40px;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+
+        .tab-trigger {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-light);
+            padding-bottom: 20px;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .tab-trigger.active {
+            color: var(--primary);
+        }
+
+        .tab-trigger.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .tab-content {
+            font-size: 18px;
+            color: var(--text-light);
+            line-height: 1.8;
+            max-width: 900px;
+        }
+
+        /* Related Products */
+        .related-section {
+            padding: 60px 0 20px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 60px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .book-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 24px;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .book-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--border-color);
+            box-shadow: var(--shadow-premium);
+        }
+
+        .book-card-img {
+            width: 100%;
+            aspect-ratio: 2/3;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .book-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .book-card h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .book-card .author {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+
+        .book-card .price {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        @media (max-width: 1024px) {
+            .product-card-container {
+                grid-template-columns: 1fr;
+                gap: 50px;
+                padding: 40px;
+            }
+
+            .product-gallery {
+                position: static;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+
+            .related-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .product-title {
+                font-size: 36px;
+            }
+
+            .purchase-zone {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sticky Header -->
+    <header>
+        <div class="container header-top">
+            <a href="home.html" class="logo">
+                <img src="images/readify_logo.png" alt="Readify Logo">
+            </a>
+
+            <nav class="main-nav">
+                <a href="home.html" class="nav-link">Home</a>
+                <a href="shop.html" class="nav-link">Shop</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="blog.html" class="nav-link">Blog</a>
+            </nav>
+
+            <div class="header-actions">
+                <a href="profile.html" class="action-item" aria-label="Account">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+                <a href="wishlist.html" class="action-item" aria-label="Wishlist">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                        </path>
+                    </svg>
+                </a>
+                <a href="cart.html" class="action-item" aria-label="Cart">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-badge">3</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="product-section">
+            <div class="container">
+                <div class="product-card-container">
+                    <!-- Left: Gallery -->
+                    <div class="product-gallery">
+                        <div class="main-image-wrapper">
+                            <img id="productImage" src="" alt="Product">
+                        </div>
+                        <div class="thumbnail-grid">
+                            <div class="thumbnail-item active" onclick="changeImage(this, 'images/paradox.png')">
+                                <img src="images/paradox.png" alt="Paradox View 1">
+                            </div>
+                            <div class="thumbnail-item" onclick="changeImage(this, 'images/before_you_quit_job.png')">
+                                <img src="images/before_you_quit_job.png" alt="Paradox View 2">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Info -->
+                    <div class="product-info-side">
+                        <span class="product-badge" id="productCategory">
+                        </span>
+                        <h1 class="product-title" id="productName">
+                        </h1>
+                        <p class="product-author">by Margarita Perez</p>
+
+                        <div class="price-container">
+                            <span class="current-price" id="productPrice">
+                            </span>
+                            <span class="old-price" id="productDiscount">
+                            </span>
+                        </div>
+
+                        <div class="specs-grid">
+                            <div class="spec-item">
+                                <span class="spec-label">Language</span>
+                                <span class="spec-value">English</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Page Count</span>
+                                <span class="spec-value">384 Pages</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Publisher</span>
+                                <span class="spec-value">Orbit Books</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Genre</span>
+                                <span class="spec-value">Sci-Fi Thriller</span>
+                            </div>
+                        </div>
+
+                        <div class="purchase-zone">
+                            <div class="qty-control">
+                                <button class="qty-btn" onclick="updateQty(-1)">-</button>
+                                <input type="number" id="qty-input" class="qty-number" value="1" min="1" readonly>
+                                <button class="qty-btn" onclick="updateQty(1)">+</button>
+                            </div>
+                            <button class="btn-add-cart" id="addToCartBtn">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="9" cy="21" r="1"></circle>
+                                    <circle cx="20" cy="21" r="1"></circle>
+                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                </svg>
+                                Add to Cart
+                            </button>
+                            <button class="btn-wishlist" id="wishlistBtn">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Tabs -->
+                        <div class="tabs-section">
+                            <div class="tabs-nav">
+                                <div class="tab-trigger active" onclick="switchTab(this, 'desc')">Description</div>
+                                <div class="tab-trigger" onclick="switchTab(this, 'info')">Information</div>
+                            </div>
+                            <div class="tab-content" id="productDescription">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Related Products -->
+                <section class="related-section">
+                    <div class="section-header">
+                        <h2>You May Also Like</h2>
+                        <a href="shop.html" style="color: var(--primary); font-weight: 700; font-size: 14px;">View All
+                            Items →</a>
+                    </div>
+                    <div class="related-grid" id="relatedProductsGrid">
+                        <!-- Dynamic related products will be loaded here -->
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modern Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="home.html" class="logo">
+                        <img src="images/readify_logo.png" alt="Readify Logo">
+                    </a>
+                    <p class="footer-text">Your one-stop destination for discovering, reading, and buying the best books
+                        across all genres with unbeatable prices.</p>
+
+                    <div class="trust-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        Secure Checkout Guaranteed
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-heading">Company</h4>
+                    <div class="footer-links">
+                        <a href="blog.html">About Us</a>
+                        <a href="info.html">Delivery Information</a>
+                        <a href="info.html">Privacy Policy</a>
+                        <a href="info.html">Terms & Conditions</a>
+                        <a href="contact.html">Contact Us</a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-heading">Categories</h4>
+                    <div class="footer-links">
+                        <a href="shop.html">Fiction</a>
+                        <a href="shop.html">Self-Help</a>
+                        <a href="shop.html">Business & Finance</a>
+                        <a href="shop.html">Technology</a>
+                        <a href="shop.html">Romance</a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-heading">Contact Info</h4>
+                    <div class="contact-list">
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            51 Green St. Huntington, NY 11746, USA
+                        </div>
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                </path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            support@readify.com
+                        </div>
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                </path>
+                            </svg>
+                            +1 (555) 123-4567
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </footer>
+
+    <!-- Login Required Modal -->
+    <div id="loginRequiredModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-icon mb-4">
+                <i class="fa-solid fa-lock" style="font-size: 32px; color: #5B4BFF;"></i>
+            </div>
+            <h3 class="fw-bold text-dark mb-2" style="font-size: 20px; font-weight: 800; margin-bottom: 8px;">Login Required</h3>
+            <p class="text-muted mb-4" style="font-size: 13.5px; color: #64748b; margin-bottom: 24px; line-height: 1.5;">You are not logged in. Please log in to add items to your cart or wishlist.</p>
+            <div class="d-flex flex-column gap-2" style="display: flex; flex-direction: column; gap: 8px;">
+                <a href="login.html" class="btn-modal-primary">Log In Now</a>
+                <button onclick="closeLoginModal()" class="btn-modal-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+   <script>
+        // Custom Premium Toast Notification function
+        function showToast(message, type = 'success') {
+            let existingToast = document.querySelector('.toast-notification');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            const toast = document.createElement('div');
+            toast.className = `toast-notification toast-${type}`;
+            
+            const icon = type === 'success' 
+                ? '<i class="fa-solid fa-circle-check"></i>' 
+                : '<i class="fa-solid fa-circle-xmark"></i>';
+                
+            toast.innerHTML = `
+                <div class="toast-icon text-sm">
+                    ${icon}
+                </div>
+                <div>
+                    <h5 class="text-xs font-bold text-slate-800">${type === 'success' ? 'Success' : 'Error'}</h5>
+                    <p class="text-[11px] text-slate-500 mt-0.5">${message}</p>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 400);
+            }, 3000);
+        }
+
+        function openLoginModal() {
+            document.getElementById("loginRequiredModal").style.display = "flex";
+        }
+
+        function closeLoginModal() {
+            document.getElementById("loginRequiredModal").style.display = "none";
+        }
+
+    const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+
+let availableStock = 0;
+
+async function loadProduct() {
+    try {
+
+        const response = await fetch(
+            `http://localhost:5000/api/products/${productId}`
+        );
+
+        const product = await response.json();
+
+        availableStock = product.stock;
+
+        document.getElementById("productName").textContent = product.name;
+        document.getElementById("productCategory").textContent =
+            product.category?.name || "Category";
+        document.getElementById("productPrice").textContent =
+            "₹" + product.price;
+        document.getElementById("productDiscount").textContent =
+            "₹" + product.discountPrice;
+        document.getElementById("productDescription").textContent =
+            product.description;
+        document.getElementById("productImage").src =
+            product.image;
+
+        // Out of stock
+        if (availableStock <= 0) {
+
+            document.getElementById("qty-input").value = 0;
+
+            document.querySelectorAll(".qty-btn").forEach(btn => {
+                btn.disabled = true;
+            });
+
+            const cartBtn = document.getElementById("addToCartBtn");
+
+            cartBtn.disabled = true;
+            cartBtn.innerText = "Out of Stock";
+            cartBtn.style.opacity = "0.6";
+            cartBtn.style.cursor = "not-allowed";
+        }
+
+    } catch (error) {
+        console.log("Error loading product:", error);
+    }
+}
+
+loadProduct();
+
+async function loadRelatedProducts() {
+    try {
+        const response = await fetch("http://localhost:5000/api/products");
+        const products = await response.json();
+        const relatedGrid = document.getElementById("relatedProductsGrid");
+        if (!relatedGrid) return;
+        
+        relatedGrid.innerHTML = "";
+        
+        // Filter out the current product and limit to 4
+        const displayProducts = products
+            .filter(p => p._id !== productId)
+            .slice(0, 4);
+            
+        if (displayProducts.length === 0) {
+            relatedGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-light); padding: 20px;">No related products found.</div>`;
+            return;
+        }
+        
+        displayProducts.forEach(product => {
+            relatedGrid.innerHTML += `
+                <div class="book-card" onclick="window.location.href='productdeatil.html?id=${product._id}'" style="cursor: pointer;">
+                    <div class="book-card-img">
+                        <img src="${product.image || 'images/default-book.png'}" alt="${product.name}">
+                    </div>
+                    <h4 class="truncate" style="margin-bottom: 8px;">${product.name}</h4>
+                    <p class="author" style="margin-bottom: 12px;">${product.category?.name || 'Book'}</p>
+                    <p class="price">₹${product.price}</p>
+                </div>
+            `;
+        });
+    } catch (error) {
+        console.error("Error loading related products:", error);
+    }
+}
+loadRelatedProducts();
+
+
+// ADD TO CART
+
+document
+    .getElementById("addToCartBtn")
+    .addEventListener("click", async () => {
+
+        try {
+
+            const userId = localStorage.getItem("userId");
+
+            if (!userId) {
+                openLoginModal();
+                return;
+            }
+
+            const quantity =
+                parseInt(document.getElementById("qty-input").value);
+
+            if (quantity > availableStock) {
+                showToast(`Only ${availableStock} item(s) available`, "error");
+                return;
+            }
+
+            const response = await fetch(
+                "http://localhost:5000/api/cart/add",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        userId,
+                        productId,
+                        quantity
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (response.ok) {
+
+                showToast("Product Added To Cart");
+                setTimeout(() => {
+                    window.location.href = "cart.html";
+                }, 1000);
+
+            } else {
+
+                showToast(data.message || "Failed To Add Product", "error");
+
+            }
+
+        } catch (error) {
+
+            console.log(error);
+            showToast("Something Went Wrong", "error");
+
+        }
+
+    });
+
+
+// ADD TO WISHLIST
+
+document
+    .getElementById("wishlistBtn")
+    .addEventListener("click", async () => {
+
+        try {
+
+            const userId = localStorage.getItem("userId");
+
+            if (!userId) {
+                openLoginModal();
+                return;
+            }
+
+            const response = await fetch(
+                "http://localhost:5000/api/wishlist/add",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        userId,
+                        productId
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (response.ok) {
+
+                showToast("Added To Wishlist");
+                setTimeout(() => {
+                    window.location.href = "wishlist.html";
+                }, 1000);
+
+            } else {
+
+                showToast(data.message, "error");
+
+            }
+
+        } catch (error) {
+
+            console.log(error);
+            showToast("Something went wrong", "error");
+
+        }
+
+    });
+
+
+// QUANTITY
+
+function updateQty(change) {
+
+    const qtyInput = document.getElementById("qty-input");
+
+    let quantity = parseInt(qtyInput.value) || 1;
+
+    if (change > 0) {
+
+        if (quantity >= availableStock) {
+            showToast(`Only ${availableStock} item(s) available`, "error");
+            return;
+        }
+
+        quantity++;
+
+    } else {
+
+        if (quantity > 1) {
+            quantity--;
+        }
+
+    }
+
+    qtyInput.value = quantity;
+}
+   </script>
+</body>
+
+</html>

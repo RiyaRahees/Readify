@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readify - Checkout</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="nav_footer.css">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --text-dark: #2D2926;
+            --text-light: #7D7C7A;
+            --border-color: #E5E4E2;
+            --bg-light: #FAF9F6;
+            --bg-body: #F8F9FF;
+            --white: #ffffff;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+            --transition: all 0.3s ease;
+        }
+
+        .wallet-popup{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.5);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:99999;
+}
+
+.wallet-popup-content{
+    background:#fff;
+    width:420px;
+    max-width:90%;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+
+.wallet-popup-content h3{
+    margin-bottom:15px;
+    color:#2D2926;
+}
+
+.wallet-popup-content p{
+    margin-bottom:20px;
+    line-height:1.7;
+}
+
+.wallet-popup-buttons{
+    display:flex;
+    gap:10px;
+}
+
+.wallet-popup-buttons button{
+    flex:1;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.wallet-popup-buttons button:first-child{
+    background:#4F46E5;
+    color:white;
+}
+
+.wallet-popup-buttons button:last-child{
+    background:#E5E7EB;
+}
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { color: var(--text-dark); background-color: var(--bg-body); line-height: 1.6; }
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- CHECKOUT LAYOUT --- */
+        .checkout-section { padding: 60px 0 80px; }
+        
+        .checkout-header {
+            margin-bottom: 40px;
+        }
+        .checkout-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+            align-items: stretch;
+        }
+
+        /* LEFT COLUMN: STEPS */
+        .checkout-steps {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .checkout-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checkout-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--bg-body);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .icon-box {
+            width: 44px;
+            height: 44px;
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Saved Addresses */
+        .address-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .address-card {
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .address-card:hover {
+            border-color: rgba(79, 70, 229, 0.3);
+            background: var(--bg-body);
+        }
+
+        .address-card.selected {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.03);
+        }
+
+        .address-card input[type="radio"] {
+            margin-top: 5px;
+            accent-color: var(--primary);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .address-details h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .address-badge {
+            font-size: 11px;
+            background: var(--bg-body);
+            color: var(--text-dark);
+            padding: 2px 8px;
+            border-radius: 100px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        
+        .address-details p {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .btn-add-address {
+            margin-top: 15px;
+            background: none;
+            border: 1px dashed var(--border-color);
+            color: var(--primary);
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-add-address:hover {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        /* Radio Options (Delivery/Payment) */
+        .radio-option {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: var(--transition);
+        }
+        .radio-option:hover {
+            border-color: rgba(79, 70, 229, 0.3);
+            background: var(--bg-body);
+        }
+        .radio-option.selected {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.03);
+        }
+        .radio-option input[type="radio"] {
+            accent-color: var(--primary);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .radio-option-text {
+            flex: 1;
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-dark);
+        }
+        .radio-option-price {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Order Notes */
+        textarea {
+            width: 100%;
+            height: 100px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            resize: none;
+            transition: var(--transition);
+        }
+        textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        /* RIGHT COLUMN: SUMMARY */
+        .summary-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: var(--shadow-premium);
+            border: 1px solid var(--border-color);
+            position: sticky;
+            top: 100px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .summary-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--bg-body);
+        }
+
+        .product-mini {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .product-mini:last-child {
+            border-bottom: none;
+            margin-bottom: 25px;
+            padding-bottom: 0;
+        }
+        .product-mini-img {
+            width: 60px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--bg-light);
+            flex-shrink: 0;
+        }
+        .product-mini-img img { width: 100%; height: 100%; object-fit: cover; }
+        .product-mini-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .product-mini-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: var(--text-dark); }
+        .product-mini-info p { font-size: 13px; color: var(--text-light); margin-bottom: 5px; }
+        .product-mini-info .price { font-weight: 800; color: var(--text-dark); font-size: 15px; }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: var(--text-light);
+        }
+        .summary-row.total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px dashed var(--border-color);
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+        .total-amount { color: var(--primary); }
+
+        .btn-checkout { 
+            display: block;
+            width: 100%;
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 18px; 
+            border-radius: 16px; 
+            font-size: 16px;
+            font-weight: 700; 
+            cursor: pointer; 
+            margin-top: 30px;
+            transition: var(--transition);
+            text-align: center;
+        }
+        .btn-checkout:hover {
+            background: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+        }
+
+        .loader-spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(248, 249, 255, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .page-transition-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .secure-loader-wrapper {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 35px;
+        }
+
+        .secure-loader-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 140%;
+            height: 140%;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.08) 0%, transparent 70%);
+            animation: pulseGlow 2s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .truck-icon {
+            width: 45px;
+            height: 45px;
+            color: var(--primary);
+            z-index: 3;
+            animation: truckDrive 0.8s ease-in-out infinite;
+            filter: drop-shadow(0 4px 8px rgba(79, 70, 229, 0.2));
+        }
+
+        @keyframes truckDrive {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateY(-2px); }
+            50% { transform: translateX(3px) translateY(0); }
+            75% { transform: translateY(1px); }
+        }
+
+        .progress-ring {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            transform: rotate(-90deg);
+            z-index: 2;
+        }
+
+        .ring-bg {
+            stroke: rgba(79, 70, 229, 0.05);
+            stroke-width: 4;
+        }
+
+        .ring-fill {
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            stroke-linecap: round;
+            stroke-width: 5;
+            animation: drawRing 2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            stroke: var(--primary);
+        }
+
+        /* Scanning effect */
+        .scan-line {
+            position: absolute;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 4;
+            opacity: 0;
+            animation: scanAnimate 2s linear infinite;
+        }
+
+        @keyframes drawRing {
+            0% { stroke-dashoffset: 283; }
+            100% { stroke-dashoffset: 0; }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.15); opacity: 0.8; }
+        }
+
+        @keyframes scanAnimate {
+            0% { top: 25%; opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { top: 75%; opacity: 0; }
+        }
+
+        .transition-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: textAppear 0.6s ease forwards 0.2s;
+        }
+
+        @keyframes textAppear {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dot {
+            animation: dotLoading 1.5s infinite;
+            opacity: 0;
+        }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes dotLoading {
+            0%, 100% { opacity: 0; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-2px); }
+        }
+
+        .redirect-progress-container {
+            width: 240px;
+            height: 6px;
+            background: rgba(79, 70, 229, 0.1);
+            border-radius: 20px;
+            margin-top: 25px;
+            overflow: hidden;
+            position: relative;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: textAppear 0.6s ease forwards 0.4s;
+        }
+
+        .redirect-progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--primary), #8b5cf6);
+            border-radius: 20px;
+            animation: fillProgress 2.8s linear forwards;
+        }
+
+        @keyframes fillProgress {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        /* Fade Out Effects */
+        body.fading-out {
+            overflow: hidden;
+        }
+        body.fading-out header, 
+        body.fading-out section, 
+        body.fading-out footer {
+            opacity: 0;
+            transform: scale(0.97) translateY(20px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: blur(5px);
+        }
+
+        @media (max-width: 1024px) {
+            .checkout-grid { grid-template-columns: 1fr; }
+            .summary-card { position: static; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Header -->
+    <header>
+        <div class="container header-top">
+            <a href="home.html" class="logo">
+                <img src="images/readify_logo.png" alt="Readify Logo">
+            </a>
+
+            <nav class="main-nav">
+                <a href="home.html" class="nav-link">Home</a>
+                <a href="shop.html" class="nav-link">Shop</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="blog.html" class="nav-link">Blog</a>
+            </nav>
+
+            <div class="header-actions">
+                <a href="profile.html" class="action-item" aria-label="Account">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </a>
+                <a href="wishlist.html" class="action-item" aria-label="Wishlist">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                </a>
+                <a href="cart.html" class="action-item" aria-label="Cart">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                    <span class="cart-badge">5</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="checkout-section">
+        <div class="container">
+            <div class="checkout-grid">
+                
+                <!-- Left: Checkout Steps -->
+                <div class="checkout-steps">
+                    
+                    <!-- Step 1: Shipping Address -->
+                    <div class="checkout-card">
+                        <h3>
+                            <div class="icon-box">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            </div>
+                            Shipping Address
+                        </h3>
+                        
+                        <div class="address-options" id="addressContainer">
+</div>
+                        
+                        <button
+    class="btn-add-address"
+    onclick="window.location.href='address.html'">
+
+    + Add New Address
+
+</button>
+                    
+                    <!-- Step 2: Delivery Method -->
+                        <h3 style="margin-top: 35px;">
+                            <div class="icon-box">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                            </div>
+                            Delivery Method
+                        </h3>
+                        
+                        <label class="radio-option selected">
+
+    <input
+        type="radio"
+        name="delivery"
+        value="0"
+        checked>
+
+    <span class="radio-option-text">
+        Standard Delivery (3-5 Business Days)
+    </span>
+
+    <span class="radio-option-price">
+        Free
+    </span>
+
+</label>
+
+<label class="radio-option">
+
+    <input
+        type="radio"
+        name="delivery"
+        value="150">
+
+    <span class="radio-option-text">
+        Fast Delivery (1-2 Business Days)
+    </span>
+
+    <span class="radio-option-price">
+        ₹150
+    </span>
+
+</label>
+                    <!-- Step 3: Payment Method -->
+                        <h3 style="margin-top: 35px;">
+                            <div class="icon-box">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                            </div>
+                            Payment Method
+                        </h3>
+                        
+                        
+                        
+<label class="radio-option">
+    <input
+        type="radio"
+        name="payment"
+        value="Razorpay">
+
+    <span class="radio-option-text">
+        Razorpay
+    </span>
+</label>
+
+<label class="radio-option">
+    <input
+        type="radio"
+        name="payment"
+        value="COD">
+
+    <span class="radio-option-text">
+        Cash on Delivery
+    </span>
+</label>
+
+<label class="radio-option">
+    <input
+        type="radio"
+        name="payment"
+        value="Wallet">
+
+    <span class="radio-option-text">
+        Wallet Balance
+    </span>
+</label>
+                    </div>
+
+                </div>
+
+                <!-- Right: Order Summary -->
+                <div class="summary-card">
+                    <h3>Order Summary</h3>
+                    
+                    <!-- Cart Items Mini View -->
+               <div id="checkoutProducts"></div>
+
+                    <!-- Coupon Section -->
+                    <div style="margin-top: 25px; padding-top: 20px; border-top: 1px dashed var(--border-color);">
+                        <p style="font-size: 15px; font-weight: 700; color: var(--text-dark); margin-bottom: 12px;">Apply Coupon</p>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="couponInput" placeholder="Enter coupon code" style="flex: 1; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 12px; outline: none; font-size: 14px; font-family: 'Inter', sans-serif;">
+                            <button style="background: rgba(79, 70, 229, 0.1); color: var(--primary); border: none; font-weight: 600; padding: 0 20px; border-radius: 12px; cursor: pointer; transition: var(--transition);"  onclick="applyCoupon()" >Apply</button>
+                        </div>
+                        
+                        <div style="margin-top:15px;">
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:8px;">
+        Available Offers:
+    </p>
+    <div id="couponList" class="mt-3"></div>
+
+    <div id="couponContainer"></div>
+
+</div>
+<div class="summary-row">
+    <span>Discount</span>
+    <span
+        id="discountAmount"
+        style="color:green;font-weight:600;">
+
+        ₹0
+
+    </span>
+</div>
+                    <!-- Totals -->
+                    <div class="summary-row" style="margin-top: 20px;">
+                        <span>Subtotal</span>
+                        <span style="font-weight: 600; color: var(--text-dark);" id="subtotal">₹0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping Estimate</span>
+                        <span style="font-weight: 600; color: var(--text-dark);"id="shipping">₹0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tax Estimate</span>
+                        <span style="font-weight: 600; color: var(--text-dark);"id="tax">₹0</span>
+                    </div>
+                    
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span class="total-amount" id="total" class="total-amount">₹0</span>
+                    </div>
+
+                    <button id="placeOrderBtn" class="btn-checkout">Place Order</button>
+                    
+                    <p style="text-align: center; font-size: 13px; color: var(--text-light); margin-top: 15px;">
+                        By placing your order you agree to our <a href="info.html" style="color: var(--primary); text-decoration: underline;">Terms & Conditions</a>.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Modern Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="home.html" class="logo">
+                      <img src="images/readify_logo.png" alt="Readify Logo">
+                    </a>
+                    <p class="footer-text">Your one-stop destination for discovering, reading, and buying the best books across all genres with unbeatable prices.</p>
+                    
+                    <div class="trust-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        Secure Checkout Guaranteed
+                    </div>
+                </div>
+
+               <div class="footer-col">
+                    <h4 class="footer-heading">Company</h4>
+                    <div class="footer-links">
+                        <a href="blog.html">About Us</a>
+                        <a href="info.html">Delivery Information</a>
+                        <a href="info.html">Privacy Policy</a>
+                        <a href="info.html">Terms & Conditions</a>
+                        <a href="contact.html">Contact Us</a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-heading">Categories</h4>
+                    <div class="footer-links">
+                        <a href="shop.html">Fiction</a>
+                        <a href="shop.html">Self-Help</a>
+                        <a href="shop.html">Business & Finance</a>
+                        <a href="shop.html">Technology</a>
+                        <a href="shop.html">Romance</a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-heading">Contact Info</h4>
+                    <div class="contact-list">
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            51 Green St. Huntington, NY 11746, USA
+                        </div>
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            support@readify.com
+                        </div>
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            +1 (555) 123-4567
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Full Screen Transition Overlay -->
+    <div id="transitionOverlay" class="page-transition-overlay">
+        <div class="secure-loader-wrapper">
+            <div class="scan-line"></div>
+            <svg class="truck-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="3" width="15" height="13"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+            <svg class="progress-ring" viewBox="0 0 100 100">
+                <circle class="ring-bg" cx="50" cy="50" r="45" fill="none"></circle>
+                <circle class="ring-fill" cx="50" cy="50" r="45" fill="none"></circle>
+            </svg>
+        </div>
+        <div class="transition-text">
+            Placing Order... Processing
+            <span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+        </div>
+        <div class="redirect-progress-container">
+            <div class="redirect-progress-fill"></div>
+        </div>
+    </div>
+
+
+  <script>
+    const userId = localStorage.getItem("userId");
+
+let currentDiscount = 0;
+let subtotalAmount = 0;
+let shippingAmount = 0;
+let taxAmount = 0;
+
+function updateTotal() {
+
+ 
+const total =
+    subtotalAmount +
+    shippingAmount +
+    taxAmount -
+    currentDiscount;
+
+document.getElementById("subtotal").innerText =
+    `₹${subtotalAmount.toFixed(2)}`;
+
+document.getElementById("shipping").innerText =
+    shippingAmount === 0
+        ? "Free"
+        : `₹${shippingAmount.toFixed(2)}`;
+
+document.getElementById("tax").innerText =
+    `₹${taxAmount.toFixed(2)}`;
+
+document.getElementById("total").innerText =
+    `₹${total.toFixed(2)}`;
+ 
+
+}
+
+function setupDeliveryMethods() {
+
+ 
+document
+    .querySelectorAll('input[name="delivery"]')
+    .forEach(radio => {
+
+        radio.addEventListener("change", function () {
+
+            document
+                .querySelectorAll('input[name="delivery"]')
+                .forEach(r => {
+
+                    r.closest(".radio-option")
+                        .classList.remove("selected");
+
+                });
+
+            this.closest(".radio-option")
+                .classList.add("selected");
+
+            shippingAmount =
+                Number(this.value);
+
+            updateTotal();
+
+        });
+
+    });
+ 
+
+}
+
+async function loadCheckout() {
+
+ 
+try {
+
+    const res = await fetch(
+        `http://localhost:5000/api/cart/${userId}`
+    );
+
+    const data = await res.json();
+
+    const productsContainer =
+        document.getElementById("checkoutProducts");
+
+    productsContainer.innerHTML = "";
+
+    let subtotal = 0;
+
+    data.cart.forEach(item => {
+
+        subtotal +=
+            item.product.price *
+            item.quantity;
+
+        productsContainer.innerHTML += `
+            <div class="product-mini">
+
+                <div class="product-mini-img">
+                    <img
+                        src="${item.product.image}"
+                        alt="${item.product.name}">
+                </div>
+
+                <div class="product-mini-info">
+                    <h4>${item.product.name}</h4>
+                    <p>Qty : ${item.quantity}</p>
+                    <span class="price">
+                        ₹${item.product.price}
+                    </span>
+                </div>
+
+            </div>
+        `;
+    });
+
+    subtotalAmount = subtotal;
+
+    shippingAmount = Number(
+        document.querySelector(
+            'input[name="delivery"]:checked'
+        )?.value || 0
+    );
+
+    taxAmount = subtotal * 0.05;
+
+    updateTotal();
+
+} catch (err) {
+
+    console.log(err);
+
+}
+ 
+
+}
+
+async function loadAddresses() {
+
+ 
+try {
+
+    const response = await fetch(
+        `http://localhost:5000/api/address/${userId}`
+    );
+
+    const addresses =
+        await response.json();
+
+    const container =
+        document.getElementById(
+            "addressContainer"
+        );
+
+    if (!addresses.length) {
+
+        container.innerHTML =
+            "<p>No address found.</p>";
+
+        return;
+    }
+
+    container.innerHTML =
+        addresses.map((address, index) => `
+
+        <label class="address-card ${index === 0 ? "selected" : ""}">
+
+            <input
+                type="radio"
+                name="address"
+                value="${address._id}"
+                ${index === 0 ? "checked" : ""}>
+
+            <div class="address-details">
+
+                <h4>
+                    ${address.fullName}
+                    <span class="address-badge">
+                        ${address.addressType}
+                    </span>
+                </h4>
+
+                <p>
+                    ${address.fullAddress}<br>
+                    ${address.city},
+                    ${address.state}<br>
+                    PIN : ${address.zip}<br>
+                    ${address.phone}
+                </p>
+
+            </div>
+
+        </label>
+
+    `).join("");
+
+} catch (error) {
+
+    console.log(error);
+
+}
+ 
+
+}
+
+async function loadCoupons() {
+
+ 
+try {
+
+    const response = await fetch(
+        "http://localhost:5000/api/coupons"
+    );
+
+    const coupons =
+        await response.json();
+
+    const container =
+        document.getElementById(
+            "couponContainer"
+        );
+
+    container.innerHTML =
+        coupons
+            .filter(c => c.isActive)
+            .map(coupon => `
+
+            <div
+            style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                border:1px dashed #22c55e;
+                background:#f0fdf4;
+                padding:12px;
+                border-radius:10px;
+                margin-bottom:8px;">
+
+                <div>
+
+                    <span
+                    style="
+                        font-weight:700;
+                        color:#16a34a;
+                        display:block;">
+
+                        ${coupon.code}
+
+                    </span>
+
+                    <small>
+
+                        ${coupon.discountType === "percentage"
+                            ? coupon.discountValue + "% OFF"
+                            : "₹" + coupon.discountValue + " OFF"}
+
+                    </small>
+
+                </div>
+
+                <button
+                    onclick="selectCoupon('${coupon.code}')">
+
+                    Apply
+
+                </button>
+
+            </div>
+
+        `).join("");
+
+} catch (error) {
+
+    console.log(error);
+
+}
+ 
+
+}
+
+function selectCoupon(code) {
+
+ 
+document.getElementById(
+    "couponInput"
+).value = code;
+ 
+
+}
+
+async function applyCoupon() {
+
+ 
+const code =
+    document.getElementById(
+        "couponInput"
+    ).value.trim();
+
+if (!code) {
+
+    alert("Enter coupon code");
+    return;
+
+}
+
+try {
+
+    const response = await fetch(
+        "http://localhost:5000/api/coupons/apply",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type":
+                    "application/json"
+            },
+            body: JSON.stringify({
+                code,
+                subtotal: subtotalAmount
+            })
+        }
+    );
+
+    const data =
+        await response.json();
+
+    if (response.ok) {
+
+        currentDiscount =
+            data.discount || 0;
+
+        document.getElementById(
+            "discountAmount"
+        ).innerText =
+            `-₹${currentDiscount.toFixed(2)}`;
+
+        updateTotal();
+
+        alert("Coupon Applied");
+
+    } else {
+
+        alert(data.message);
+
+    }
+
+} catch (error) {
+
+    console.log(error);
+
+}
+ 
+
+}
+
+async function placeOrder() {
+
+
+try {
+
+    const selectedAddress = document.querySelector(
+        'input[name="address"]:checked'
+    );
+
+    if (!selectedAddress) {
+        alert("Please select an address");
+        return;
+    }
+
+    const selectedPayment = document.querySelector(
+        'input[name="payment"]:checked'
+    )?.value;
+
+    const deliveryMethod = document.querySelector(
+        'input[name="delivery"]:checked'
+    )?.closest(".radio-option")
+    .innerText.trim();
+
+    const total =
+        subtotalAmount +
+        shippingAmount +
+        taxAmount -
+        currentDiscount;
+
+
+
+// =====================
+// WALLET PAYMENT
+// =====================
+
+if (selectedPayment === "Wallet") {
+
+    const walletResponse = await fetch(
+        `http://localhost:5000/api/wallet/${userId}`
+    );
+
+    const wallet = await walletResponse.json();
+
+    if (!wallet) {
+
+        alert("Wallet not found");
+        return;
+
+    }
+
+    if (wallet.balance < total) {
+
+        const remainingAmount =
+            (total - wallet.balance).toFixed(2);
+
+        document.getElementById(
+            "walletMessage"
+        ).innerHTML = `
+            Wallet Balance : ₹${wallet.balance}<br>
+            Order Total : ₹${total}<br>
+            Need ₹${remainingAmount} more
+        `;
+
+        document.getElementById(
+            "walletPopup"
+        ).style.display = "flex";
+
+        return;
+    }
+
+    const response = await fetch(
+        "http://localhost:5000/api/orders/place",
+        {
+            method: "POST",
+
+            headers: {
+                "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+
+                userId,
+
+                addressId:
+                selectedAddress.value,
+
+                paymentMethod:
+                "Wallet",
+
+                deliveryMethod,
+
+                subtotal:
+                subtotalAmount,
+
+                shipping:
+                shippingAmount,
+
+                tax:
+                taxAmount,
+
+                discount:
+                currentDiscount,
+
+                total
+
+            })
+        }
+    );
+
+    const data =
+        await response.json();
+
+    if (response.ok) {
+
+        alert(
+            "Order Paid Using Wallet"
+        );
+
+        window.location.href =
+        `thankyou.html?orderId=${data.order._id}`;
+
+    } else {
+
+        alert(data.message);
+
+    }
+
+    return;
+}
+
+    // =====================
+    // RAZORPAY PAYMENT
+    // =====================
+
+    
+
+    if (selectedPayment === "Razorpay") {
+
+        
+
+        const keyResponse = await fetch(
+            "http://localhost:5000/api/payment/get-key"
+        );
+
+        const { key } = await keyResponse.json();
+
+        const orderResponse = await fetch(
+            "http://localhost:5000/api/payment/create-order",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    amount: total
+                })
+            }
+        );
+
+        const razorpayOrder =
+            await orderResponse.json();
+
+        const options = {
+
+            key: key,
+
+            amount: razorpayOrder.amount,
+
+            currency: "INR",
+
+            name: "Readify",
+
+            description: "Book Purchase",
+
+            order_id: razorpayOrder.id,
+
+            handler: async function (response) {
+
+                const saveOrder = await fetch(
+                    "http://localhost:5000/api/orders/place",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type":
+                            "application/json"
+                        },
+                        body: JSON.stringify({
+
+                            userId,
+
+                            addressId:
+                            selectedAddress.value,
+
+                            paymentMethod:
+                            "Razorpay",
+
+                            razorpayPaymentId:
+                            response.razorpay_payment_id,
+
+                            deliveryMethod,
+
+                            subtotal:
+                            subtotalAmount,
+
+                            shipping:
+                            shippingAmount,
+
+                            tax:
+                            taxAmount,
+
+                            discount:
+                            currentDiscount,
+
+                            total
+                        })
+                    }
+                );
+
+                const orderData =
+                    await saveOrder.json();
+
+                alert("Payment Successful");
+
+                window.location.href =
+                    `thankyou.html?orderId=${orderData.order._id}`;
+            }
+
+        };
+
+        const razorpay =
+            new Razorpay(options);
+
+        razorpay.open();
+
+        return;
+    }
+
+    // =====================
+    // COD ORDER
+    // =====================
+
+    const response = await fetch(
+        "http://localhost:5000/api/orders/place",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type":
+                "application/json"
+            },
+            body: JSON.stringify({
+
+                userId,
+
+                addressId:
+                selectedAddress.value,
+
+                paymentMethod:
+                selectedPayment,
+
+                deliveryMethod,
+
+                subtotal:
+                subtotalAmount,
+
+                shipping:
+                shippingAmount,
+
+                tax:
+                taxAmount,
+
+                discount:
+                currentDiscount,
+
+                total
+
+            })
+        }
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+
+        alert("Order Placed Successfully");
+
+        window.location.href =
+            `thankyou.html?orderId=${data.order._id}`;
+
+    } else {
+
+        alert(data.message);
+
+    }
+
+} catch (error) {
+
+    console.log(error);
+
+    alert("Failed to place order");
+
+}
+
+
+}
+
+document
+.getElementById("placeOrderBtn")
+.addEventListener(
+"click",
+placeOrder
+);
+
+loadCheckout();
+loadAddresses();
+loadCoupons();
+setupDeliveryMethods();
+
+
+function goToWallet() {
+
+    localStorage.setItem(
+        "returnToCheckout",
+        "true"
+    );
+
+    window.location.href =
+        "wallet.html";
+}
+
+function useOtherPayment() {
+
+    document.getElementById(
+        "walletPopup"
+    ).style.display = "none";
+
+    const razorpay =
+        document.querySelector(
+            'input[value="Razorpay"]'
+        );
+
+    if (razorpay) {
+
+        razorpay.checked = true;
+
+        razorpay.closest(".radio-option")
+            .classList.add("selected");
+
+    }
+}
+
+  </script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <div id="walletPopup" class="wallet-popup">
+
+    <div class="wallet-popup-content">
+
+        <h3>Insufficient Wallet Balance</h3>
+
+        <p id="walletMessage"></p>
+
+        <div class="wallet-popup-buttons">
+
+            <button
+                onclick="goToWallet()">
+
+                Recharge Wallet
+
+            </button>
+
+            <button
+                onclick="useOtherPayment()">
+
+                Use Another Payment Method
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>

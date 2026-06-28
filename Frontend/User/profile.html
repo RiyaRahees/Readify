@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readify - My Profile</title>
+    <script>
+        (function() {
+            const userId = localStorage.getItem("userId");
+            const token = localStorage.getItem("userToken");
+            if (!userId && !token) {
+                document.documentElement.classList.add("not-logged-in-html");
+            }
+        })();
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Dashboard Core CSS -->
+    <link rel="stylesheet" href="nav_footer.css">
+    <link rel="stylesheet" href="dashboard.css">
+
+    <style>
+        /* Login Required Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            max-width: 450px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+        .modal-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(91, 75, 255, 0.1);
+            margin: 0 auto;
+        }
+        .btn-modal-primary {
+            background-color: #5B4BFF !important;
+            border-color: #5B4BFF !important;
+            color: #fff !important;
+            transition: all 0.3s ease;
+        }
+        .btn-modal-primary:hover {
+            background-color: #4338CA !important;
+            border-color: #4338CA !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(91, 75, 255, 0.3);
+        }
+        .btn-modal-secondary {
+            background-color: transparent !important;
+            border: 2px solid #e2e8f0 !important;
+            color: #64748b !important;
+            transition: all 0.3s ease;
+        }
+        .btn-modal-secondary:hover {
+            background-color: #f8fafc !important;
+            border-color: #cbd5e1 !important;
+            color: #1e293b !important;
+            transform: translateY(-2px);
+        }
+        
+        html.not-logged-in-html body {
+            overflow: hidden !important;
+        }
+        html.not-logged-in-html #loginRequiredModal {
+            display: flex !important;
+        }
+
+        .profile-header-card {
+            background: #fff;
+            padding: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px 40px 40px;
+        }
+
+        .stat-item {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: var(--transition);
+        }
+
+        .stat-item:hover {
+            background: #fff;
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+            color: var(--primary-color);
+        }
+
+        .stat-content h4 { margin: 0; font-weight: 700; font-size: 18px; }
+        .stat-content p { margin: 0; font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .form-floating > .form-control {
+            border-radius: 12px;
+            background-color: #f8fafc;
+        }
+
+        .section-divider {
+            margin: 50px 0 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-divider h4 { margin: 0; font-weight: 700; font-size: 20px; }
+        .section-divider .line { flex: 1; height: 1px; background: #e2e8f0; }
+    </style>
+</head>
+<body>
+
+    <!-- Login Required Modal -->
+    <div id="loginRequiredModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-icon mb-4">
+                <i data-lucide="lock" style="width: 36px; height: 36px; color: #5B4BFF;"></i>
+            </div>
+            <h3 class="fw-bold text-dark mb-2">Access Denied</h3>
+            <p class="text-muted mb-4">Please log in to view your profile settings, order history, and wallet details.</p>
+            <div class="d-flex flex-column gap-2">
+                <a href="login.html" class="btn btn-modal-primary py-3 rounded-pill fw-semibold text-decoration-none">Log In Now</a>
+                <a href="home.html" class="btn btn-modal-secondary py-3 rounded-pill fw-semibold text-decoration-none">Continue to Homepage</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-top">
+            <a href="home.html" class="logo">
+                <img src="images/readify_logo.png" alt="Readify Logo">
+            </a>
+
+            <nav class="main-nav">
+                <a href="home.html" class="nav-link">Home</a>
+                <a href="shop.html" class="nav-link">Shop</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="blog.html" class="nav-link">Blog</a>
+            </nav>
+
+            <div class="header-actions">
+                <a href="profile.html" class="action-item active" aria-label="Account">
+                    <i data-lucide="user"></i>
+                </a>
+                <a href="wishlist.html" class="action-item" aria-label="Wishlist">
+                    <i data-lucide="heart"></i>
+                </a>
+                <a href="cart.html" class="action-item" aria-label="Cart">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-badge">3</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="dash-container">
+        <div class="dashboard-layout">
+        
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-user">
+                    <div class="user-avatar-wrapper">
+                        <img id="sidebarUserAvatar" src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff&size=128" alt="User">
+                        <div class="status-dot"></div>
+                    </div>
+                    <h5 id="sidebarUserName">Loading...</h5>
+                    <p>Premium Member</p>
+                </div>
+
+                <nav class="sidebar-menu">
+                    <a href="profile.html" class="menu-item active">
+                        <i data-lucide="user"></i> My Profile
+                    </a>
+                    <a href="order.html" class="menu-item">
+                        <i data-lucide="package"></i> Orders
+                    </a>
+                    <a href="wishlist.html" class="menu-item">
+                        <i data-lucide="heart"></i> Wishlist
+                    </a>
+                    <a href="address.html" class="menu-item">
+                        <i data-lucide="map-pin"></i> Address Book
+                    </a>
+                    <a href="wallet.html" class="menu-item">
+                        <i data-lucide="wallet"></i> Wallet
+                    </a>
+                    <a href="coupons.html" class="menu-item">
+                        <i data-lucide="ticket"></i> Coupons
+                    </a>
+                    <a href="#" class="menu-item logout-item" onclick="localStorage.removeItem('userToken'); localStorage.removeItem('userId'); localStorage.removeItem('userRole'); window.location.href='login.html'; return false;">
+                        <i data-lucide="log-out"></i> Logout
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Breadcrumbs -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="home.html" class="text-decoration-none text-muted">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">My Profile</li>
+                    </ol>
+                </nav>
+
+                <!-- Profile Header Section -->
+                <div class="premium-card">
+                    <div class="profile-header-card">
+                        <div class="d-flex align-items-center gap-4">
+                            <div class="header-avatar-ring" style="width: 100px; height: 100px; border-radius: 50%; padding: 4px; background: var(--primary-gradient);">
+                                <img id="headerUserAvatar" src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff&size=128" alt="User" style="width: 100%; height: 100%; border-radius: 50%; border: 4px solid #fff;">
+                            </div>
+                            <div>
+                                <h2 id="headerGreeting" class="fw-bold mb-1">Hello! 👋</h2>
+                                <p class="text-muted mb-0">Manage your personal info and security settings.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-icon"><i data-lucide="package"></i></div>
+                            <div class="stat-content"><h4 id="statTotalOrders">-</h4><p>Total Orders</p></div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon"><i data-lucide="heart"></i></div>
+                            <div class="stat-content"><h4 id="statWishlistCount">-</h4><p>Wishlist</p></div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon"><i data-lucide="wallet"></i></div>
+                            <div class="stat-content"><h4 id="statWalletBalance">-</h4><p>Wallet</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Details Form -->
+                <div class="premium-card p-4 p-lg-5">
+                    <div class="section-divider mt-0">
+                        <i data-lucide="user-circle" class="text-primary"></i>
+                        <h4>Personal Details</h4>
+                        <div class="line"></div>
+                    </div>
+
+                    <form  id="passwordForm">
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="firstName" placeholder="First Name" value="Riya">
+                                    <label for="firstName">First Name</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="lastName" placeholder="Last Name" value="Rahees">
+                                    <label for="lastName">Last Name</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="email" class="form-control" id="email" placeholder="Email" value="riyarahees136@gmail.com" readonly>
+                                    <label for="email">Email Address</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="tel" class="form-control" id="phone" placeholder="Phone" value="+91 9766530881">
+                                    <label for="phone">Phone Number</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-divider">
+                            <i data-lucide="lock" class="text-primary"></i>
+                            <h4>Security & Password</h4>
+                            <div class="line"></div>
+                        </div>
+
+                        <div class="row g-4 mb-4">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="password" class="form-control" id="currentPass" placeholder="Current Password">
+                                    <label for="currentPass">Current Password</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="password" class="form-control" id="newPass" placeholder="New Password">
+                                    <label for="newPass">New Password</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="password" class="form-control" id="confirmPass" placeholder="Confirm Password">
+                                    <label for="confirmPass">Confirm New Password</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-3 mt-5">
+                            <button type="submit" class="btn-premium px-5">Save All Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </main>
+
+    <!-- Modern Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="home.html" class="logo">
+                      <img src="images/readify_logo.png" alt="Readify Logo">
+                    </a>
+                    <p class="footer-text">Your one-stop destination for discovering, reading, and buying the best books across all genres with unbeatable prices.</p>
+                    
+                    <div class="trust-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        Secure Checkout Guaranteed
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-heading">Company</h4>
+                    <div class="footer-links">
+                        <a href="blog.html">About Us</a>
+                        <a href="info.html">Delivery Information</a>
+                        <a href="info.html">Privacy Policy</a>
+                        <a href="info.html">Terms & Conditions</a>
+                        <a href="contact.html">Contact Us</a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-heading">Categories</h4>
+                    <div class="footer-links">
+                        <a href="shop.html">Fiction</a>
+                        <a href="shop.html">Self-Help</a>
+                        <a href="shop.html">Business & Finance</a>
+                        <a href="shop.html">Technology</a>
+                        <a href="shop.html">Romance</a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-heading">Contact Info</h4>
+                    <div class="contact-list">
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            51 Green St. Huntington, NY 11746, USA
+                        </div>
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            support@readify.com
+                        </div>
+                        <div class="contact-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            +1 (555) 123-4567
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Initialize Lucide -->
+    <script>
+        lucide.createIcons();
+
+        const token = localStorage.getItem("userToken");
+        let userId = localStorage.getItem("userId");
+
+        async function loadUserProfile() {
+            if (!token) return;
+
+            try {
+                // Fetch User Details
+                const profileRes = await fetch("http://localhost:5000/api/auth/profile", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+                const profileData = await profileRes.json();
+
+                if (profileRes.ok && profileData.success) {
+                    const user = profileData.user;
+                    
+                    // Recover userId if missing (e.g. Google Login callback fallback)
+                    if (!userId) {
+                        userId = user._id;
+                        localStorage.setItem("userId", user._id);
+                        localStorage.setItem("userRole", user.role);
+                    }
+
+                    const nameParts = user.name.split(" ");
+                    const firstName = nameParts[0] || "";
+                    const lastName = nameParts.slice(1).join(" ") || "";
+
+                    // Populate Input Fields
+                    document.getElementById("firstName").value = firstName;
+                    document.getElementById("lastName").value = lastName;
+                    document.getElementById("email").value = user.email;
+                    document.getElementById("phone").value = user.phone || "";
+
+                    // Update UI Elements
+                    document.getElementById("sidebarUserName").innerText = user.name;
+                    document.getElementById("headerGreeting").innerText = `Hello, ${firstName}! 👋`;
+                    
+                    const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=6366f1&color=fff&size=128`;
+                    document.getElementById("sidebarUserAvatar").src = avatarUrl;
+                    document.getElementById("headerUserAvatar").src = avatarUrl;
+                }
+
+                if (userId) {
+                    // Fetch Total Orders
+                    const ordersRes = await fetch(`http://localhost:5000/api/orders/user/${userId}`);
+                    if (ordersRes.ok) {
+                        const orders = await ordersRes.json();
+                        document.getElementById("statTotalOrders").innerText = orders.length;
+                    }
+
+                    // Fetch Wishlist count
+                    const wishlistRes = await fetch(`http://localhost:5000/api/wishlist/${userId}`);
+                    if (wishlistRes.ok) {
+                        const wishlist = await wishlistRes.json();
+                        document.getElementById("statWishlistCount").innerText = wishlist.length;
+                    }
+
+                    // Fetch Wallet balance
+                    const walletRes = await fetch(`http://localhost:5000/api/wallet/${userId}`);
+                    if (walletRes.ok) {
+                        const wallet = await walletRes.json();
+                        document.getElementById("statWalletBalance").innerText = wallet && wallet.balance !== undefined ? `₹${wallet.balance.toFixed(2)}` : "₹0.00";
+                    } else {
+                        document.getElementById("statWalletBalance").innerText = "₹0.00";
+                    }
+                }
+
+            } catch (error) {
+                console.error("Error loading user profile:", error);
+            }
+        }
+
+        // Run profile loader on page load
+        loadUserProfile();
+
+        // Handle Profile Form Submission (Details & Password change)
+        document.getElementById("passwordForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const firstName = document.getElementById("firstName").value;
+            const lastName = document.getElementById("lastName").value;
+            const phone = document.getElementById("phone").value;
+            const currentPassword = document.getElementById("currentPass").value;
+            const newPassword = document.getElementById("newPass").value;
+            const confirmPassword = document.getElementById("confirmPass").value;
+
+            try {
+                // 1. Update personal details
+                const combinedName = (firstName.trim() + " " + lastName.trim()).trim();
+                const profileRes = await fetch("http://localhost:5000/api/auth/profile", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        name: combinedName,
+                        phone: phone
+                    })
+                });
+                const profileData = await profileRes.json();
+
+                if (!profileRes.ok) {
+                    alert(profileData.message || "Failed to update profile details");
+                    return;
+                }
+
+                // 2. Update password if requested
+                if (currentPassword || newPassword || confirmPassword) {
+                    if (!currentPassword) {
+                        alert("Please enter your current password to change password.");
+                        return;
+                    }
+                    if (newPassword !== confirmPassword) {
+                        alert("Passwords do not match");
+                        return;
+                    }
+
+                    const passRes = await fetch(
+                        "http://localhost:5000/api/auth/change-password",
+                        {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${token}`
+                            },
+                            body: JSON.stringify({
+                                currentPassword,
+                                newPassword
+                            })
+                        }
+                    );
+
+                    const passData = await passRes.json();
+                    
+                    if (!passRes.ok) {
+                        alert(passData.message || "Failed to change password");
+                        return;
+                    }
+
+                    document.getElementById("currentPass").value = "";
+                    document.getElementById("newPass").value = "";
+                    document.getElementById("confirmPass").value = "";
+                    alert("Profile details and password updated successfully");
+                } else {
+                    alert("Profile details updated successfully");
+                }
+
+                // Refresh details
+                loadUserProfile();
+
+            } catch (err) {
+                console.error(err);
+                alert("Failed to update profile");
+            }
+        });
+    </script>
+</body>
+</html>
