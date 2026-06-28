@@ -314,7 +314,8 @@
             }, 3000);
         }
 
-        let selectedCategory = "";
+        const urlParams = new URLSearchParams(window.location.search);
+        let selectedCategory = urlParams.get("category") || "";
         let allProducts = [];
 
         function updatePriceDisplay(val) {
@@ -501,7 +502,7 @@
 
                 categoryList.innerHTML = `
                     <label class="filter-item">
-                        <input type="radio" name="category" value="" checked>
+                        <input type="radio" name="category" value="" ${selectedCategory === "" ? "checked" : ""}>
                         <span>All Categories</span>
                     </label>
                 `;
@@ -509,7 +510,7 @@
                 categories.forEach(category => {
                     categoryList.innerHTML += `
                         <label class="filter-item">
-                            <input type="radio" name="category" value="${category._id}">
+                            <input type="radio" name="category" value="${category._id}" ${selectedCategory === category._id ? "checked" : ""}>
                             <span>${category.name}</span>
                         </label>
                     `;
