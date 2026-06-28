@@ -1,0 +1,37 @@
+# Dependency directories
+node_modules/
+Backend/node_modules/
+
+# Local environment files (contains sensitive keys)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+Backend/.env
+
+# IDE / Editor configuration
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS metadata
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Log files
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
