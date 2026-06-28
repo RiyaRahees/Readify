@@ -14,7 +14,8 @@ const {
     googleCallback,
     changePassword,
     getProfile,
-    updateProfile
+    updateProfile,
+    resendSignupOtp
 } = require("../controller/authController");
 
 router.post("/register", register);
@@ -24,6 +25,8 @@ router.post("/login", login);
 router.post("/forgot-password", sendOtp);
 
 router.post("/verify-otp", verifyOtp);
+
+router.post("/resend-signup-otp", resendSignupOtp);
 
 router.post("/reset-password", resetPassword);
 

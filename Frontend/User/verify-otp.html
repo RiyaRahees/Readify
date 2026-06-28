@@ -259,7 +259,7 @@
                 <img src="images/readify_logo.png" alt="Readify Logo">
             </a>
 
-            <nav class="main-nav">
+            <nav class="main-nav" id="mainNav">
                 <a href="home.html" class="nav-link">Home</a>
                 <a href="shop.html" class="nav-link">Shop</a>
                 <a href="contact.html" class="nav-link">Contact</a>
@@ -291,6 +291,15 @@
                     </svg>
                     <span class="cart-badge">3</span>
                 </a>
+                
+                <!-- Mobile Menu Toggle Button -->
+                <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle Menu">
+                    <svg class="hamburger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12" class="line-mid"></line>
+                        <line x1="3" y1="6" x2="21" y2="6" class="line-top"></line>
+                        <line x1="3" y1="18" x2="21" y2="18" class="line-bot"></line>
+                    </svg>
+                </button>
             </div>
         </div>
     </header>
@@ -413,62 +422,132 @@
     </footer>
 
     <script>
-
-document
-  .getElementById("verifyOtpForm")
-  .addEventListener("submit", async (e) => {
-
-    e.preventDefault();
-
-    const otp =
-      document.getElementById("otp1").value +
-      document.getElementById("otp2").value +
-      document.getElementById("otp3").value +
-      document.getElementById("otp4").value;
-
-    const email =
-      localStorage.getItem("resetEmail");
-
-    try {
-
-      const response = await fetch(
-        "http://localhost:5000/api/auth/verify-otp",
-        {
-          method: "POST",
-          headers:{
-            "Content-Type":"application/json"
-          },
-          body: JSON.stringify({
-            email,
-            otp
-          })
+        // Update context text if coming from signup flow
+        const otpFlow = localStorage.getItem("otpFlow");
+        if (otpFlow === "signup") {
+            const descText = document.querySelector(".image-content p");
+            if (descText) {
+                descText.textContent = "Enter the verification code sent to your email to complete your registration.";
+            }
+            const formDescText = document.querySelector(".login-header p");
+            if (formDescText) {
+                formDescText.textContent = "We've sent a 4-digit code to verify your account. Please enter it below.";
+            }
         }
-      );
 
-      const data = await response.json();
+        document
+          .getElementById("verifyOtpForm")
+          .addEventListener("submit", async (e) => {
+        
+            e.preventDefault();
+        
+            const otp =
+              document.getElementById("otp1").value +
+              document.getElementById("otp2").value +
+              document.getElementById("otp3").value +
+              document.getElementById("otp4").value;
+        
+            const otpFlow = localStorage.getItem("otpFlow");
+            const isSignup = otpFlow === "signup";
+            const email = isSignup ? localStorage.getItem("otpEmail") : localStorage.getItem("resetEmail");
+        
+            try {
+        
+              const response = await fetch(
+                "http://localhost:5000/api/auth/verify-otp",
+                {
+                  method: "POST",
+                  headers:{
+                    "Content-Type":"application/json"
+                  },
+                  body: JSON.stringify({
+                    email,
+                    otp,
+                    isSignup
+                  })
+                }
+              );
+        
+              const data = await response.json();
+        
+              if(response.ok){
+                if (isSignup) {
+                    alert("Email verified successfully! You can now log in.");
+                    localStorage.removeItem("otpFlow");
+                    localStorage.removeItem("otpEmail");
+                    window.location.href = "login.html";
+                } else {
+                    localStorage.setItem("verifiedOtp", otp);
+                    window.location.href = "reset-password.html";
+                }
+              }else{
+                alert(data.message);
+              }
+        
+            } catch(error){
+              console.log(error);
+            }
+        
+        });
 
-      if(response.ok){
+        // Resend Code Click Handler
+        const resendLink = document.querySelector(".resend-text a");
+        if (resendLink) {
+            resendLink.style.cursor = "pointer";
+            resendLink.addEventListener("click", async (e) => {
+                e.preventDefault();
+                const otpFlow = localStorage.getItem("otpFlow");
+                const email = otpFlow === "signup" ? localStorage.getItem("otpEmail") : localStorage.getItem("resetEmail");
+                
+                if (!email) {
+                    alert("No email found to resend OTP.");
+                    return;
+                }
+                
+                const endpoint = otpFlow === "signup" ? 
+                    "http://localhost:5000/api/auth/resend-signup-otp" : 
+                    "http://localhost:5000/api/auth/forgot-password";
+                    
+                try {
+                    const response = await fetch(endpoint, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ email })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        alert(data.message || "OTP sent successfully!");
+                    } else {
+                        alert(data.message || "Failed to send OTP.");
+                    }
+                } catch (error) {
+                    console.error(error);
+                    alert("Cannot connect to server.");
+                }
+            });
+        }
 
-        localStorage.setItem(
-          "verifiedOtp",
-          otp
-        );
-
-        window.location.href =
-          "reset-password.html";
-
-      }else{
-
-        alert(data.message);
-
-      }
-
-    } catch(error){
-      console.log(error);
-    }
-
-});
-</script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+        if (mobileMenuBtn && mainNav) {
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mainNav.classList.toggle('active');
+                mobileMenuBtn.classList.toggle('active');
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    mainNav.classList.remove('active');
+                    mobileMenuBtn.classList.remove('active');
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

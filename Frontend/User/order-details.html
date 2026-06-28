@@ -213,20 +213,107 @@
         }
 
         @media(max-width:768px){
-
-            .grid{
-                grid-template-columns:1fr;
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
             }
 
-            .tracking{
-                flex-wrap:wrap;
-                gap:20px;
+            /* Premium Vertical Timeline for Mobile */
+            .tracking {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 24px;
+                padding-left: 20px;
+                margin: 30px 0;
             }
 
-            .order-header{
-                flex-direction:column;
-                gap:15px;
+            .step {
+                flex: none;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                text-align: left;
+                width: 100%;
             }
+
+            .dot {
+                margin: 0;
+                width: 24px;
+                height: 24px;
+                flex-shrink: 0;
+            }
+
+            .step p {
+                margin-top: 0;
+                font-size: 14px;
+            }
+
+            .step::after {
+                width: 3px;
+                height: calc(100% + 24px);
+                top: 12px;
+                left: 10.5px;
+                z-index: 1;
+            }
+
+            .step:last-child::after {
+                display: none;
+            }
+
+            .order-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .order-card {
+                padding: 20px;
+                border-radius: 20px;
+            }
+            
+            .product {
+                padding: 16px;
+                gap: 16px;
+            }
+            
+            .product-info h4 {
+                font-size: 16px;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+                padding: 14px;
+            }
+        }
+
+        /* Active step styling */
+        .active-step .dot {
+            background: #4F46E5 !important;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.25);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 8px rgba(79, 70, 229, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+            }
+        }
+
+        /* Completed line styling */
+        .line-completed::after {
+            background: #4F46E5 !important;
         }
     </style>
     <script src="alert-override.js"></script>
@@ -234,14 +321,14 @@
 
 <body>
 
- <!-- Sticky Header -->
+  <!-- Sticky Header -->
     <header>
         <div class="container header-top">
             <a href="home.html" class="logo">
                 <img src="images/readify_logo.png" alt="Readify Logo">
             </a>
 
-            <nav class="main-nav">
+            <nav class="main-nav" id="mainNav">
                 <a href="home.html" class="nav-link">Home</a>
                 <a href="shop.html" class="nav-link">Shop</a>
                 <a href="contact.html" class="nav-link">Contact</a>
@@ -271,8 +358,17 @@
                         <circle cx="20" cy="21" r="1"></circle>
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                     </svg>
-                    <span class="cart-badge">3</span>
+                    <span class="cart-badge">0</span>
                 </a>
+                
+                <!-- Mobile Menu Toggle Button -->
+                <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle Menu">
+                    <svg class="hamburger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12" class="line-mid"></line>
+                        <line x1="3" y1="6" x2="21" y2="6" class="line-top"></line>
+                        <line x1="3" y1="18" x2="21" y2="18" class="line-bot"></line>
+                    </svg>
+                </button>
             </div>
         </div>
     </header>
@@ -614,7 +710,7 @@ async function loadOrder(){
 
             <div class="summary-row">
                 <span>Tax</span>
-                <span>₹${order.tax}</span>
+                <span>₹${order.tax ? Number(order.tax).toFixed(2) : '0.00'}</span>
             </div>
 
             <div class="summary-row">
@@ -682,7 +778,9 @@ function loadTracking(status){
         <div class="step
         ${index <= current
         ? "completed"
-        : ""}">
+        : ""}
+        ${index === current ? "active-step" : ""}
+        ${index < current ? "line-completed" : ""}">
 
             <div class="dot">
 
@@ -739,8 +837,42 @@ async function cancelOrder() {
 
 loadOrder();
 
+// Mobile Menu Toggle
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mainNav = document.getElementById('mainNav');
+if (mobileMenuBtn && mainNav) {
+    mobileMenuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mainNav.classList.toggle('active');
+        mobileMenuBtn.classList.toggle('active');
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+            mainNav.classList.remove('active');
+            mobileMenuBtn.classList.remove('active');
+        }
+    });
+}
 
-
+async function updateCartBadge() {
+    const userId = localStorage.getItem("userId");
+    if (!userId) return;
+    try {
+        const res = await fetch(`http://localhost:5000/api/cart/${userId}`);
+        if (res.ok) {
+            const data = await res.json();
+            const badge = document.querySelector(".cart-badge");
+            if (badge && data && data.cart) {
+                badge.innerText = data.cart.length;
+            }
+        }
+    } catch(err) {
+        console.error(err);
+    }
+}
+updateCartBadge();
 </script>
 
 <div

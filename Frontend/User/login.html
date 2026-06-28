@@ -644,7 +644,14 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
 } else {
 
-    alert(data.message);
+    if (data.requiresVerification) {
+        alert(data.message);
+        localStorage.setItem("otpEmail", data.email);
+        localStorage.setItem("otpFlow", "signup");
+        window.location.href = "verify-otp.html";
+    } else {
+        alert(data.message);
+    }
 
 }
 

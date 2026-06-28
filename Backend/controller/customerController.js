@@ -26,6 +26,7 @@ exports.getAllCustomers = async (req, res) => {
                     name: user.name,
                     email: user.email,
                     isBlocked: user.isBlocked,
+                    isVerified: user.isVerified || false,
                     orderCount: orders.length,
                     totalSpend
                 };

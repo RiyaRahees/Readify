@@ -729,7 +729,7 @@
                         <p style="font-size: 15px; font-weight: 700; color: var(--text-dark); margin-bottom: 12px;">Apply Coupon</p>
                         <div style="display: flex; gap: 10px;">
                             <input type="text" id="couponInput" placeholder="Enter coupon code" style="flex: 1; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 12px; outline: none; font-size: 14px; font-family: 'Inter', sans-serif;">
-                            <button style="background: rgba(79, 70, 229, 0.1); color: var(--primary); border: none; font-weight: 600; padding: 0 20px; border-radius: 12px; cursor: pointer; transition: var(--transition);"  onclick="applyCoupon()" >Apply</button>
+                            <button style="background: var(--primary); color: white; border: none; font-weight: 600; padding: 12px 24px; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.15);" onmouseover="this.style.background='var(--primary-hover)'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='var(--primary)'; this.style.transform='translateY(0)';" onclick="applyCoupon()">Apply</button>
                         </div>
                         
                         <div style="margin-top:15px;">
@@ -1122,10 +1122,12 @@ try {
                 </div>
 
                 <button
-                    onclick="selectCoupon('${coupon.code}')">
-
+                    onclick="selectCoupon('${coupon.code}')"
+                    style="background:#22c55e;color:white;border:none;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s ease;box-shadow:0 2px 4px rgba(34,197,94,0.2);"
+                    onmouseover="this.style.background='#16a34a';this.style.transform='translateY(-1px)';"
+                    onmouseout="this.style.background='#22c55e';this.style.transform='translateY(0)';"
+                >
                     Apply
-
                 </button>
 
             </div>

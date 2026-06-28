@@ -30,7 +30,9 @@ passport.use(
 
                         email: profile.emails[0].value,
 
-                        role: "user"
+                        role: "user",
+
+                        isVerified: true
 
                     });
 

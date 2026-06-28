@@ -11,27 +11,86 @@ const nodemailer = require("nodemailer");
 const register = async (req, res) => {
     try {
 
-        const { name, email, password } = req.body;
+        const { name, email, password, phone } = req.body;
 
         const userExists = await User.findOne({ email });
 
         if (userExists) {
-            return res.status(400).json({
-                message: "User already exists"
-            });
+            if (userExists.isVerified) {
+                return res.status(400).json({
+                    message: "User already exists"
+                });
+            } else {
+                // User exists but is not verified: update details and send a new OTP
+                const hashedPassword = await bcrypt.hash(password, 10);
+                userExists.name = name;
+                userExists.password = hashedPassword;
+                if (phone !== undefined) userExists.phone = phone;
+                
+                const otp = Math.floor(1000 + Math.random() * 9000).toString();
+                userExists.otp = otp;
+                userExists.otpExpiry = Date.now() + 5 * 60 * 1000;
+                await userExists.save();
+
+                const transporter = nodemailer.createTransport({
+                    service: "gmail",
+                    auth: {
+                        user: process.env.EMAIL,
+                        pass: process.env.EMAIL_PASSWORD
+                    }
+                });
+
+                await transporter.sendMail({
+                    from: process.env.EMAIL,
+                    to: email,
+                    subject: "Readify Signup OTP Verification",
+                    html: `
+                        <h2>Your Signup OTP is: ${otp}</h2>
+                        <p>Valid for 5 minutes.</p>
+                    `
+                });
+
+                return res.status(200).json({
+                    message: "OTP sent to your email. Please verify to complete signup.",
+                    requiresVerification: true
+                });
+            }
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
+        const otp = Math.floor(1000 + Math.random() * 9000).toString();
 
         const user = await User.create({
             name,
             email,
-            password: hashedPassword
+            phone,
+            password: hashedPassword,
+            isVerified: false,
+            otp,
+            otpExpiry: Date.now() + 5 * 60 * 1000
         });
 
-        res.status(201).json({
-            message: "User registered successfully",
-            user
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.EMAIL_PASSWORD
+            }
+        });
+
+        await transporter.sendMail({
+            from: process.env.EMAIL,
+            to: email,
+            subject: "Readify Signup OTP Verification",
+            html: `
+                <h2>Your Signup OTP is: ${otp}</h2>
+                <p>Valid for 5 minutes.</p>
+            `
+        });
+
+        res.status(200).json({
+            message: "OTP sent to your email. Please verify to complete signup.",
+            requiresVerification: true
         });
 
     } catch (error) {
@@ -54,16 +113,16 @@ const login = async (req, res) => {
 
         if (!user) {
             return res.status(400).json({
-                message: "Invalid credentials"
+                message: "No user found with this email address."
             });
         }
 
         if (user.isBlocked) {
-    return res.status(403).json({
-        success: false,
-        message: "Your account has been blocked by admin"
-    });
-}
+            return res.status(403).json({
+                success: false,
+                message: "Your account has been blocked by admin"
+            });
+        }
 
         const isMatch = await bcrypt.compare(
             password,
@@ -72,32 +131,65 @@ const login = async (req, res) => {
 
         if (!isMatch) {
             return res.status(400).json({
-                message: "Invalid credentials"
+                message: "Incorrect password. Please try again."
+            });
+        }
+
+        if (user.role !== "admin" && user.isVerified === false) {
+            // Generate and send a new OTP
+            const otp = Math.floor(1000 + Math.random() * 9000).toString();
+            user.otp = otp;
+            user.otpExpiry = Date.now() + 5 * 60 * 1000;
+            await user.save();
+
+            const transporter = nodemailer.createTransport({
+                service: "gmail",
+                auth: {
+                    user: process.env.EMAIL,
+                    pass: process.env.EMAIL_PASSWORD
+                }
+            });
+
+            await transporter.sendMail({
+                from: process.env.EMAIL,
+                to: email,
+                subject: "Readify Signup OTP Verification",
+                html: `
+                    <h2>Your Signup OTP is: ${otp}</h2>
+                    <p>Valid for 5 minutes.</p>
+                `
+            });
+
+            return res.status(401).json({
+                success: false,
+                message: "Please verify your email address to log in. A new OTP has been sent.",
+                requiresVerification: true,
+                email: user.email
             });
         }
 
         const token = jwt.sign(
-    {
-        id: user._id,
-        role: user.role
-    },
-    process.env.JWT_SECRET,
-    {
-        expiresIn: "7d"
-    }
-);
+            {
+                id: user._id,
+                role: user.role
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "7d"
+            }
+        );
 
-res.status(200).json({
-    success: true,
-    message: "Login successful",
-    token,
-    user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-    }
-});
+        res.status(200).json({
+            success: true,
+            message: "Login successful",
+            token,
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role
+            }
+        });
 
     } catch (error) {
 
@@ -164,7 +256,7 @@ const sendOtp = async (req, res) => {
 
 const verifyOtp = async (req, res) => {
 
-  const { email, otp } = req.body;
+  const { email, otp, isSignup } = req.body;
 
   const user = await User.findOne({ email });
 
@@ -183,9 +275,67 @@ const verifyOtp = async (req, res) => {
     });
   }
 
+  if (isSignup) {
+    user.isVerified = true;
+    user.otp = null;
+    user.otpExpiry = null;
+    await user.save();
+  }
+
   res.status(200).json({
     message: "OTP Verified"
   });
+};
+
+const resendSignupOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({
+        message: "Email is already verified"
+      });
+    }
+
+    const otp = Math.floor(1000 + Math.random() * 9000).toString();
+    user.otp = otp;
+    user.otpExpiry = Date.now() + 5 * 60 * 1000;
+    await user.save();
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD
+      }
+    });
+
+    await transporter.sendMail({
+      from: process.env.EMAIL,
+      to: email,
+      subject: "Readify Signup OTP Verification",
+      html: `
+        <h2>Your Signup OTP is: ${otp}</h2>
+        <p>Valid for 5 minutes.</p>
+      `
+    });
+
+    res.status(200).json({
+      message: "OTP resent successfully"
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
 };
 
 
@@ -357,5 +507,6 @@ module.exports = {
     googleCallback,
     changePassword,
     getProfile,
-    updateProfile
+    updateProfile,
+    resendSignupOtp
 };

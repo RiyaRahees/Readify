@@ -228,6 +228,7 @@
                             <!-- <th class="p-3">Mobile Number</th> -->
                             <th class="p-3">Order Count</th>
                             <th class="p-3">Total Spend</th>
+                            <th class="p-3">Verified</th>
                             <th class="p-3">Status</th>
                             <th class="p-3 text-center rounded-r-xl">Action</th>
                         </tr>
@@ -330,6 +331,16 @@
 
                 <td class="p-3 font-black text-slate-900">
                     ₹${customer.totalSpend.toLocaleString()}
+                </td>
+
+                <td class="p-3">
+                    <span class="
+                        ${customer.isVerified
+                            ? 'bg-blue-50 text-blue-700'
+                            : 'bg-amber-50 text-amber-700'}
+                        font-bold px-2 py-1 rounded-md text-[10px]">
+                        ${customer.isVerified ? 'Verified' : 'Unverified'}
+                    </span>
                 </td>
 
                 <td class="p-3">
@@ -478,6 +489,7 @@
         }
 
     </script>
+    <script src="admin-responsive.js"></script>
 </body>
 
 </html>

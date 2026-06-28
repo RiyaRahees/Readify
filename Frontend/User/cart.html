@@ -537,7 +537,7 @@
                 </div>
 
                 <div class="summary-actions">
-                    <a href="checkout.html" class="btn-checkout">Proceed to Checkout</a>
+                    <a href="checkout.html" class="btn-checkout" id="checkoutBtn">Proceed to Checkout</a>
 
                     <a href="shop.html" class="continue-link">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -748,6 +748,21 @@ async function loadCart() {
         document.getElementById("shipping").innerText = `₹${shipping.toFixed(2)}`;
         document.getElementById("tax").innerText = `₹${tax.toFixed(2)}`;
         document.getElementById("grandTotal").innerText = `₹${grandTotal.toFixed(2)}`;
+
+        const checkoutBtn = document.getElementById("checkoutBtn");
+        if (checkoutBtn) {
+            if (totalItems === 0) {
+                checkoutBtn.setAttribute("href", "#");
+                checkoutBtn.style.pointerEvents = "none";
+                checkoutBtn.style.opacity = "0.5";
+                checkoutBtn.style.cursor = "not-allowed";
+            } else {
+                checkoutBtn.setAttribute("href", "checkout.html");
+                checkoutBtn.style.pointerEvents = "auto";
+                checkoutBtn.style.opacity = "1";
+                checkoutBtn.style.cursor = "pointer";
+            }
+        }
 
         // Also update the cart badge
         const badge = document.querySelector(".cart-badge");
