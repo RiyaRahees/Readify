@@ -80,8 +80,42 @@ const removeCartItem = async (req, res) => {
   }
 };
 
+// Update Cart Quantity
+
+const updateCartQuantity = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { quantity } = req.body;
+
+    if (quantity <= 0) {
+      await Cart.findByIdAndDelete(id);
+      return res.status(200).json({
+        success: true,
+        message: "Item Removed",
+      });
+    }
+
+    const cartItem = await Cart.findByIdAndUpdate(
+      id,
+      { quantity },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      cartItem,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   addToCart,
   getCart,
   removeCartItem,
+  updateCartQuantity,
 };

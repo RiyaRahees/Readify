@@ -157,6 +157,7 @@
         .section-divider h4 { margin: 0; font-weight: 700; font-size: 20px; }
         .section-divider .line { flex: 1; height: 1px; background: #e2e8f0; }
     </style>
+    <script src="alert-override.js"></script>
 </head>
 <body>
 
@@ -182,7 +183,7 @@
                 <img src="images/readify_logo.png" alt="Readify Logo">
             </a>
 
-            <nav class="main-nav">
+            <nav class="main-nav" id="mainNav">
                 <a href="home.html" class="nav-link">Home</a>
                 <a href="shop.html" class="nav-link">Shop</a>
                 <a href="contact.html" class="nav-link">Contact</a>
@@ -198,8 +199,17 @@
                 </a>
                 <a href="cart.html" class="action-item" aria-label="Cart">
                     <i data-lucide="shopping-cart"></i>
-                    <span class="cart-badge">3</span>
+                    <span class="cart-badge">0</span>
                 </a>
+                
+                <!-- Mobile Menu Toggle Button -->
+                <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle Menu">
+                    <svg class="hamburger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12" class="line-mid"></line>
+                        <line x1="3" y1="6" x2="21" y2="6" class="line-top"></line>
+                        <line x1="3" y1="18" x2="21" y2="18" class="line-bot"></line>
+                    </svg>
+                </button>
             </div>
         </div>
     </header>
@@ -578,6 +588,43 @@
                 alert("Failed to update profile");
             }
         });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+        if (mobileMenuBtn && mainNav) {
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mainNav.classList.toggle('active');
+                mobileMenuBtn.classList.toggle('active');
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    mainNav.classList.remove('active');
+                    mobileMenuBtn.classList.remove('active');
+                }
+            });
+        }
+
+        async function updateCartBadge() {
+            const userId = localStorage.getItem("userId");
+            if (!userId) return;
+            try {
+                const res = await fetch(`http://localhost:5000/api/cart/${userId}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    const badge = document.querySelector(".cart-badge");
+                    if (badge && data && data.cart) {
+                        badge.innerText = data.cart.length;
+                    }
+                }
+            } catch(err) {
+                console.error(err);
+            }
+        }
+        updateCartBadge();
     </script>
 </body>
 </html>

@@ -229,6 +229,7 @@
             }
         }
     </style>
+    <script src="alert-override.js"></script>
 </head>
 
 <body>
@@ -698,8 +699,9 @@ function loadTracking(status){
 }
 async function cancelOrder() {
 
-    const confirmCancel = confirm(
-        "Are you sure you want to cancel this order?"
+    const confirmCancel = await showConfirm(
+        "Are you sure you want to cancel this order?",
+        true
     );
 
     if (!confirmCancel) return;
