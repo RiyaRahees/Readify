@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readify - Customers Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .custom-sidebar-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-sidebar-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 font-sans flex antialiased">
+
+    <aside
+        class="w-64 bg-white h-screen border-r border-slate-100 flex flex-col justify-between fixed top-0 left-0 z-20 overflow-y-auto custom-sidebar-scroll">
+        <div>
+            <div class="p-6 border-b border-slate-50">
+                <div class="flex flex-col">
+                    <span
+                        class="text-2xl font-serif font-black tracking-tight text-blue-950 leading-none">Readify</span>
+                    <div class="w-16 h-1 bg-gradient-to-r from-blue-900 to-indigo-500 mt-1.5 rounded-full"></div>
+                    <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-2">Management
+                        Suite</span>
+                </div>
+            </div>
+
+            <nav class="px-4 py-6 space-y-6">
+                <div>
+                    <span class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Main
+                        Menu</span>
+                    <div class="space-y-1">
+                        <a href="dashboard.html"
+                            class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
+                            <i class="fa-solid fa-chart-pie w-5 text-center text-indigo-300"></i> Dashboard
+                        </a>
+                        <a href="order.html"
+                            class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
+                            <i class="fa-solid fa-cart-shopping w-5 text-center"></i> Order Management
+                        </a>
+                        <a href="customers.html"
+                            class="flex items-center gap-3 px-3 py-2.5 bg-gradient-to-r from-blue-950 to-blue-900 text-white rounded-xl text-sm font-medium shadow-sm transition">
+                            <i class="fa-solid fa-users w-5 text-center"></i> Customers
+                        </a>
+                        <a href="coupon-codes.html"
+                            class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
+                            <i class="fa-solid fa-ticket w-5 text-center"></i> Coupon Code
+                        </a>
+                        <a href="categories.html"
+                            class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
+                            <i class="fa-solid fa-layer-group w-5 text-center"></i> Categories
+                        </a>
+                        <a href="transactions.html"
+                            class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
+                            <i class="fa-solid fa-arrow-right-arrow-left w-5 text-center"></i> Transaction
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <span
+                        class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Product</span>
+                    <div class="space-y-1">
+                        <a href="add-product.html"
+                            class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
+                            <i class="fa-solid fa-square-plus w-5 text-center"></i> Add Products
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <span
+                        class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Admin</span>
+                    <div class="space-y-1">
+                        <a href="AdminRole.html"
+                            class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
+                            <i class="fa-solid fa-user-shield w-5 text-center"></i> Admin Role
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-slate-100 space-y-2 bg-slate-50/50">
+            <div class="flex items-center justify-between p-2 rounded-xl hover:bg-white transition">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-8 h-8 rounded-full bg-indigo-950 flex items-center justify-center text-white font-serif font-black text-xs">
+                        R</div>
+                    <div class="truncate max-w-[120px]">
+                        <p class="text-xs font-bold text-slate-800">Readify </p>
+                        <p class="text-[10px] text-slate-400 truncate">admin@readify.com</p>
+                    </div>
+                </div>
+                <button class="text-slate-400 hover:text-red-500 transition"><i
+                        class="fa-solid fa-right-from-bracket text-xs"></i></button>
+            </div>
+            <a href="#"
+                class="flex items-center justify-between p-2.5 border border-slate-200 bg-white rounded-xl text-xs font-semibold text-slate-700 hover:border-indigo-400 transition">
+                <span class="text-blue-950"><i class="fa-solid fa-shop mr-1.5 text-indigo-500"></i> Open Live
+                    Shop</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-slate-400 text-[9px]"></i>
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-1 ml-64 p-8 min-h-screen">
+
+        <header class="flex items-center justify-between mb-8">
+            <h2 class="text-xl font-bold text-slate-900">Customers</h2>
+
+            <div class="flex items-center gap-4">
+                <div class="relative w-80">
+                    <input type="text" placeholder="Search system data, users, or reports..."
+                        class="w-full pl-4 pr-10 py-2 bg-slate-100 rounded-xl text-xs focus:outline-none focus:bg-slate-200/60 focus:ring-1 focus:ring-slate-300 transition">
+                    <i
+                        class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                </div>
+                <button
+                    class="w-9 h-9 border border-slate-200 rounded-xl flex items-center justify-center text-slate-600 bg-white hover:bg-slate-50 transition relative">
+                    <i class="fa-regular fa-bell text-sm"></i>
+                    <span class="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-indigo-600 rounded-full"></span>
+                </button>
+                <button class="w-12 h-6 bg-slate-200 rounded-full p-0.5 flex items-center justify-start transition">
+                    <div
+                        class="w-5 h-5 bg-blue-950 rounded-full flex items-center justify-center text-white text-[9px]">
+                        <i class="fa-solid fa-moon"></i>
+                    </div>
+                </button>
+                <div
+                    class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-950 to-indigo-900 flex items-center justify-center text-white font-serif font-black text-xs shadow">
+                    R
+                </div>
+            </div>
+        </header>
+
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+
+            <div class="space-y-4 flex flex-col justify-between">
+                <div
+                    class="bg-white p-5 border border-slate-100 rounded-2xl shadow-sm flex-1 flex flex-col justify-between relative">
+                    <div class="flex justify-between items-start">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Customers</p>
+                    </div>
+                    <div class="mt-2 flex items-baseline gap-2">
+                        <span id="totalCustomers" class="text-2xl font-black text-blue-950">0</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-1">Total registered users</p>
+                </div>
+
+                <div
+                    class="bg-white p-5 border border-slate-100 rounded-2xl shadow-sm flex-1 flex flex-col justify-between relative">
+                    <div class="flex justify-between items-start">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Customers</p>
+                    </div>
+                    <div class="mt-2 flex items-baseline gap-2">
+                        <span id="activeCustomers" class="text-2xl font-black text-blue-950">0</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-1">With active transactions</p>
+                </div>
+
+                <div
+                    class="bg-white p-5 border border-slate-100 rounded-2xl shadow-sm flex-1 flex flex-col justify-between relative">
+                    <div class="flex justify-between items-start">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Blocked Customers</p>
+                    </div>
+                    <div class="mt-2 flex items-baseline gap-2">
+                        <span id="blockedCustomers" class="text-2xl font-black text-blue-950">0</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-1">Accounts restricted by admin</p>
+                </div>
+            </div>
+
+            <div
+                class="lg:col-span-2 bg-white p-6 border border-slate-100 rounded-2xl shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xs font-bold text-slate-800">Customer Overview</h3>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-2 border-b border-slate-50 pb-4">
+                        <div class="border-l-2 border-indigo-500 pl-2">
+                            <p id="overviewActiveCustomers" class="text-lg font-black text-blue-950">0</p>
+                            <p class="text-[10px] text-slate-400">Active Customers</p>
+                        </div>
+                        <div>
+                            <p id="overviewRepeatCustomers" class="text-lg font-black text-blue-950">0</p>
+                            <p class="text-[10px] text-slate-400">Repeat Customers</p>
+                        </div>
+                        <div>
+                            <p id="overviewTotalOrders" class="text-lg font-black text-blue-950">0</p>
+                            <p class="text-[10px] text-slate-400">Total Orders</p>
+                        </div>
+                        <div>
+                            <p id="overviewAvgSpend" class="text-lg font-black text-blue-950">₹0</p>
+                            <p class="text-[10px] text-slate-400">Avg Spend Value</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 relative h-40">
+                    <canvas id="customerActivityChart" class="w-full h-full"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white border border-slate-100 rounded-2xl shadow-sm p-6">
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-slate-50 text-blue-950 font-bold uppercase tracking-wider rounded-xl">
+                            <th class="p-3 rounded-l-xl">Name</th>
+                            <th class="p-3">Email</th>
+                            <!-- <th class="p-3">Mobile Number</th> -->
+                            <th class="p-3">Order Count</th>
+                            <th class="p-3">Total Spend</th>
+                            <th class="p-3">Status</th>
+                            <th class="p-3 text-center rounded-r-xl">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customerTableBody" class="divide-y divide-slate-50 font-medium text-slate-700">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex items-center justify-between mt-6 border-t border-slate-100 pt-4 text-xs font-bold">
+                <button
+                    class="border border-slate-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5 text-slate-700 hover:bg-slate-50 transition">
+                    <i class="fa-solid fa-arrow-left text-[10px]"></i> Previous
+                </button>
+
+                <div class="flex items-center gap-1">
+                    <button
+                        class="w-7 h-7 bg-blue-950 text-white font-black rounded-md text-center shadow-sm">1</button>
+                    <button
+                        class="w-7 h-7 hover:bg-slate-50 text-slate-600 rounded-md text-center transition">2</button>
+                    <button
+                        class="w-7 h-7 hover:bg-slate-50 text-slate-600 rounded-md text-center transition">3</button>
+                    <span class="px-1 text-slate-300 text-center">...</span>
+                    <button
+                        class="w-7 h-7 hover:bg-slate-50 text-slate-600 rounded-md text-center transition">24</button>
+                </div>
+
+                <button
+                    class="border border-slate-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5 text-slate-700 hover:bg-slate-50 transition">
+                    Next <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </button>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+
+        const API =
+            "http://localhost:5000/api/customers";
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            loadCustomers
+        );
+        async function loadCustomers() {
+
+            try {
+
+                const res = await fetch(API);
+
+                const data = await res.json();
+
+                const totalCust = data.customers.length;
+                const activeCust = data.customers.filter(c => c.orderCount > 0).length;
+                const repeatCust = data.customers.filter(c => c.orderCount > 1).length;
+                const blockedCust = data.customers.filter(c => c.isBlocked).length;
+                
+                const totalOrders = data.customers.reduce((sum, c) => sum + c.orderCount, 0);
+                const totalSpend = data.customers.reduce((sum, c) => sum + c.totalSpend, 0);
+                const avgSpend = totalOrders > 0 ? Math.round(totalSpend / totalOrders) : 0;
+
+                // Update metrics cards
+                document.getElementById("totalCustomers").innerText = totalCust;
+                document.getElementById("activeCustomers").innerText = activeCust;
+                document.getElementById("blockedCustomers").innerText = blockedCust;
+
+                // Update Overview numbers
+                document.getElementById("overviewActiveCustomers").innerText = activeCust;
+                document.getElementById("overviewRepeatCustomers").innerText = repeatCust;
+                document.getElementById("overviewTotalOrders").innerText = totalOrders;
+                document.getElementById("overviewAvgSpend").innerText = `₹${avgSpend.toLocaleString()}`;
+
+                const tbody =
+                    document.getElementById(
+                        "customerTableBody"
+                    );
+
+                tbody.innerHTML = "";
+
+                data.customers.forEach(customer => {
+
+                    tbody.innerHTML += `
+
+            <tr class="hover:bg-slate-50/50 transition">
+
+                <td class="p-3 font-semibold text-slate-800">
+                    ${customer.name}
+                </td>
+
+                <td class="p-3 text-slate-500">
+                    ${customer.email}
+                </td>
+
+                <td class="p-3 pl-6 font-bold text-slate-600">
+                    ${customer.orderCount}
+                </td>
+
+                <td class="p-3 font-black text-slate-900">
+                    ₹${customer.totalSpend.toLocaleString()}
+                </td>
+
+                <td class="p-3">
+                    <span class="
+                        ${customer.isBlocked
+                            ? 'bg-red-50 text-red-700'
+                            : 'bg-emerald-50 text-emerald-700'}
+                        font-bold px-2 py-1 rounded-md text-[10px]">
+                        ${customer.isBlocked ? 'Blocked' : 'Active'}
+                    </span>
+                </td>
+
+                <td class="p-3 text-center">
+                    <button
+                        onclick="blockUser('${customer._id}')"
+                        class="px-2 py-1 rounded-md text-[10px] font-bold transition text-white
+                        ${customer.isBlocked
+                            ? 'bg-emerald-600 hover:bg-emerald-700'
+                            : 'bg-rose-600 hover:bg-rose-700'}"
+                    >
+                        ${customer.isBlocked ? 'Unblock' : 'Block'}
+                    </button>
+                </td>
+
+            </tr>
+
+            `;
+                });
+
+                // Fetch and draw weekly activity graph
+                loadActivityChart();
+
+            } catch (error) {
+
+                console.log(error);
+
+            }
+
+        }
+
+        let activityChartInstance = null;
+
+        async function loadActivityChart() {
+            try {
+                const res = await fetch("http://localhost:5000/api/dashboard/sales-chart");
+                const result = await res.json();
+
+                const labels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                const values = Array(7).fill(0);
+
+                result.forEach(item => {
+                    values[item._id - 1] = item.customerCount || 0;
+                });
+
+                const ctx = document.getElementById("customerActivityChart").getContext("2d");
+
+                if (activityChartInstance) {
+                    activityChartInstance.destroy();
+                }
+
+                activityChartInstance = new Chart(ctx, {
+                    type: "line",
+                    data: {
+                        labels,
+                        datasets: [{
+                            label: "Active Customers",
+                            data: values,
+                            borderColor: "#4f46e5",
+                            backgroundColor: "rgba(79, 70, 229, 0.05)",
+                            borderWidth: 2.5,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 3,
+                            pointHoverRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    font: {
+                                        family: 'Inter',
+                                        size: 10
+                                    },
+                                    color: '#64748b'
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: '#f1f5f9'
+                                },
+                                ticks: {
+                                    stepSize: 1,
+                                    font: {
+                                        family: 'Inter',
+                                        size: 10
+                                    },
+                                    color: '#64748b'
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (err) {
+                console.error("Error loading activity chart: ", err);
+            }
+        }
+
+
+        async function blockUser(id) {
+
+            try {
+
+                const res = await fetch(
+                    `http://localhost:5000/api/customers/block/${id}`,
+                    {
+                        method: "PATCH"
+                    }
+                );
+
+                const data = await res.json();
+
+                if (data.success) {
+
+                    loadCustomers();
+
+                }
+
+            } catch (error) {
+
+                console.log(error);
+
+            }
+
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readify - Order Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .custom-sidebar-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-sidebar-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+
+        /* Premium Toast Notification styling */
+        .toast-notification {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: white;
+            border-left: 4px solid #10b981;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0,0,0,0.05);
+            padding: 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 9999;
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            max-width: 320px;
+        }
+        .toast-notification.show {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .toast-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .toast-success {
+            border-left-color: #10b981;
+        }
+        .toast-success .toast-icon {
+            background-color: #ecfdf5;
+            color: #10b981;
+        }
+        .toast-error {
+            border-left-color: #ef4444;
+        }
+        .toast-error .toast-icon {
+            background-color: #fef2f2;
+            color: #ef4444;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 font-sans flex antialiased">
+
+    <aside
+        class="w-64 bg-white h-screen border-r border-slate-100 flex flex-col justify-between fixed top-0 left-0 z-20 overflow-y-auto custom-sidebar-scroll">
+        <div>
+            <div class="p-6 border-b border-slate-50">
+                <div class="flex flex-col">
+                    <span
+                        class="text-2xl font-serif font-black tracking-tight text-blue-950 leading-none">Readify</span>
+                    <div class="w-16 h-1 bg-gradient-to-r from-blue-900 to-indigo-500 mt-1.5 rounded-full"></div>
+                    <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-2">Management
+                        Suite</span>
+                </div>
+            </div>
+
+            <nav class="px-4 py-6 space-y-6">
+                <div>
+                    <span class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Main
+                        Menu</span>
+                    <div class="space-y-1">
+                        <a href="dashboard.html"
+                            class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
+                            <i class="fa-solid fa-chart-pie w-5 text-center text-indigo-300"></i> Dashboard
+                        </a>
+                        <a href="order.html"
+                            class="flex items-center gap-3 px-3 py-2.5 bg-gradient-to-r from-blue-950 to-blue-900 text-white rounded-xl text-sm font-medium shadow-sm transition">
+                            <i class="fa-solid fa-cart-shopping w-5 text-center"></i> Order Management
+                        </a>
+                        <a href="customers.html"
+                            class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
+                            <i class="fa-solid fa-users w-5 text-center"></i> Customers
+                        </a>
+                        <a href="coupon-codes.html"
+                            class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
+                            <i class="fa-solid fa-ticket w-5 text-center"></i> Coupon Code
+                        </a>
+                        <a href="categories.html"
+                            class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
+                            <i class="fa-solid fa-layer-group w-5 text-center"></i> Categories
+                        </a>
+                        <a href="transactions.html"
+                            class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
+                            <i class="fa-solid fa-arrow-right-arrow-left w-5 text-center"></i> Transaction
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <span
+                        class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Product</span>
+                    <div class="space-y-1">
+                        <a href="add-product.html"
+                            class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
+                            <i class="fa-solid fa-square-plus w-5 text-center"></i> Add Products
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <span
+                        class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Admin</span>
+                    <div class="space-y-1">
+                        <a href="AdminRole.html"
+                            class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
+                            <i class="fa-solid fa-user-shield w-5 text-center"></i> Admin Role
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-slate-100 space-y-2 bg-slate-50/50">
+            <div class="flex items-center justify-between p-2 rounded-xl hover:bg-white transition">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-8 h-8 rounded-full bg-indigo-950 flex items-center justify-center text-white font-serif font-black text-xs">
+                        R</div>
+                    <div class="truncate max-w-[120px]">
+                        <p class="text-xs font-bold text-slate-800">Readify </p>
+                        <p class="text-[10px] text-slate-400 truncate">admin@readify.com</p>
+                    </div>
+                </div>
+                <button class="text-slate-400 hover:text-red-500 transition"><i
+                        class="fa-solid fa-right-from-bracket text-xs"></i></button>
+            </div>
+            <a href="#"
+                class="flex items-center justify-between p-2.5 border border-slate-200 bg-white rounded-xl text-xs font-semibold text-slate-700 hover:border-indigo-400 transition">
+                <span class="text-blue-950"><i class="fa-solid fa-shop mr-1.5 text-indigo-500"></i> Open Live
+                    Shop</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-slate-400 text-[9px]"></i>
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-1 ml-64 p-8 min-h-screen">
+
+        <header class="flex items-center justify-between mb-8">
+            <h2 class="text-xl font-bold text-slate-900">Order Management</h2>
+
+            <div class="flex items-center gap-4">
+                <div class="relative w-80">
+                    <input type="text" placeholder="Search orders, ISBN, titles..."
+                        class="w-full pl-4 pr-10 py-2 bg-slate-100 rounded-xl text-xs focus:outline-none focus:bg-slate-200/60 focus:ring-1 focus:ring-slate-300 transition">
+                    <i
+                        class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                </div>
+                <button
+                    class="w-9 h-9 border border-slate-200 rounded-xl flex items-center justify-center text-slate-600 bg-white hover:bg-slate-50 transition relative">
+                    <i class="fa-regular fa-bell text-sm"></i>
+                    <span class="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-indigo-600 rounded-full"></span>
+                </button>
+                <button class="w-12 h-6 bg-slate-200 rounded-full p-0.5 flex items-center justify-start transition">
+                    <div
+                        class="w-5 h-5 bg-blue-950 rounded-full flex items-center justify-center text-white text-[9px]">
+                        <i class="fa-solid fa-moon"></i>
+                    </div>
+                </button>
+                <div
+                    class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-950 to-indigo-900 flex items-center justify-center text-white font-serif font-black text-xs shadow">
+                    R</div>
+            </div>
+        </header>
+
+        <section class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-bold text-slate-950">Book Orders List</h3>
+            <div class="flex items-center gap-3">
+                <button
+                    class="bg-gradient-to-r from-blue-950 to-indigo-900 text-white px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 hover:opacity-90 shadow-sm transition">
+                    <i class="fa-solid fa-plus text-[10px]"></i> Create Manual Order
+                </button>
+                <button
+                    class="border border-slate-200 bg-white px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 text-slate-700 hover:bg-slate-50 transition">
+                    Export Orders <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+                </button>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white p-5 border border-slate-100 rounded-2xl shadow-sm relative">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Book Shipments</p>
+                <div class="mt-3 flex items-baseline gap-2">
+                    <span id="totalOrders" class="text-2xl font-black text-blue-950">0</span>
+                    <span
+                        class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-md flex items-center"><i
+                            class="fa-solid fa-arrow-up mr-0.5"></i> 14.4%</span>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-1">Last 7 days</p>
+            </div>
+
+            <div class="bg-white p-5 border border-slate-100 rounded-2xl shadow-sm relative">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">New Purchases</p>
+                <div class="mt-3 flex items-baseline gap-2">
+                    <span id="pendingOrders" class="text-2xl font-black text-blue-950">0</span>
+                    <span
+                        class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-md flex items-center"><i
+                            class="fa-solid fa-arrow-up mr-0.5"></i> 20%</span>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-1">Pending Processing</p>
+            </div>
+
+            <div class="bg-white p-5 border border-slate-100 rounded-2xl shadow-sm relative">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Dispatched / Delivered</p>
+                <div class="mt-3 flex items-baseline gap-2">
+                    <span id="deliveredOrders" class="text-2xl font-black text-blue-950">0</span>
+                    <span class="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-1.5 py-0.5 rounded-md">85%</span>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-1">Success rate</p>
+            </div>
+
+            <div class="bg-white p-5 border border-slate-100 rounded-2xl shadow-sm relative">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Canceled/Returned</p>
+                <div class="mt-3 flex items-baseline gap-2">
+                    <span id="cancelledOrders" class="text-2xl font-black text-rose-950">0</span>
+                    <span
+                        class="text-[10px] text-rose-600 font-bold bg-rose-50 px-1.5 py-0.5 rounded-md flex items-center"><i
+                            class="fa-solid fa-arrow-down mr-0.5"></i> 5%</span>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-1">Damaged/Wrong Item</p>
+            </div>
+        </section>
+
+        <section class="bg-white border border-slate-100 rounded-2xl shadow-sm p-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <div id="orderTabs"
+                    class="flex items-center bg-slate-50 border border-slate-100 p-1 rounded-xl text-xs font-bold text-slate-500 gap-1">
+                    <button onclick="filterTab('All', this)" class="px-3 py-1.5 bg-blue-950 text-white rounded-lg shadow-sm">All Orders (<span id="allOrdersCount">0</span>)</button>
+                    <button onclick="filterTab('Delivered', this)" class="px-3 py-1.5 hover:text-slate-800 transition rounded-lg">Delivered</button>
+                    <button onclick="filterTab('Processing', this)" class="px-3 py-1.5 hover:text-slate-800 transition rounded-lg">Processing</button>
+                    <button onclick="filterTab('Cancelled', this)" class="px-3 py-1.5 hover:text-slate-800 transition rounded-lg">Cancelled</button>
+                </div>
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <input type="text" placeholder="Search order records..."
+                        class="w-full sm:w-64 bg-slate-50 border border-transparent rounded-xl py-2 pl-4 text-xs focus:outline-none focus:bg-slate-100 transition">
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-slate-50 text-blue-950 font-bold uppercase tracking-wider rounded-xl">
+                            <th class="p-3 w-12 rounded-l-xl">
+                                <input type="checkbox" class="rounded text-indigo-600 w-3.5 h-3.5 border-slate-300">
+                            </th>
+                            <th class="p-3">No.</th>
+                            <th class="p-3">Order Id</th>
+                            <th class="p-3">Book Title / Format</th>
+                            <th class="p-3">Purchase Date</th>
+                            <th class="p-3">Total Cost</th>
+                            <th class="p-3">Payment</th>
+                            <th class="p-3">Shipping Status</th>
+                            <th class="p-3 rounded-r-xl text-center">View Order</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="ordersTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex items-center justify-between mt-6 border-t border-slate-100 pt-4 text-xs font-bold">
+                <button
+                    class="border border-slate-200 px-3 py-1.5 rounded-lg text-slate-700 hover:bg-slate-50 transition"><i
+                        class="fa-solid fa-arrow-left"></i> Previous</button>
+                <div class="flex items-center gap-1">
+                    <button class="w-7 h-7 bg-blue-950 text-white font-black rounded-md text-center">1</button>
+                    <button class="w-7 h-7 hover:bg-slate-50 text-slate-600 rounded-md text-center">2</button>
+                </div>
+                <button
+                    class="border border-slate-200 px-3 py-1.5 rounded-lg text-slate-700 hover:bg-slate-50 transition">Next
+                    <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_URL = "http://localhost:5000/api/orders";
+        let allOrders = [];
+
+        document.addEventListener("DOMContentLoaded", fetchOrders);
+
+        async function fetchOrders() {
+            try {
+
+                const response = await fetch(API_URL);
+
+                const data = await response.json();
+
+                allOrders = data.orders || [];
+
+                updateStats(allOrders);
+
+                document.getElementById("allOrdersCount").innerText = allOrders.length;
+
+                renderOrdersTable(allOrders);
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        function filterTab(status, btnElement) {
+            const buttons = document.querySelectorAll("#orderTabs button");
+            buttons.forEach(btn => {
+                btn.classList.remove("bg-blue-950", "text-white", "shadow-sm");
+                btn.classList.add("text-slate-500", "hover:text-slate-800");
+            });
+
+            btnElement.classList.remove("text-slate-500", "hover:text-slate-800");
+            btnElement.classList.add("bg-blue-950", "text-white", "shadow-sm");
+
+            let filtered = [];
+            if (status === "All") {
+                filtered = allOrders;
+            } else if (status === "Processing") {
+                filtered = allOrders.filter(o => o.orderStatus === "Pending" || o.orderStatus === "Processing");
+            } else {
+                filtered = allOrders.filter(o => o.orderStatus === status);
+            }
+
+            renderOrdersTable(filtered);
+        }
+
+        function renderOrdersTable(orders) {
+            const tbody = document.getElementById("ordersTableBody");
+            tbody.innerHTML = "";
+
+            if (!orders || orders.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="p-8 text-center text-slate-400">
+                            No orders found
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            orders.forEach((order, index) => {
+                const bookNames = order.items.map(item => item.product?.name || "Book").join(", ");
+                const truncatedBooks = bookNames.length > 35 ? bookNames.slice(0, 35) + "..." : bookNames;
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50/50 transition">
+
+                        <td class="p-3">
+                            <input type="checkbox" class="rounded text-indigo-600 w-3.5 h-3.5 border-slate-300">
+                        </td>
+
+                        <td class="p-3 text-slate-400 font-mono">
+                            ${index + 1}
+                        </td>
+
+                        <td class="p-3 font-bold text-slate-900 font-mono">
+                            #${order._id.slice(-6)}
+                        </td>
+
+                        <td class="p-3 text-slate-600 font-semibold" title="${bookNames}">
+                            ${truncatedBooks || "Book"}
+                        </td>
+
+                        <td class="p-3 text-slate-500">
+                            ${new Date(order.createdAt).toLocaleDateString()}
+                        </td>
+
+                        <td class="p-3 font-black text-blue-950">
+                            ₹${order.total}
+                        </td>
+
+                        <td class="p-3 text-slate-500">
+                            ${order.paymentMethod || "COD"}
+                        </td>
+
+                        <td class="p-3">
+                            ${getShippingStatus(order.orderStatus)}
+                        </td>
+
+                        <td class="p-3 text-center">
+                            <button
+                                onclick="viewOrder('${order._id}')"
+                                class="bg-blue-950 text-white px-3 py-1.5 rounded-lg hover:bg-opacity-90 shadow-sm transition"
+                            >
+                                <i class="fa-solid fa-eye mr-1"></i> View
+                            </button>
+                        </td>
+
+                    </tr>
+                `;
+            });
+        }
+
+        async function viewOrder(id) {
+
+            try {
+
+                const response = await fetch(
+                    `http://localhost:5000/api/orders/${id}`
+                );
+
+                const order = await response.json();
+
+                document.getElementById(
+                    "orderDetailsContent"
+                ).innerHTML = `
+
+            <div class="space-y-3">
+
+                <p>
+                    <strong>Order ID:</strong>
+                    ${order._id}
+                </p>
+
+                <p>
+    <strong>Customer:</strong>
+    ${order.address?.name || "N/A"}
+</p>
+
+<p>
+    <strong>Phone:</strong>
+    ${order.address?.phone || "N/A"}
+</p>
+                    
+                    <p>
+                        <strong>Email:</strong>
+                        ${order.user?.email || "N/A"}
+                    </p>
+
+                <p>
+                    <strong>Payment:</strong>
+                    ${order.paymentMethod}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-bold ${
+                        order.orderStatus === 'Delivered' ? 'bg-emerald-50 text-emerald-700' :
+                        order.orderStatus === 'Cancelled' ? 'bg-rose-50 text-rose-700' :
+                        order.orderStatus === 'Shipped' ? 'bg-indigo-50 text-indigo-700' :
+                        'bg-amber-50 text-amber-700'
+                    }">${order.orderStatus}</span>
+                </p>
+
+                <p>
+                    <strong>Total:</strong>
+                    ₹${order.total}
+                </p>
+
+                <hr>
+
+                <h3 class="font-bold">
+                    Ordered Items
+                </h3>
+
+                ${order.items.map(item => `
+<div class="border rounded-xl p-4 flex gap-4">
+
+    <img
+        src="${item.product?.image}"
+        alt="${item.product?.title}"
+        class="w-24 h-32 object-cover rounded-lg border"
+    >
+
+    <div>
+
+        <h4 class="font-bold text-lg">
+            ${item.product?.title || "Book"}
+        </h4>
+
+        <p>
+            <strong>Author:</strong>
+            ${item.product?.author || "N/A"}
+        </p>
+
+        <p>
+            <strong>Quantity:</strong>
+            ${item.quantity}
+        </p>
+
+        <p>
+    <strong>Price:</strong>
+    ₹${item.price}
+</p>
+
+<div class="mt-3 flex items-center gap-2">
+
+    <select
+        id="itemStatus-${item.product._id}"
+        class="border rounded-lg px-3 py-2 text-sm"
+    >
+        <option
+            value="Active"
+            ${item.status === "Active" ? "selected" : ""}
+        >
+            Active
+        </option>
+
+        <option
+            value="Processing"
+            ${item.status === "Processing" ? "selected" : ""}
+        >
+            Processing
+        </option>
+
+        <option
+            value="Shipped"
+            ${item.status === "Shipped" ? "selected" : ""}
+        >
+            Shipped
+        </option>
+
+        <option
+            value="Delivered"
+            ${item.status === "Delivered" ? "selected" : ""}
+        >
+            Delivered
+        </option>
+
+        <option
+            value="Cancelled"
+            ${item.status === "Cancelled" ? "selected" : ""}
+        >
+            Cancelled
+        </option>
+    </select>
+
+    <button
+        onclick="updateItemStatus(
+            '${order._id}',
+            '${item.product._id}'
+        )"
+        class="bg-blue-950 text-white px-3 py-2 rounded-lg text-sm"
+    >
+        Update
+    </button>
+
+</div>
+
+    </div>
+
+</div>
+`).join("")}
+
+            </div>
+        `;
+
+                document
+                    .getElementById("orderModal")
+                    .classList
+                    .remove("hidden");
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            let existingToast = document.querySelector('.toast-notification');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            const toast = document.createElement('div');
+            toast.className = `toast-notification toast-${type}`;
+            
+            const icon = type === 'success' 
+                ? '<i class="fa-solid fa-circle-check"></i>' 
+                : '<i class="fa-solid fa-circle-xmark"></i>';
+                
+            toast.innerHTML = `
+                <div class="toast-icon text-sm">
+                    ${icon}
+                </div>
+                <div>
+                    <h5 class="text-xs font-bold text-slate-800">${type === 'success' ? 'Success' : 'Error'}</h5>
+                    <p class="text-[11px] text-slate-500 mt-0.5">${message}</p>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 400);
+            }, 3000);
+        }
+
+        async function updateStatus(orderId) {
+
+            try {
+
+                const status =
+                    document.getElementById("orderStatus").value;
+
+                const response = await fetch(
+                    `http://localhost:5000/api/orders/${orderId}/status`,
+                    {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ status })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (data.success) {
+
+                    showToast("Order status updated successfully");
+
+                    closeModal();
+
+                    fetchOrders();
+
+                }
+
+            } catch (error) {
+
+                console.error(error);
+                showToast("Failed to update order status", "error");
+
+            }
+
+        }
+
+        async function updateItemStatus(
+            orderId,
+            productId
+        ) {
+
+            try {
+
+                const status =
+                    document.getElementById(
+                        `itemStatus-${productId}`
+                    ).value;
+
+                const response = await fetch(
+                    `http://localhost:5000/api/orders/${orderId}/item-status`,
+                    {
+                        method: "PATCH",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            productId,
+                            status
+                        })
+                    }
+                );
+
+                const data =
+                    await response.json();
+
+                if (data.success) {
+                    showToast("Item status updated successfully");
+                    viewOrder(orderId);
+                    if (typeof fetchOrders === "function") {
+                        fetchOrders();
+                    }
+                } else {
+                    showToast(data.message || "Failed to update item status", "error");
+                }
+
+            } catch (error) {
+
+                console.log(error);
+                showToast("An error occurred during update", "error");
+            }
+        }
+
+        function getPaymentStatus(status) {
+
+            if (status === "Paid") {
+                return `
+            <span class="text-emerald-600">
+                ● Paid
+            </span>
+        `;
+            }
+
+            return `
+        <span class="text-red-500">
+            ● Failed
+        </span>
+    `;
+        }
+
+        function getShippingStatus(status) {
+
+            const colors = {
+                Processing:
+                    "bg-yellow-50 text-yellow-700",
+
+                Shipped:
+                    "bg-blue-50 text-blue-700",
+
+                Delivered:
+                    "bg-green-50 text-green-700",
+
+                Cancelled:
+                    "bg-red-50 text-red-700"
+            };
+
+            return `
+        <span class="${colors[status] || 'bg-slate-50 text-slate-700'} px-2 py-1 rounded-lg">
+            ${status}
+        </span>
+    `;
+        }
+
+        function updateStats(orders) {
+            document.getElementById("totalOrders").innerText = orders.length;
+
+            document.getElementById("pendingOrders").innerText =
+                orders.filter(o => o.orderStatus === "Pending" || o.orderStatus === "Processing").length;
+
+            document.getElementById("deliveredOrders").innerText =
+                orders.filter(o => o.orderStatus === "Delivered" || o.orderStatus === "Shipped").length;
+
+            document.getElementById("cancelledOrders").innerText =
+                orders.filter(o => o.orderStatus === "Cancelled").length;
+        }
+
+        function closeModal() {
+
+            document
+                .getElementById("orderModal")
+                .classList
+                .add("hidden");
+        }
+
+        window.addEventListener("click", (e) => {
+
+            const modal =
+                document.getElementById("orderModal");
+
+            if (e.target === modal) {
+                closeModal();
+            }
+
+        });
+    </script>
+
+
+
+    <!-- Order Details Modal -->
+    <div id="orderModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-6 w-[700px] max-h-[90vh] overflow-y-auto">
+
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Order Details</h2>
+
+                <button onclick="closeModal()" class="text-red-500 text-2xl">
+                    &times;
+                </button>
+            </div>
+
+            <div id="orderDetailsContent">
+                Loading...
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
+

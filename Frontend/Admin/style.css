@@ -1,0 +1,19 @@
+@type custom-brand;
+:root {
+    --brand-dark: #0f172a;
+    --brand-primary: #1e3a8a;
+    --brand-accent: #6366f1;
+    --brand-bg-light: #f8fafc;
+}
+
+/* Custom scrollbar adjustments for the fixed sidebar */
+.custom-sidebar-scroll::-webkit-scrollbar {
+    width: 4px;
+}
+.custom-sidebar-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-sidebar-scroll::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 2px;
+}
