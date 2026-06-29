@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { API_BASE_URL } = require("../../Frontend/apiConfig");
 
 const productSchema = new mongoose.Schema(
 {
@@ -10,7 +11,22 @@ const productSchema = new mongoose.Schema(
 
     image: {
     type: String,
-    default: ""
+    default: "",
+    get: (val) => {
+        if (!val) return "";
+        try {
+            if (val.startsWith("http")) {
+                const urlObj = new URL(val);
+                return `${API_BASE_URL}${urlObj.pathname}`;
+            }
+            if (val.startsWith("/uploads")) {
+                return `${API_BASE_URL}${val}`;
+            }
+            return `${API_BASE_URL}/uploads/${val}`;
+        } catch (e) {
+            return val;
+        }
+    }
 },
 
     sku: {
@@ -45,7 +61,9 @@ const productSchema = new mongoose.Schema(
     }
 },
 {
-    timestamps: true
+    timestamps: true,
+    toJSON: { getters: true },
+    toObject: { getters: true }
 }
 );
 

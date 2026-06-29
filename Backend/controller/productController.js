@@ -1,4 +1,4 @@
-const { API_BASE_URL } = require("../../../Frontend/apiConfig");
+const { API_BASE_URL } = require("../../Frontend/apiConfig");
 const Product = require("../model/Product");
 
 // Add Product
