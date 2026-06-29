@@ -70,6 +70,8 @@
             color: #ef4444;
         }
     </style>
+
+    <script src="../apiConfig.js"></script>
 </head>
 
 <body class="bg-slate-50 text-slate-800 font-sans flex antialiased">
@@ -307,7 +309,7 @@
     </main>
 
     <script>
-        const API_URL = "http://localhost:5000/api/orders";
+        const API_URL = `${API_BASE_URL}/api/orders`;
         let allOrders = [];
 
         document.addEventListener("DOMContentLoaded", fetchOrders);
@@ -427,7 +429,7 @@
             try {
 
                 const response = await fetch(
-                    `http://localhost:5000/api/orders/${id}`
+                    `${API_BASE_URL}/api/orders/${id}`
                 );
 
                 const order = await response.json();
@@ -631,7 +633,7 @@
                     document.getElementById("orderStatus").value;
 
                 const response = await fetch(
-                    `http://localhost:5000/api/orders/${orderId}/status`,
+                    `${API_BASE_URL}/api/orders/${orderId}/status`,
                     {
                         method: "PATCH",
                         headers: {
@@ -675,7 +677,7 @@
                     ).value;
 
                 const response = await fetch(
-                    `http://localhost:5000/api/orders/${orderId}/item-status`,
+                    `${API_BASE_URL}/api/orders/${orderId}/item-status`,
                     {
                         method: "PATCH",
 

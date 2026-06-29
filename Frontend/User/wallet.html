@@ -121,6 +121,8 @@
         .amount-debit { color: #b91c1c; }
     </style>
     <script src="alert-override.js"></script>
+
+    <script src="../apiConfig.js"></script>
 </head>
 <body>
 
@@ -326,7 +328,7 @@
     async function loadWallet() {
 
         const response = await fetch(
-            `http://localhost:5000/api/wallet/${userId}`
+            `${API_BASE_URL}/api/wallet/${userId}`
         );
 
         const wallet = await response.json();
@@ -409,7 +411,7 @@
         const userId = localStorage.getItem("userId");
         if (!userId) return;
         try {
-            const res = await fetch(`http://localhost:5000/api/cart/${userId}`);
+            const res = await fetch(`${API_BASE_URL}/api/cart/${userId}`);
             if (res.ok) {
                 const data = await res.json();
                 const badge = document.querySelector(".cart-badge");
@@ -435,7 +437,7 @@
 
     const keyResponse =
         await fetch(
-            "http://localhost:5000/api/payment/get-key"
+            `${API_BASE_URL}/api/payment/get-key`
         );
 
     const { key } =
@@ -443,7 +445,7 @@
 
     const orderResponse =
         await fetch(
-            "http://localhost:5000/api/payment/create-order",
+            `${API_BASE_URL}/api/payment/create-order`,
             {
                 method: "POST",
 
@@ -476,7 +478,7 @@
         handler: async function (response) {
 
             await fetch(
-                "http://localhost:5000/api/wallet/add-money",
+                `${API_BASE_URL}/api/wallet/add-money`,
                 {
                     method: "POST",
 

@@ -252,6 +252,8 @@
         }
     </style>
     <script src="alert-override.js"></script>
+
+    <script src="../apiConfig.js"></script>
 </head>
 
 <body>
@@ -429,7 +431,7 @@ document
     try {
 
       const response = await fetch(
-        "http://localhost:5000/api/auth/forgot-password",
+        `${API_BASE_URL}/api/auth/forgot-password`,
         {
           method: "POST",
           headers: {

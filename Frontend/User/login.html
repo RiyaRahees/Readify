@@ -385,6 +385,8 @@
         }
     </style>
     <script src="alert-override.js"></script>
+
+    <script src="../apiConfig.js"></script>
 </head>
 
 <body>
@@ -584,7 +586,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
     try {
         const response = await fetch(
-            "http://localhost:5000/api/auth/login",
+            `${API_BASE_URL}/api/auth/login`,
             {
                 method: "POST",
                 headers: {
@@ -667,7 +669,7 @@ document
 .addEventListener("click", () => {
 
     window.location.href =
-    "http://localhost:5000/api/auth/google";
+    `${API_BASE_URL}/api/auth/google`;
 
 });
 </script>

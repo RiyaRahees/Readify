@@ -111,6 +111,8 @@
         }
     </style>
     <script src="alert-override.js"></script>
+
+    <script src="../apiConfig.js"></script>
 </head>
 
 <body class="bg-background text-dark antialiased">
@@ -437,7 +439,7 @@ if (token) {
     localStorage.setItem("userToken", token);
     
     // Fetch profile to get userId and userRole
-    fetch("http://localhost:5000/api/auth/profile", {
+    fetch(`${API_BASE_URL}/api/auth/profile`, {
         headers: {
             "Authorization": `Bearer ${token}`
         }
@@ -459,7 +461,7 @@ if (token) {
 
         async function loadCategories() {
             try {
-                const response = await fetch("http://localhost:5000/api/categories");
+                const response = await fetch(`${API_BASE_URL}/api/categories`);
                 const categories = await response.json();
                 
                 const grid = document.getElementById("categoriesGrid");
@@ -539,7 +541,7 @@ if (token) {
 
         async function loadFeaturedProducts() {
             try {
-                const response = await fetch("http://localhost:5000/api/products");
+                const response = await fetch(`${API_BASE_URL}/api/products`);
                 const products = await response.json();
                 
                 const grid = document.getElementById("featuredProductsGrid");
@@ -626,7 +628,7 @@ if (token) {
                     window.location.href = "login.html";
                     return;
                 }
-                const response = await fetch("http://localhost:5000/api/wishlist/add", {
+                const response = await fetch(`${API_BASE_URL}/api/wishlist/add`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ userId, productId })
@@ -655,7 +657,7 @@ if (token) {
                     alert("Product is out of stock");
                     return;
                 }
-                const response = await fetch("http://localhost:5000/api/cart/add", {
+                const response = await fetch(`${API_BASE_URL}/api/cart/add`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ userId, productId, quantity: 1 })
@@ -696,7 +698,7 @@ if (token) {
             const userId = localStorage.getItem("userId");
             if (!userId) return;
             try {
-                const res = await fetch(`http://localhost:5000/api/cart/${userId}`);
+                const res = await fetch(`${API_BASE_URL}/api/cart/${userId}`);
                 if (res.ok) {
                     const data = await res.json();
                     const badge = document.querySelector(".cart-badge");

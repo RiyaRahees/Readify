@@ -1,3 +1,4 @@
+const { API_BASE_URL } = require("../../Frontend/apiConfig");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
@@ -11,7 +12,7 @@ passport.use(
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             callbackURL:
-                "http://localhost:5000/api/auth/google/callback"
+                `${API_BASE_URL}/api/auth/google/callback`
         },
 
         async (accessToken, refreshToken, profile, done) => {

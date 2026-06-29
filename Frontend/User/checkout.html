@@ -570,6 +570,8 @@
         }
     </style>
     <script src="alert-override.js"></script>
+
+    <script src="../apiConfig.js"></script>
 </head>
 <body>
 
@@ -938,7 +940,7 @@ async function loadCheckout() {
 try {
 
     const res = await fetch(
-        `http://localhost:5000/api/cart/${userId}`
+        `${API_BASE_URL}/api/cart/${userId}`
     );
 
     const data = await res.json();
@@ -1004,7 +1006,7 @@ async function loadAddresses() {
 try {
 
     const response = await fetch(
-        `http://localhost:5000/api/address/${userId}`
+        `${API_BASE_URL}/api/address/${userId}`
     );
 
     const addresses =
@@ -1072,7 +1074,7 @@ async function loadCoupons() {
 try {
 
     const response = await fetch(
-        "http://localhost:5000/api/coupons"
+        `${API_BASE_URL}/api/coupons`
     );
 
     const coupons =
@@ -1171,7 +1173,7 @@ if (!code) {
 try {
 
     const response = await fetch(
-        "http://localhost:5000/api/coupons/apply",
+        `${API_BASE_URL}/api/coupons/apply`,
         {
             method: "POST",
             headers: {
@@ -1255,7 +1257,7 @@ try {
 if (selectedPayment === "Wallet") {
 
     const walletResponse = await fetch(
-        `http://localhost:5000/api/wallet/${userId}`
+        `${API_BASE_URL}/api/wallet/${userId}`
     );
 
     const wallet = await walletResponse.json();
@@ -1288,7 +1290,7 @@ if (selectedPayment === "Wallet") {
     }
 
     const response = await fetch(
-        "http://localhost:5000/api/orders/place",
+        `${API_BASE_URL}/api/orders/place`,
         {
             method: "POST",
 
@@ -1359,13 +1361,13 @@ if (selectedPayment === "Wallet") {
         
 
         const keyResponse = await fetch(
-            "http://localhost:5000/api/payment/get-key"
+            `${API_BASE_URL}/api/payment/get-key`
         );
 
         const { key } = await keyResponse.json();
 
         const orderResponse = await fetch(
-            "http://localhost:5000/api/payment/create-order",
+            `${API_BASE_URL}/api/payment/create-order`,
             {
                 method: "POST",
                 headers: {
@@ -1397,7 +1399,7 @@ if (selectedPayment === "Wallet") {
             handler: async function (response) {
 
                 const saveOrder = await fetch(
-                    "http://localhost:5000/api/orders/place",
+                    `${API_BASE_URL}/api/orders/place`,
                     {
                         method: "POST",
                         headers: {
@@ -1460,7 +1462,7 @@ if (selectedPayment === "Wallet") {
     // =====================
 
     const response = await fetch(
-        "http://localhost:5000/api/orders/place",
+        `${API_BASE_URL}/api/orders/place`,
         {
             method: "POST",
             headers: {

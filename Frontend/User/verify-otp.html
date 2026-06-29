@@ -249,6 +249,8 @@
         }
     </style>
     <script src="alert-override.js"></script>
+
+    <script src="../apiConfig.js"></script>
 </head>
 
 <body>
@@ -454,7 +456,7 @@
             try {
         
               const response = await fetch(
-                "http://localhost:5000/api/auth/verify-otp",
+                `${API_BASE_URL}/api/auth/verify-otp`,
                 {
                   method: "POST",
                   headers:{
@@ -505,8 +507,8 @@
                 }
                 
                 const endpoint = otpFlow === "signup" ? 
-                    "http://localhost:5000/api/auth/resend-signup-otp" : 
-                    "http://localhost:5000/api/auth/forgot-password";
+                    `${API_BASE_URL}/api/auth/resend-signup-otp` : 
+                    `${API_BASE_URL}/api/auth/forgot-password`;
                     
                 try {
                     const response = await fetch(endpoint, {

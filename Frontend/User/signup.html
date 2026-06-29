@@ -337,6 +337,8 @@
 }
     </style>
     <script src="alert-override.js"></script>
+
+    <script src="../apiConfig.js"></script>
 </head>
 
 <body>
@@ -545,7 +547,7 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
 
     try {
         const response = await fetch(
-            "http://localhost:5000/api/auth/register",
+            `${API_BASE_URL}/api/auth/register`,
             {
                 method: "POST",
                 headers: {
@@ -582,7 +584,7 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
 
 document.getElementById("googleLogin").addEventListener("click", () => {
     window.location.href =
-        "http://localhost:5000/api/auth/google";
+        `${API_BASE_URL}/api/auth/google`;
 });
 </script>
 

@@ -21,6 +21,8 @@
             border-radius: 10px;
         }
     </style>
+
+    <script src="../apiConfig.js"></script>
 </head>
 
 <body class="bg-slate-50 text-slate-800 font-sans flex antialiased">
@@ -152,7 +154,7 @@
                     R
                 </div>
 
-                <a href="http://localhost:5000/api/dashboard/weekly-report" target="_blank"
+                <a id="weeklyReportLink" href="#" target="_blank"
                     class="bg-blue-950 hover:bg-blue-900 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition flex items-center gap-2 whitespace-nowrap">
 
                     <i class="fa-solid fa-download"></i>
@@ -364,7 +366,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
 
-        const API = "http://localhost:5000/api/dashboard";
+        const API = `${API_BASE_URL}/api/dashboard`;
+        document.getElementById("weeklyReportLink").href = `${API_BASE_URL}/api/dashboard/weekly-report`;
 
         async function loadDashboard() {
 
@@ -514,7 +517,7 @@
         async function loadSalesChart() {
 
             const res = await fetch(
-                "http://localhost:5000/api/dashboard/sales-chart"
+                `${API_BASE_URL}/api/dashboard/sales-chart`
             );
 
             const result = await res.json();

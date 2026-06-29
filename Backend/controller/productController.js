@@ -1,3 +1,4 @@
+const { API_BASE_URL } = require("../../../Frontend/apiConfig");
 const Product = require("../model/Product");
 
 // Add Product
@@ -17,7 +18,7 @@ const addProduct = async (req, res) => {
             description: req.body.description,
 
             image: req.file
-                ? `http://localhost:5000/uploads/${req.file.filename}`
+                ? `${API_BASE_URL}/uploads/${req.file.filename}`
                 : ""
 
         });
@@ -152,7 +153,7 @@ const updateProduct = async (req, res) => {
         if (req.file) {
 
             updateData.image =
-                `http://localhost:5000/uploads/${req.file.filename}`;
+                `${API_BASE_URL}/uploads/${req.file.filename}`;
 
         }
 

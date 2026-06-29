@@ -143,6 +143,8 @@
         }
     </style>
     <script src="alert-override.js"></script>
+
+    <script src="../apiConfig.js"></script>
 </head>
 
 <body>
@@ -283,7 +285,7 @@ let allOrdersList = [];
 async function loadOrders() {
     try {
         const response = await fetch(
-            `http://localhost:5000/api/orders/user/${userId}`
+            `${API_BASE_URL}/api/orders/user/${userId}`
         );
         allOrdersList = await response.json();
         renderOrders(allOrdersList);
@@ -462,7 +464,7 @@ async function updateCartBadge() {
     const userId = localStorage.getItem("userId");
     if (!userId) return;
     try {
-        const res = await fetch(`http://localhost:5000/api/cart/${userId}`);
+        const res = await fetch(`${API_BASE_URL}/api/cart/${userId}`);
         if (res.ok) {
             const data = await res.json();
             const badge = document.querySelector(".cart-badge");

@@ -60,6 +60,8 @@
             color: #ef4444;
         }
     </style>
+
+    <script src="../apiConfig.js"></script>
 </head>
 <!-- Category Modal -->
 <div id="categoryModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -428,7 +430,7 @@ document.getElementById("categoryForm")
     try {
 
         const response = await fetch(
-            "http://localhost:5000/api/categories",
+            `${API_BASE_URL}/api/categories`,
             {
                 method: "POST",
                 headers: {
@@ -478,7 +480,7 @@ async function loadCategories() {
     try {
 
         const response = await fetch(
-            "http://localhost:5000/api/categories"
+            `${API_BASE_URL}/api/categories`
         );
 
         const categories = await response.json();
@@ -583,7 +585,7 @@ async function deleteCategory(id) {
         async () => {
             try {
                 const response = await fetch(
-                    `http://localhost:5000/api/categories/${id}`,
+                    `${API_BASE_URL}/api/categories/${id}`,
                     {
                         method: "DELETE"
                     }

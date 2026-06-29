@@ -192,6 +192,8 @@
         }
     </style>
     <script src="alert-override.js"></script>
+
+    <script src="../apiConfig.js"></script>
 </head>
 <body>
     
@@ -381,7 +383,7 @@ async function loadOrder() {
     try {
 
         const response = await fetch(
-            `http://localhost:5000/api/orders/${orderId}`
+            `${API_BASE_URL}/api/orders/${orderId}`
         );
 
         const order =

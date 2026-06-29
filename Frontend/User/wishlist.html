@@ -636,6 +636,8 @@
             }
         }
     </style>
+
+    <script src="../apiConfig.js"></script>
 </head>
 <body>
 
@@ -821,7 +823,7 @@ async function loadWishlist() {
 
     try {
         const response = await fetch(
-            `http://localhost:5000/api/wishlist/${userId}`
+            `${API_BASE_URL}/api/wishlist/${userId}`
         );
         const wishlist = await response.json();
         
@@ -895,7 +897,7 @@ async function removeWishlist(id) {
     try {
 
         const response = await fetch(
-            `http://localhost:5000/api/wishlist/remove/${id}`,
+            `${API_BASE_URL}/api/wishlist/remove/${id}`,
             {
                 method: "DELETE"
             }
@@ -923,7 +925,7 @@ async function addToCart(productId, wishlistId) {
     try {
 
         const response = await fetch(
-            "http://localhost:5000/api/cart/add",
+            `${API_BASE_URL}/api/cart/add`,
             {
                 method: "POST",
                 headers: {
@@ -942,7 +944,7 @@ async function addToCart(productId, wishlistId) {
         if (response.ok) {
 
             await fetch(
-                `http://localhost:5000/api/wishlist/remove/${wishlistId}`,
+                `${API_BASE_URL}/api/wishlist/remove/${wishlistId}`,
                 {
                     method: "DELETE"
                 }
@@ -994,7 +996,7 @@ async function updateCartBadge() {
     const userId = localStorage.getItem("userId");
     if (!userId) return;
     try {
-        const res = await fetch(`http://localhost:5000/api/cart/${userId}`);
+        const res = await fetch(`${API_BASE_URL}/api/cart/${userId}`);
         if (res.ok) {
             const data = await res.json();
             const badge = document.querySelector(".cart-badge");
