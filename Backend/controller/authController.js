@@ -380,7 +380,7 @@ const googleCallback = async (req, res) => {
         );
 
        res.redirect(
-    `http://127.0.0.1:5500/Frontend/User/home.html?token=${token}`
+    `http://127.0.0.1:5500/Frontend/User/index.html?token=${token}`
 );
 
     } catch (err) {
