@@ -7,7 +7,12 @@ const addCategory = async (req, res) => {
 
     try {
 
-        const { name, description, imageUrl } = req.body;
+        const { name, description } = req.body;
+        let imageUrl = req.body.imageUrl || "";
+
+        if (req.file) {
+            imageUrl = `/uploads/${req.file.filename}`;
+        }
 
         const categoryExists = await Category.findOne({
             name

@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <link rel="icon" href="images/favicon.png" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Readify - Login</title>
@@ -9,6 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="nav_footer.css">
+    <link rel="stylesheet" href="global_style_extensions.css">
     <style>
         :root {
             --primary: #4F46E5;
@@ -398,10 +400,10 @@
             </a>
 
             <nav class="main-nav">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="shop.html" class="nav-link">Shop</a>
-                <a href="contact.html" class="nav-link">Contact</a>
-                <a href="blog.html" class="nav-link">Blog</a>
+                <a href="index.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>Home</a>
+                <a href="shop.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>Shop</a>
+                <a href="contact.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Contact</a>
+                <a href="blog.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Blog</a>
             </nav>
 
             <div class="header-actions">
@@ -427,7 +429,7 @@
                         <circle cx="20" cy="21" r="1"></circle>
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                     </svg>
-                    <span class="cart-badge">3</span>
+                    <span class="cart-badge">0</span>
                 </a>
             </div>
         </div>
@@ -460,14 +462,17 @@
                     </div>
 
                     <form id="loginForm">
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" placeholder="name@example.com" required>
+                        <div class="form-input-container">
+                            <label for="email" style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Email Address</label>
+                            <input type="email" id="email" class="form-control-premium" placeholder="name@example.com" required>
                         </div>
 
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" id="password" placeholder="••••••••" required>
+                        <div class="form-input-container">
+                            <label for="password" style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Password</label>
+                            <div class="password-toggle-wrapper">
+                                <input type="password" id="password" class="form-control-premium" placeholder="••••••••" required style="padding-right: 50px;">
+                                <button type="button" class="password-toggle-btn" aria-label="Toggle password visibility">👁️</button>
+                            </div>
                         </div>
 
                         <div class="form-options">
@@ -477,9 +482,9 @@
                             <a href="forgot.html" class="forgot-link">Forgot password?</a>
                         </div>
 
-                        <button type="submit" class="btn-submit">
-    Sign In
-</button>
+                        <button type="submit" class="btn-premium-indigo w-full" id="submitBtn" style="width: 100%;">
+                            <span>Sign In</span>
+                        </button>
 
 <div class="divider">
     <span>OR</span>
@@ -578,13 +583,69 @@
     </footer>
 
     <script>
+    // Realtime validation config
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const submitBtn = document.getElementById("submitBtn");
+
+    emailInput.addEventListener("blur", () => {
+        window.validateInput(emailInput, {
+            required: true,
+            pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            requiredMessage: "Email is required.",
+            patternMessage: "Please enter a valid email address."
+        });
+    });
+    emailInput.addEventListener("input", () => window.clearInputError(emailInput));
+
+    passwordInput.addEventListener("blur", () => {
+        window.validateInput(passwordInput, {
+            required: true,
+            minLength: 6,
+            requiredMessage: "Password is required.",
+            minLengthMessage: "Password must be at least 6 characters."
+        });
+    });
+    passwordInput.addEventListener("input", () => window.clearInputError(passwordInput));
+
+    // Password show/hide toggle
+    const toggleBtn = document.querySelector(".password-toggle-btn");
+    if (toggleBtn) {
+        toggleBtn.addEventListener("click", () => {
+            const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+            passwordInput.setAttribute("type", type);
+            toggleBtn.textContent = type === "password" ? "👁️" : "🙈";
+        });
+    }
+
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const isEmailValid = window.validateInput(emailInput, {
+        required: true,
+        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        requiredMessage: "Email is required.",
+        patternMessage: "Please enter a valid email address."
+    });
+    const isPassValid = window.validateInput(passwordInput, {
+        required: true,
+        minLength: 6,
+        requiredMessage: "Password is required.",
+        minLengthMessage: "Password must be at least 6 characters."
+    });
+
+    if (!isEmailValid || !isPassValid) {
+        window.showToast("Please correct the validation errors in the form.", "error");
+        return;
+    }
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
 
     try {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span class="btn-spinner"></span> <span>Signing In...</span>`;
+
         const response = await fetch(
             `${API_BASE_URL}/api/auth/login`,
             {
@@ -601,65 +662,39 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
         const data = await response.json();
 
-       if (response.ok) {
-
-    if (data.user.role === "admin") {
-
-        localStorage.setItem(
-            "adminToken",
-            data.token
-        );
-
-        localStorage.setItem(
-            "adminRole",
-            data.user.role
-        );
-
-        localStorage.setItem(
-            "adminId",
-            data.user._id
-        );
-
-        window.location.href =
-            "../Admin/dashboard.html";
-
-    } else {
-
-        localStorage.setItem(
-            "userToken",
-            data.token
-        );
-
-        localStorage.setItem(
-            "userRole",
-            data.user.role
-        );
-
-        localStorage.setItem(
-            "userId",
-            data.user._id
-        );
-
-        window.location.href =
-            "index.html";
-    }
-
-} else {
-
-    if (data.requiresVerification) {
-        alert(data.message);
-        localStorage.setItem("otpEmail", data.email);
-        localStorage.setItem("otpFlow", "signup");
-        window.location.href = "verify-otp.html";
-    } else {
-        alert(data.message);
-    }
-
-}
-
+        if (response.ok) {
+            window.showToast("Signed in successfully!", "success");
+            setTimeout(() => {
+                if (data.user.role === "admin") {
+                    localStorage.setItem("adminToken", data.token);
+                    localStorage.setItem("adminRole", data.user.role);
+                    localStorage.setItem("adminId", data.user._id);
+                    window.location.href = "../Admin/dashboard.html";
+                } else {
+                    localStorage.setItem("userToken", data.token);
+                    localStorage.setItem("userRole", data.user.role);
+                    localStorage.setItem("userId", data.user._id);
+                    window.location.href = "index.html";
+                }
+            }, 1000);
+        } else {
+            if (data.requiresVerification) {
+                window.showToast(data.message || "OTP Verification Required", "warning");
+                localStorage.setItem("otpEmail", data.email);
+                localStorage.setItem("otpFlow", "signup");
+                setTimeout(() => {
+                    window.location.href = "verify-otp.html";
+                }, 1500);
+            } else {
+                window.showToast(data.message || "Invalid email or password", "error");
+            }
+        }
     } catch (error) {
         console.error(error);
-        alert("Cannot connect to server");
+        window.showToast("Cannot connect to server. Please check your network connection.", "error");
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<span>Sign In</span>`;
     }
 });
 
@@ -667,10 +702,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 document
 .getElementById("googleLogin")
 .addEventListener("click", () => {
-
-    window.location.href =
-    `${API_BASE_URL}/api/auth/google`;
-
+    window.location.href = `${API_BASE_URL}/api/auth/google`;
 });
 </script>
 

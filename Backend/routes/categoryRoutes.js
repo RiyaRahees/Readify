@@ -1,6 +1,7 @@
 const express = require("express");
 
 const router = express.Router();
+const upload = require("../middleware/upload");
 
 const {
     addCategory,
@@ -10,7 +11,7 @@ const {
 
 
 // Add Category
-router.post("/", addCategory);
+router.post("/", upload.single("image"), addCategory);
 
 // Get Categories
 router.get("/", getCategories);

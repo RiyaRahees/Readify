@@ -69,6 +69,13 @@ header {
     font-weight:500;
     padding-bottom:8px;
     transition:0.3s ease;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.nav-link svg {
+    display: none;
 }
 
 /* BLUE TEXT HOVER */
