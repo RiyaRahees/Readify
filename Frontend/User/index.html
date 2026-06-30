@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="nav_footer.css">
+    <link rel="stylesheet" href="global_style_extensions.css">
 
     <script>
         tailwind.config = {
@@ -629,21 +630,26 @@ if (token) {
                     window.location.href = "login.html";
                     return;
                 }
+                window.showLoading("Adding to wishlist...");
                 const response = await fetch(`${API_BASE_URL}/api/wishlist/add`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ userId, productId })
                 });
                 const data = await response.json();
+                window.hideLoading();
                 if (response.ok) {
-                    alert("Added To Wishlist");
-                    window.location.href = "wishlist.html";
+                    window.showToast("Added to your wishlist successfully!", "success");
+                    setTimeout(() => {
+                        window.location.href = "wishlist.html";
+                    }, 1000);
                 } else {
-                    alert(data.message || "Failed to add to wishlist");
+                    window.showToast(data.message || "Failed to add to wishlist", "error");
                 }
             } catch (error) {
                 console.error(error);
-                alert("Something went wrong");
+                window.hideLoading();
+                window.showToast("Something went wrong. Please try again.", "error");
             }
         }
 
@@ -655,24 +661,30 @@ if (token) {
                     return;
                 }
                 if (stock <= 0) {
-                    alert("Product is out of stock");
+                    window.showToast("Sorry, this book is out of stock.", "warning");
                     return;
                 }
+                window.showLoading("Adding to cart...");
                 const response = await fetch(`${API_BASE_URL}/api/cart/add`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ userId, productId, quantity: 1 })
                 });
                 const data = await response.json();
+                window.hideLoading();
                 if (response.ok) {
-                    alert("Product Added To Cart");
-                    window.location.href = "cart.html";
+                    window.showToast("Book added to your cart successfully!", "success");
+                    updateCartBadge();
+                    setTimeout(() => {
+                        window.location.href = "cart.html";
+                    }, 1000);
                 } else {
-                    alert(data.message || "Failed to add to cart");
+                    window.showToast(data.message || "Failed to add to cart", "error");
                 }
             } catch (error) {
                 console.error(error);
-                alert("Something went wrong");
+                window.hideLoading();
+                window.showToast("Something went wrong. Please try again.", "error");
             }
         }
 
