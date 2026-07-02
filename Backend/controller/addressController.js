@@ -59,3 +59,32 @@ exports.deleteAddress = async (req, res) => {
     }
 
 };
+
+exports.setDefaultAddress = async (req, res) => {
+    try {
+        const address = await Address.findById(req.params.id);
+        if (!address) {
+            return res.status(404).json({ message: "Address not found" });
+        }
+
+        // Set all other addresses for this user to isDefault: false
+        await Address.updateMany(
+            { user: address.user },
+            { isDefault: false }
+        );
+
+        address.isDefault = true;
+        await address.save();
+
+        res.json({
+            success: true,
+            message: "Default address set successfully",
+            address
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};

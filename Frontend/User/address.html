@@ -554,12 +554,13 @@ async function loadAddresses() {
     const container =
         document.getElementById("addressContainer");
 
-    container.innerHTML = addresses.map(address => `
-
-        <div class="address-card">
+    container.innerHTML = addresses.map(address => {
+        const isDefault = address.isDefault === true;
+        return `
+        <div class="address-card ${isDefault ? 'default' : ''}">
 
             <span class="address-type">
-                ${address.addressType}
+                ${address.addressType} ${isDefault ? '(Default)' : ''}
             </span>
 
             <h4 class="address-name">
@@ -573,22 +574,55 @@ async function loadAddresses() {
                 PIN : ${address.zip}
             </p>
 
-            <div class="address-actions">
+            <div class="address-actions" style="display: flex; gap: 15px; align-items: center;">
 
                 <button
-                    class="action-btn"
-                    onclick="deleteAddress('${address._id}')">
-
+                    class="action-btn text-danger"
+                    onclick="deleteAddress('${address._id}')"
+                    style="color: #ef4444 !important;">
                     Delete
-
                 </button>
+
+                ${!isDefault ? `
+                <button
+                    class="action-btn text-primary"
+                    onclick="setDefaultAddress('${address._id}')"
+                    style="color: var(--primary-color) !important;">
+                    Set as Default
+                </button>
+                ` : `
+                <span class="text-success font-semibold text-xs d-flex align-items-center gap-1" style="font-size: 13px; color: #10b981; font-weight: 600;">
+                    ✓ Default Address
+                </span>
+                `}
 
             </div>
 
         </div>
+        `;
+    }).join("");
 
-    `).join("");
+}
 
+async function setDefaultAddress(id) {
+    try {
+        const res = await fetch(
+            `${API_BASE_URL}/api/address/default/${id}`,
+            {
+                method: "PUT"
+            }
+        );
+        const data = await res.json();
+        if (res.ok || data.success) {
+            showToast("Default address updated successfully");
+            loadAddresses();
+        } else {
+            showToast(data.message || "Failed to set default address", "error");
+        }
+    } catch (err) {
+        console.error(err);
+        showToast("Error updating default address", "error");
+    }
 }
 
 async function deleteAddress(id) {
