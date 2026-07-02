@@ -603,9 +603,6 @@
                     <button class="btn-action-primary" id="addToCartBtn">
                         <i class="fa-solid fa-cart-shopping"></i> Add to Cart
                     </button>
-                    <button class="btn-action-primary btn-action-secondary" id="buyNowBtn">
-                        <i class="fa-solid fa-bolt"></i> Buy Now
-                    </button>
                     <button class="btn-wishlist-icon" id="wishlistBtn" title="Add to Wishlist">
                         <i class="fa-regular fa-heart" id="wishlistIcon"></i>
                     </button>
@@ -799,7 +796,6 @@
 
                 const stockBadge = document.getElementById("productStock");
                 const cartBtn = document.getElementById("addToCartBtn");
-                const buyBtn = document.getElementById("buyNowBtn");
                 const qtyInput = document.getElementById("qty-input");
                 const qtyBtns = document.querySelectorAll(".qty-btn");
 
@@ -808,7 +804,7 @@
                     stockBadge.style.color = "#EF4444";
                     qtyInput.value = 0;
                     qtyBtns.forEach(btn => btn.disabled = true);
-                    [cartBtn, buyBtn].forEach(btn => {
+                    [cartBtn].forEach(btn => {
                         btn.disabled = true;
                         btn.style.opacity = "0.5";
                         btn.style.cursor = "not-allowed";
@@ -818,7 +814,7 @@
                     stockBadge.style.color = "#10B981";
                     qtyInput.value = 1;
                     qtyBtns.forEach(btn => btn.disabled = false);
-                    [cartBtn, buyBtn].forEach(btn => {
+                    [cartBtn].forEach(btn => {
                         btn.disabled = false;
                         btn.style.opacity = "1";
                         btn.style.cursor = "pointer";
@@ -885,34 +881,7 @@
             }
         });
 
-        // Buy now button
-        document.getElementById("buyNowBtn").addEventListener("click", async () => {
-            const userId = localStorage.getItem("userId");
-            if (!userId) {
-                openLoginModal();
-                return;
-            }
 
-            const quantity = parseInt(document.getElementById("qty-input").value);
-            if (quantity > availableStock) {
-                showToast(`Only ${availableStock} item(s) available`, "error");
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/cart/add`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ userId, productId, quantity })
-                });
-
-                if (response.ok) {
-                    window.location.href = "cart.html";
-                }
-            } catch (err) {
-                console.error(err);
-            }
-        });
 
         // Add to wishlist
         document.getElementById("wishlistBtn").addEventListener("click", async () => {
