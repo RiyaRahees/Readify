@@ -225,8 +225,12 @@
                             <input id="stock" type="number" class="w-full border rounded-xl p-3" required>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-semibold">Price (₹)</label>
+                            <label class="block mb-2 text-sm font-semibold">Selling Price (₹)</label>
                             <input id="price" type="number" class="w-full border rounded-xl p-3" required>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold">Original Price / M.R.P. (₹)</label>
+                            <input id="discountPrice" type="number" class="w-full border rounded-xl p-3" placeholder="Optional (e.g. 699)">
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-semibold">Language</label>
@@ -532,6 +536,7 @@
             formData.append("category", document.getElementById("category").value);
             formData.append("stock", document.getElementById("stock").value);
             formData.append("price", document.getElementById("price").value);
+            formData.append("discountPrice", document.getElementById("discountPrice").value || "0");
             formData.append("author", document.getElementById("author").value.trim());
             formData.append("language", document.getElementById("language").value.trim());
             formData.append("pages", document.getElementById("pages").value || "0");
@@ -590,6 +595,7 @@
                 document.getElementById("category").value = product.category?._id || "";
                 document.getElementById("stock").value = product.stock || 0;
                 document.getElementById("price").value = product.price || 0;
+                document.getElementById("discountPrice").value = product.discountPrice || "";
                 document.getElementById("author").value = product.author || "";
                 document.getElementById("language").value = product.language || "English";
                 document.getElementById("pages").value = product.pages || 0;

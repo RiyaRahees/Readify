@@ -547,18 +547,11 @@
                 <h1 class="product-title" id="productName">Book Title</h1>
                 <p class="product-author" id="productAuthor">by margarita perez</p>
 
-                <!-- Rating -->
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-                    <div class="stars-outer">
-                        <div class="stars-inner" id="starsHeader"></div>
-                    </div>
-                    <span id="averageRatingText" style="font-weight:700; font-size:14px; color:var(--text-dark);">0.0</span>
-                    <span id="totalReviewsCount" style="font-size:13px; color:var(--text-light); font-weight:600;">(0 reviews)</span>
-                </div>
-
                 <!-- Price -->
-                <div class="price-box">
+                <div class="price-box" style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
                     <span class="price-amount" id="productPrice">₹0</span>
+                    <span id="originalPrice" style="text-decoration: line-through; color: var(--text-light); font-size: 18px; font-weight: 500; display: none;">₹0</span>
+                    <span id="discountAmountText" style="color: #10B981; font-weight: 700; font-size: 15px; display: none;">Save ₹0</span>
                     <span class="discount-badge" id="savingsTag" style="display: none;">0% OFF</span>
                 </div>
 
@@ -779,13 +772,26 @@
                 document.getElementById("productDescription").textContent = product.description || "No description available.";
                 document.getElementById("productPrice").textContent = "₹" + product.price;
 
+                const origPriceEl = document.getElementById("originalPrice");
+                const savingsTag = document.getElementById("savingsTag");
+                const discountAmtEl = document.getElementById("discountAmountText");
+
                 if (product.discountPrice && product.discountPrice > product.price) {
-                    const diffPercent = Math.round(((product.discountPrice - product.price) / product.discountPrice) * 100);
-                    const savingsTag = document.getElementById("savingsTag");
+                    const savingsAmt = product.discountPrice - product.price;
+                    const diffPercent = Math.round((savingsAmt / product.discountPrice) * 100);
+
+                    origPriceEl.textContent = "₹" + product.discountPrice;
+                    origPriceEl.style.display = "inline-block";
+
+                    discountAmtEl.textContent = `Save ₹${savingsAmt}`;
+                    discountAmtEl.style.display = "inline-block";
+
                     savingsTag.textContent = `${diffPercent}% OFF`;
                     savingsTag.style.display = "inline-block";
                 } else {
-                    document.getElementById("savingsTag").style.display = "none";
+                    origPriceEl.style.display = "none";
+                    discountAmtEl.style.display = "none";
+                    savingsTag.style.display = "none";
                 }
 
                 document.getElementById("productLanguage").textContent = product.language || "English";
@@ -821,33 +827,12 @@
 
                 document.getElementById("deliveryInfoText").textContent = product.deliveryInfo || "Free Delivery on orders above ₹499";
                 document.getElementById("returnPolicyText").textContent = product.returnPolicy || "7 Day Return & Replacement";
-
-                // Setup Reviews
-                renderReviews();
-
             } catch (err) {
                 console.error("Error loading product details:", err);
             }
         }
 
-        function renderReviews() {
-            if (!productData) return;
-            const reviews = productData.reviews || [];
-            const count = reviews.length;
 
-            document.getElementById("totalReviewsCount").textContent = `(${count} reviews)`;
-
-            if (count === 0) {
-                document.getElementById("averageRatingText").textContent = "0.0";
-                document.getElementById("starsHeader").style.width = "0%";
-                return;
-            }
-
-            const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
-            const avg = (sum / count).toFixed(1);
-            document.getElementById("averageRatingText").textContent = avg;
-            document.getElementById("starsHeader").style.width = `${(avg / 5) * 100}%`;
-        }
 
         // Qty controls
         function updateQty(change) {
