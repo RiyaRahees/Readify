@@ -321,39 +321,50 @@ body {
     .sidebar-menu {
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
-        gap: 6px;
-        padding: 8px 4px;
-        overflow-x: visible;
+        gap: 12px;
+        overflow-x: auto;
         white-space: nowrap;
+        padding-bottom: 8px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
     }
     
-    /* Hide scrollbar on mobile */
+    /* Sleek thin scrollbar on mobile */
     .sidebar-menu::-webkit-scrollbar {
-        display: none;
+        height: 3px;
+        display: block;
+    }
+    .sidebar-menu::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .sidebar-menu::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
     }
     
     .menu-item {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
         margin-bottom: 0;
-        padding: 10px !important;
-        font-size: 0 !important; /* Hide text label on mobile screens */
-        border-radius: 12px;
+        padding: 8px 16px !important;
+        font-size: 13px !important; /* Keep icons with text labels for all items */
+        border-radius: 100px !important;
         flex-shrink: 0;
+        background: #f1f5f9;
+        color: var(--text-muted);
         transition: var(--transition);
+        gap: 8px;
     }
 
     .menu-item.active {
-        font-size: 13px !important; /* Show active text label */
-        padding: 8px 14px !important;
-        gap: 6px;
+        background: var(--primary-gradient) !important;
+        color: #fff !important;
+        box-shadow: 0 4px 10px rgba(99, 102, 241, 0.15);
     }
 
     .menu-item i, .menu-item svg {
-        width: 18px !important;
-        height: 18px !important;
+        width: 16px !important;
+        height: 16px !important;
     }
     
     .menu-item:hover {
@@ -362,7 +373,7 @@ body {
     
     .logout-item {
         border-top: none;
-        padding: 10px !important;
+        padding: 8px 16px !important;
         margin-top: 0;
     }
     
