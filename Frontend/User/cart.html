@@ -273,22 +273,23 @@
         }
 
         .btn-remove {
-            background: transparent;
+            background: rgba(239, 68, 68, 0.1);
             color: #ef4444;
             border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
             cursor: pointer;
             transition: var(--transition);
-            font-size: 14px;
-            font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 6px;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .btn-remove:hover {
-            background: rgba(239, 68, 68, 0.1);
+            background: #ef4444;
+            color: white;
+            transform: scale(1.05);
         }
 
         /* Order Summary */
@@ -514,10 +515,9 @@
             }
 
             .btn-remove {
-                width: auto;
-                height: auto;
-                padding: 4px 8px;
-                font-size: 12px;
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
             }
 
             .cart-table tr.empty-row {
@@ -839,7 +839,7 @@ async function loadCart() {
                     </td>
                     <td>
                         <button class="btn-remove" onclick="deleteCartItem('${item._id}')" title="Remove Item">
-                            Remove
+                            <i class="fa-regular fa-trash-can"></i>
                         </button>
                     </td>
                 </tr>
