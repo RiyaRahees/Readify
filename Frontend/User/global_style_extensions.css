@@ -146,12 +146,35 @@ textarea:focus-visible {
     color: var(--text-light);
     cursor: pointer;
     padding: 4px;
-    font-size: 14px;
     transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .password-toggle-btn:hover {
     color: var(--text-dark);
+}
+
+.password-toggle-btn svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+}
+
+.password-toggle-btn .eye-off-icon {
+    display: none;
+}
+
+.password-toggle-btn.is-visible .eye-icon {
+    display: none;
+}
+
+.password-toggle-btn.is-visible .eye-off-icon {
+    display: block;
 }
 
 .password-strength-container {

@@ -1,0 +1,40 @@
+name: Deploy Readify
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.2.2
+
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu/Readify
+
+            echo "Pull latest code..."
+            git pull origin main
+
+            echo "Install backend packages..."
+            cd Backend
+            npm install
+
+            echo "Restart backend..."
+            pm2 restart readify-backend
+
+            echo "Deploy frontend..."
+            sudo rm -rf /var/www/readify/*
+            sudo cp -r /home/ubuntu/Readify/Frontend/User/* /var/www/readify/
+
+            echo "Reload nginx..."
+            sudo systemctl reload nginx
+
+            echo "Deployment completed!"

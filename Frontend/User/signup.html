@@ -48,6 +48,7 @@
             padding: 0 20px;
         }
 
+        /* ── WRAPPER ── */
         .login-wrapper {
             flex: 1;
             display: flex;
@@ -69,6 +70,7 @@
             }
         }
 
+        /* ── CARD ── */
         .login-section {
             display: flex;
             width: 100%;
@@ -80,6 +82,7 @@
             box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.05);
         }
 
+        /* ── LEFT PANEL ── */
         .login-image-side {
             flex: 1.3;
             position: relative;
@@ -163,6 +166,7 @@
             letter-spacing: 0.5px;
         }
 
+        /* ── RIGHT PANEL ── */
         .login-form-side {
             flex: 1.2;
             display: flex;
@@ -177,6 +181,7 @@
             max-width: 480px;
         }
 
+        /* Header */
         .login-header {
             margin-bottom: 30px;
         }
@@ -200,6 +205,7 @@
             font-size: 15px;
         }
 
+        /* Form grid */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -241,6 +247,7 @@
             box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
         }
 
+        /* Submit button */
         .btn-submit {
             width: 100%;
             padding: 14px;
@@ -262,6 +269,7 @@
             box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
         }
 
+        /* Footer */
         .login-footer {
             margin-top: 24px;
             text-align: center;
@@ -278,65 +286,79 @@
             text-decoration: underline;
         }
 
+        /* Terms line */
+        .terms-note {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 14px;
+            line-height: 1.6;
+        }
+
+        .terms-note a {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 22px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .divider span {
+            margin: 0 15px;
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Google button */
+        .google-btn {
+            width: 100%;
+            height: 55px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .google-btn img {
+            width: 22px;
+            height: 22px;
+        }
+
+        .google-btn:hover {
+            background: #f8fafc;
+            border-color: #4F46E5;
+            box-shadow: 0 8px 20px rgba(79,70,229,.15);
+        }
+
+        /* Responsive */
         @media (max-width: 992px) {
-            .login-image-side {
-                display: none;
-            }
+            .login-image-side { display: none; }
             .login-section {
                 max-width: 550px;
                 min-height: auto;
             }
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
+            .form-grid { grid-template-columns: 1fr; }
         }
-        .divider{
-    display:flex;
-    align-items:center;
-    margin:22px 0;
-}
-
-.divider::before,
-.divider::after{
-    content:"";
-    flex:1;
-    height:1px;
-    background:#e5e7eb;
-}
-
-.divider span{
-    margin:0 15px;
-    color:#6b7280;
-    font-size:14px;
-    font-weight:600;
-}
-
-.google-btn{
-    width:100%;
-    height:55px;
-    border:1px solid #d1d5db;
-    border-radius:12px;
-    background:#fff;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:12px;
-    font-size:15px;
-    font-weight:600;
-    cursor:pointer;
-    transition:.3s;
-}
-
-.google-btn img{
-    width:22px;
-    height:22px;
-}
-
-.google-btn:hover{
-    background:#f8fafc;
-    border-color:#4F46E5;
-    box-shadow:0 8px 20px rgba(79,70,229,.15);
-}
     </style>
     <script src="alert-override.js"></script>
 
@@ -389,6 +411,7 @@
 
     <main class="login-wrapper">
         <div class="login-section">
+            <!-- Left: Hero Panel -->
             <div class="login-image-side">
                 <div class="image-content">
                     <h2>Join the World's Most Passionate Readers.</h2>
@@ -405,6 +428,7 @@
                 </div>
             </div>
 
+            <!-- Right: Form Panel -->
             <div class="login-form-side">
                 <div class="login-container">
                     <div class="login-header">
@@ -413,48 +437,70 @@
                         <p>Sign up to start your literary journey today.</p>
                     </div>
 
-                    <form id="signupForm">
+                    <form id="signupForm" novalidate>
                         <div class="form-grid">
-                            <div class="form-input-container" style="margin-bottom: 0;">
-                                <label for="fname" style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">First Name</label>
-                                <input type="text" id="fname" class="form-control-premium" placeholder="John" required>
+                            <!-- First Name -->
+                            <div class="form-input-container" style="margin-bottom:0">
+                                <label for="fname" style="display:block;font-size:12.5px;font-weight:700;margin-bottom:6px;">First Name</label>
+                                <input type="text" id="fname" class="form-control-premium" placeholder="John" required autocomplete="given-name">
                             </div>
-                            <div class="form-input-container" style="margin-bottom: 0;">
-                                <label for="lname" style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Last Name</label>
-                                <input type="text" id="lname" class="form-control-premium" placeholder="Doe" required>
+                            <!-- Last Name -->
+                            <div class="form-input-container" style="margin-bottom:0">
+                                <label for="lname" style="display:block;font-size:12.5px;font-weight:700;margin-bottom:6px;">Last Name</label>
+                                <input type="text" id="lname" class="form-control-premium" placeholder="Doe" required autocomplete="family-name">
                             </div>
-                            <div class="form-input-container" style="margin-bottom: 0;">
-                                <label for="email" style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Email Address</label>
-                                <input type="email" id="email" class="form-control-premium" placeholder="john@example.com" required>
+                            <!-- Email -->
+                            <div class="form-input-container" style="margin-bottom:0">
+                                <label for="email" style="display:block;font-size:12.5px;font-weight:700;margin-bottom:6px;">Email Address</label>
+                                <input type="email" id="email" class="form-control-premium" placeholder="john@example.com" required autocomplete="email">
                             </div>
-                            <div class="form-input-container" style="margin-bottom: 0;">
-                                <label for="phone" style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Phone Number</label>
-                                <input type="tel" id="phone" class="form-control-premium" placeholder="+1 (555) 000-0000" required>
+                            <!-- Phone -->
+                            <div class="form-input-container" style="margin-bottom:0">
+                                <label for="phone" style="display:block;font-size:12.5px;font-weight:700;margin-bottom:6px;">Phone Number</label>
+                                <input type="tel" id="phone" class="form-control-premium" placeholder="+1 (555) 000-0000" required autocomplete="tel">
                             </div>
-                            <div class="form-input-container full-width" style="grid-column: 1 / -1; margin-bottom: 0;">
-                                <label for="password" style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Password</label>
+                            <!-- Password -->
+                            <div class="form-input-container full-width" style="grid-column:1 / -1;margin-bottom:0">
+                                <label for="password" style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Password</label>
                                 <div class="password-toggle-wrapper">
-                                    <input type="password" id="password" class="form-control-premium" placeholder="••••••••" required style="padding-right: 50px;">
-                                    <button type="button" class="password-toggle-btn" aria-label="Toggle password visibility">👁️</button>
+                                    <input type="password" id="password" class="form-control-premium" placeholder="••••••••" required autocomplete="new-password" style="padding-right:50px;">
+                                    <button type="button" class="password-toggle-btn" id="togglePassword" aria-label="Toggle password visibility">
+                                        <svg class="eye-icon" viewBox="0 0 24 24">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        <svg class="eye-off-icon" viewBox="0 0 24 24">
+                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                        </svg>
+                                    </button>
                                 </div>
-                                <div class="password-strength-container">
-                                    <div class="password-strength-bar">
-                                        <div class="password-strength-segment" id="strength-seg-1"></div>
-                                        <div class="password-strength-segment" id="strength-seg-2"></div>
-                                        <div class="password-strength-segment" id="strength-seg-3"></div>
-                                        <div class="password-strength-segment" id="strength-seg-4"></div>
-                                    </div>
-                                    <span class="password-strength-label" id="strength-label">Password strength: empty</span>
+                            </div>
+                            <!-- Confirm Password -->
+                            <div class="form-input-container full-width" style="grid-column:1 / -1;margin-bottom:0">
+                                <label for="confirmPassword" style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Confirm Password</label>
+                                <div class="password-toggle-wrapper">
+                                    <input type="password" id="confirmPassword" class="form-control-premium" placeholder="Re-enter your password" required autocomplete="new-password" style="padding-right:50px;">
+                                    <button type="button" class="password-toggle-btn" id="toggleConfirm" aria-label="Toggle confirm password visibility">
+                                        <svg class="eye-icon" viewBox="0 0 24 24">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        <svg class="eye-off-icon" viewBox="0 0 24 24">
+                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                        </svg>
+                                    </button>
                                 </div>
+                                <div id="confirmPasswordFeedback" style="min-height:18px;"></div>
                             </div>
                         </div>
 
                         <button type="submit" class="btn-premium-indigo w-full" id="submitBtn" style="width: 100%; margin-top: 10px;">
                             <span>Sign Up</span>
                         </button>
-                        <div class="divider">
-                            <span>OR</span>
-                        </div>
+
+                        <div class="divider"><span>OR</span></div>
 
                         <button type="button" id="googleLogin" class="google-btn">
                             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
@@ -544,14 +590,16 @@
     </footer>
 
     <script>
-    const fnameInput = document.getElementById("fname");
-    const lnameInput = document.getElementById("lname");
-    const emailInput = document.getElementById("email");
-    const phoneInput = document.getElementById("phone");
-    const passwordInput = document.getElementById("password");
-    const submitBtn = document.getElementById("submitBtn");
+    const fnameInput           = document.getElementById("fname");
+    const lnameInput           = document.getElementById("lname");
+    const emailInput           = document.getElementById("email");
+    const phoneInput           = document.getElementById("phone");
+    const passwordInput        = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+    const confirmFeedback      = document.getElementById("confirmPasswordFeedback");
+    const submitBtn            = document.getElementById("submitBtn");
 
-    // Realtime blur validators
+    /* ── Blur validators ── */
     fnameInput.addEventListener("blur", () => {
         window.validateInput(fnameInput, {
             required: true,
@@ -602,177 +650,168 @@
     });
     passwordInput.addEventListener("input", () => {
         window.clearInputError(passwordInput);
-        checkPasswordStrength(passwordInput.value);
+        // Re-validate confirm if user is updating password
+        if (confirmPasswordInput.value) updateConfirmFeedback();
     });
 
-    // Password strength visualizer
-    function checkPasswordStrength(val) {
-        const segs = [
-            document.getElementById("strength-seg-1"),
-            document.getElementById("strength-seg-2"),
-            document.getElementById("strength-seg-3"),
-            document.getElementById("strength-seg-4")
-        ];
-        const label = document.getElementById("strength-label");
+    /* ── Confirm Password real-time feedback ── */
+    function updateConfirmFeedback() {
+        const val     = confirmPasswordInput.value;
+        const passVal = passwordInput.value;
 
-        // Reset
-        segs.forEach(s => s.style.backgroundColor = "transparent");
-        
         if (!val) {
-            label.innerText = "Password strength: empty";
-            label.style.color = "var(--text-light)";
+            confirmFeedback.innerHTML = "";
+            confirmPasswordInput.classList.remove("is-valid", "is-invalid");
             return;
         }
 
-        let strength = 0;
-        if (val.length >= 6) strength++;
-        if (/[a-z]/.test(val) && /[A-Z]/.test(val)) strength++;
-        if (/[0-9]/.test(val)) strength++;
-        if (/[^a-zA-Z0-9]/.test(val)) strength++;
-
-        if (val.length < 6) {
-            strength = Math.min(strength, 1);
-        }
-
-        if (strength === 1) {
-            segs[0].style.backgroundColor = "#EF4444"; // red
-            label.innerText = "Password strength: Weak";
-            label.style.color = "#EF4444";
-        } else if (strength === 2) {
-            segs[0].style.backgroundColor = "#F59E0B"; // orange
-            segs[1].style.backgroundColor = "#F59E0B";
-            label.innerText = "Password strength: Medium";
-            label.style.color = "#F59E0B";
-        } else if (strength === 3) {
-            segs[0].style.backgroundColor = "#3B82F6"; // blue
-            segs[1].style.backgroundColor = "#3B82F6";
-            segs[2].style.backgroundColor = "#3B82F6";
-            label.innerText = "Password strength: Good";
-            label.style.color = "#3B82F6";
-        } else if (strength === 4) {
-            segs[0].style.backgroundColor = "#10B981"; // green
-            segs[1].style.backgroundColor = "#10B981";
-            segs[2].style.backgroundColor = "#10B981";
-            segs[3].style.backgroundColor = "#10B981";
-            label.innerText = "Password strength: Strong";
-            label.style.color = "#10B981";
-        }
-    }
-
-    // Password show/hide toggle
-    const toggleBtn = document.querySelector(".password-toggle-btn");
-    if (toggleBtn) {
-        toggleBtn.addEventListener("click", () => {
-            const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
-            passwordInput.setAttribute("type", type);
-            toggleBtn.textContent = type === "password" ? "👁️" : "🙈";
-        });
-    }
-
-document.getElementById("signupForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const isFnameValid = window.validateInput(fnameInput, {
-        required: true,
-        pattern: /^[a-zA-Z]{2,}$/,
-        requiredMessage: "First name is required.",
-        patternMessage: "Please enter a valid first name (at least 2 letters)."
-    });
-    const isLnameValid = window.validateInput(lnameInput, {
-        required: true,
-        pattern: /^[a-zA-Z]{2,}$/,
-        requiredMessage: "Last name is required.",
-        patternMessage: "Please enter a valid last name (at least 2 letters)."
-    });
-    const isEmailValid = window.validateInput(emailInput, {
-        required: true,
-        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-        requiredMessage: "Email address is required.",
-        patternMessage: "Please enter a valid email address."
-    });
-    const isPhoneValid = window.validateInput(phoneInput, {
-        required: true,
-        pattern: /^[0-9+\s-]{10,}$/,
-        requiredMessage: "Phone number is required.",
-        patternMessage: "Please enter a valid phone number (at least 10 digits)."
-    });
-    const isPassValid = window.validateInput(passwordInput, {
-        required: true,
-        minLength: 6,
-        requiredMessage: "Password is required.",
-        minLengthMessage: "Password must be at least 6 characters long."
-    });
-
-    if (!isFnameValid || !isLnameValid || !isEmailValid || !isPhoneValid || !isPassValid) {
-        window.showToast("Please correct the validation errors in the form.", "error");
-        return;
-    }
-
-    const firstName = fnameInput.value.trim();
-    const lastName = lnameInput.value.trim();
-    const email = emailInput.value.trim();
-    const phone = phoneInput.value.trim();
-    const password = passwordInput.value;
-
-    const userData = {
-        name: `${firstName} ${lastName}`,
-        email,
-        phone,
-        password
-    };
-
-    try {
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = `<span class="btn-spinner"></span> <span>Creating Account...</span>`;
-
-        const response = await fetch(
-            `${API_BASE_URL}/api/auth/register`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(userData)
-            }
-        );
-
-        const data = await response.json();
-
-        if (response.ok) {
-            if (data.requiresVerification) {
-                window.showToast("Verification OTP sent to your email!", "warning");
-                localStorage.setItem("otpEmail", email);
-                localStorage.setItem("otpFlow", "signup");
-                setTimeout(() => {
-                    window.location.href = "verify-otp.html";
-                }, 1500);
-            } else {
-                window.showToast("Registration successful!", "success");
-                if (data.token) {
-                    localStorage.setItem("token", data.token);
-                }
-                setTimeout(() => {
-                    window.location.href = "login.html";
-                }, 1500);
-            }
+        if (val === passVal) {
+            confirmPasswordInput.classList.add("is-valid");
+            confirmPasswordInput.classList.remove("is-invalid");
+            confirmFeedback.innerHTML = `<span class="valid-feedback-text">✓ Passwords match</span>`;
         } else {
-            window.showToast(data.message || "Registration failed", "error");
+            confirmPasswordInput.classList.add("is-invalid");
+            confirmPasswordInput.classList.remove("is-valid");
+            confirmFeedback.innerHTML = `<span class="invalid-feedback-text">✕ Passwords do not match</span>`;
+        }
+    }
+
+    confirmPasswordInput.addEventListener("input", () => {
+        window.clearInputError(confirmPasswordInput);
+        updateConfirmFeedback();
+    });
+
+    confirmPasswordInput.addEventListener("blur", () => {
+        if (!confirmPasswordInput.value) {
+            window.validateInput(confirmPasswordInput, {
+                required: true,
+                requiredMessage: "Please confirm your password."
+            });
+        } else {
+            updateConfirmFeedback();
+        }
+    });
+
+    /* ── Toggle password visibility ── */
+    document.getElementById("togglePassword").addEventListener("click", () => {
+        const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+        passwordInput.setAttribute("type", type);
+        document.getElementById("togglePassword").classList.toggle("is-visible", type === "text");
+    });
+
+    document.getElementById("toggleConfirm").addEventListener("click", () => {
+        const type = confirmPasswordInput.getAttribute("type") === "password" ? "text" : "password";
+        confirmPasswordInput.setAttribute("type", type);
+        document.getElementById("toggleConfirm").classList.toggle("is-visible", type === "text");
+    });
+
+    /* ── Form Submit ── */
+    document.getElementById("signupForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const isFnameValid = window.validateInput(fnameInput, {
+            required: true,
+            pattern: /^[a-zA-Z]{2,}$/,
+            requiredMessage: "First name is required.",
+            patternMessage: "Please enter a valid first name (at least 2 letters)."
+        });
+        const isLnameValid = window.validateInput(lnameInput, {
+            required: true,
+            pattern: /^[a-zA-Z]{2,}$/,
+            requiredMessage: "Last name is required.",
+            patternMessage: "Please enter a valid last name (at least 2 letters)."
+        });
+        const isEmailValid = window.validateInput(emailInput, {
+            required: true,
+            pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            requiredMessage: "Email address is required.",
+            patternMessage: "Please enter a valid email address."
+        });
+        const isPhoneValid = window.validateInput(phoneInput, {
+            required: true,
+            pattern: /^[0-9+\s-]{10,}$/,
+            requiredMessage: "Phone number is required.",
+            patternMessage: "Please enter a valid phone number (at least 10 digits)."
+        });
+        const isPassValid = window.validateInput(passwordInput, {
+            required: true,
+            minLength: 6,
+            requiredMessage: "Password is required.",
+            minLengthMessage: "Password must be at least 6 characters long."
+        });
+
+        // Confirm password check
+        let isConfirmValid = true;
+        if (!confirmPasswordInput.value) {
+            window.validateInput(confirmPasswordInput, {
+                required: true,
+                requiredMessage: "Please confirm your password."
+            });
+            isConfirmValid = false;
+        } else if (confirmPasswordInput.value !== passwordInput.value) {
+            confirmPasswordInput.classList.add("is-invalid");
+            confirmFeedback.innerHTML = `<span class="invalid-feedback-text">✕ Passwords do not match</span>`;
+            isConfirmValid = false;
         }
 
-    } catch (error) {
-        console.error(error);
-        window.showToast("Cannot connect to server. Please check your network.", "error");
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `<span>Sign Up</span>`;
-    }
-});
+        if (!isFnameValid || !isLnameValid || !isEmailValid || !isPhoneValid || !isPassValid || !isConfirmValid) {
+            window.showToast("Please correct the errors in the form.", "error");
+            return;
+        }
 
-document.getElementById("googleLogin").addEventListener("click", (e) => {
-    e.preventDefault();
-    window.location.href = `${API_BASE_URL}/api/auth/google`;
-});
-</script>
+        const firstName = fnameInput.value.trim();
+        const lastName  = lnameInput.value.trim();
+        const email     = emailInput.value.trim();
+        const phone     = phoneInput.value.trim();
+        const password  = passwordInput.value;
+
+        const userData = {
+            name: `${firstName} ${lastName}`,
+            email,
+            phone,
+            password
+        };
+
+        try {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span class="btn-spinner"></span> <span>Creating Account...</span>`;
+
+            const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                if (data.requiresVerification) {
+                    window.showToast("Verification OTP sent to your email!", "warning");
+                    localStorage.setItem("otpEmail", email);
+                    localStorage.setItem("otpFlow", "signup");
+                    setTimeout(() => { window.location.href = "verify-otp.html"; }, 1500);
+                } else {
+                    window.showToast("Registration successful!", "success");
+                    if (data.token) localStorage.setItem("token", data.token);
+                    setTimeout(() => { window.location.href = "login.html"; }, 1500);
+                }
+            } else {
+                window.showToast(data.message || "Registration failed", "error");
+            }
+        } catch (error) {
+            console.error(error);
+            window.showToast("Cannot connect to server. Please check your network.", "error");
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span>Create Account</span>`;
+        }
+    });
+
+    document.getElementById("googleLogin").addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = `${API_BASE_URL}/api/auth/google`;
+    });
+    </script>
 
 </body>
 </html>

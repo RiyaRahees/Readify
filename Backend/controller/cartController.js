@@ -46,13 +46,23 @@ const getCart = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    const cart = await Cart.find({
+    const cartItems = await Cart.find({
       user: userId,
     }).populate("product");
 
+    const validItems = [];
+    for (const item of cartItems) {
+      if (item.product) {
+        validItems.push(item);
+      } else {
+        // Clean up orphan item asynchronously
+        await Cart.findByIdAndDelete(item._id).catch(() => {});
+      }
+    }
+
     res.status(200).json({
       success: true,
-      cart,
+      cart: validItems,
     });
   } catch (error) {
     res.status(500).json({

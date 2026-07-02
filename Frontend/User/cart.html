@@ -673,14 +673,7 @@
 
         </div>
 
-        <div class="container">
-            <div class="popular-products">
-                <h3>You May Also Like</h3>
-                <div class="product-grid" id="relatedProductsGrid">
-                    <!-- Dynamic related products will be loaded here -->
-                </div>
-            </div>
-        </div>
+
     </section>
 
     <!-- Modern Footer -->
@@ -814,6 +807,7 @@ async function loadCart() {
         if (data.cart && data.cart.length > 0) {
             if (tableEl) tableEl.classList.remove("is-empty");
             data.cart.forEach((item) => {
+                if (!item.product) return;
                 const itemTotal = item.product.price * item.quantity;
                 subtotal += itemTotal;
                 totalItems += item.quantity;
@@ -891,7 +885,7 @@ async function loadCart() {
         // Also update the cart badge
         const badge = document.querySelector(".cart-badge");
         if (badge && data && data.cart) {
-            badge.innerText = data.cart.length;
+            badge.innerText = data.cart.filter(item => item.product).length;
         }
 
     } catch (err) {
@@ -901,37 +895,7 @@ async function loadCart() {
 
 loadCart();
 
-async function loadRelatedProducts() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/products`);
-        const products = await response.json();
-        const grid = document.getElementById("relatedProductsGrid");
-        if (!grid) return;
-        
-        grid.innerHTML = "";
-        
-        // Show up to 4 products
-        const displayProducts = products.slice(0, 4);
-        
-        if (displayProducts.length === 0) {
-            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 20px;">No recommendations available.</div>`;
-            return;
-        }
-        
-        displayProducts.forEach(product => {
-            grid.innerHTML += `
-                <div class="product-card" onclick="window.location.href='productdeatil.html?id=${product._id}'" style="cursor: pointer;">
-                    <img src="${product.image || 'images/default-book.png'}" alt="${product.name}">
-                    <h4 style="font-size: 14px; margin: 5px 0;" class="truncate">${product.name}</h4>
-                    <p class="price">₹${product.price}</p>
-                </div>
-            `;
-        });
-    } catch (error) {
-        console.error("Error loading related products:", error);
-    }
-}
-loadRelatedProducts();
+
 
 // Mobile Menu Toggle
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -961,7 +925,7 @@ async function updateCartBadge() {
             const data = await res.json();
             const badge = document.querySelector(".cart-badge");
             if (badge && data && data.cart) {
-                badge.innerText = data.cart.length;
+                badge.innerText = data.cart.filter(item => item.product).length;
             }
         }
     } catch(err) {

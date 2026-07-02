@@ -74,11 +74,8 @@
         }
     </style>
 
-
     <script src="../apiConfig.js"></script>
 </head>
-
-
 
 <body class="bg-slate-100">
 
@@ -92,15 +89,13 @@
                         <span
                             class="text-2xl font-serif font-black tracking-tight text-blue-950 leading-none">Readify</span>
                         <div class="w-16 h-1 bg-gradient-to-r from-blue-900 to-indigo-500 mt-1.5 rounded-full"></div>
-                        <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-2">Management
-                            Suite</span>
+                        <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-2">Management Suite</span>
                     </div>
                 </div>
 
                 <nav class="px-4 py-6 space-y-6">
                     <div>
-                        <span class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Main
-                            Menu</span>
+                        <span class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Main Menu</span>
                         <div class="space-y-1">
                             <a href="dashboard.html"
                                 class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
@@ -130,8 +125,7 @@
                     </div>
 
                     <div>
-                        <span
-                            class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Product</span>
+                        <span class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Product</span>
                         <div class="space-y-1">
                             <a href="add-product.html"
                                 class="flex items-center gap-3 px-3 py-2.5 bg-gradient-to-r from-blue-950 to-blue-900 text-white rounded-xl text-sm font-medium shadow-sm transition">
@@ -141,8 +135,7 @@
                     </div>
 
                     <div>
-                        <span
-                            class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Admin</span>
+                        <span class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Admin</span>
                         <div class="space-y-1">
                             <a href="AdminRole.html"
                                 class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-sm font-medium transition">
@@ -156,257 +149,163 @@
             <div class="p-4 border-t border-slate-100 space-y-2 bg-slate-50/50">
                 <div class="flex items-center justify-between p-2 rounded-xl hover:bg-white transition">
                     <div class="flex items-center gap-3">
-                        <div
-                            class="w-8 h-8 rounded-full bg-indigo-950 flex items-center justify-center text-white font-serif font-black text-xs">
-                            R</div>
+                        <div class="w-8 h-8 rounded-full bg-indigo-950 flex items-center justify-center text-white font-serif font-black text-xs">R</div>
                         <div class="truncate max-w-[120px]">
                             <p class="text-xs font-bold text-slate-800">Readify </p>
                             <p class="text-[10px] text-slate-400 truncate">admin@readify.com</p>
                         </div>
                     </div>
-                    <button class="text-slate-400 hover:text-red-500 transition"><i
-                            class="fa-solid fa-right-from-bracket text-xs"></i></button>
+                    <button class="text-slate-400 hover:text-red-500 transition"><i class="fa-solid fa-right-from-bracket text-xs"></i></button>
                 </div>
-                <a href="#"
+                <a href="../User/index.html"
                     class="flex items-center justify-between p-2.5 border border-slate-200 bg-white rounded-xl text-xs font-semibold text-slate-700 hover:border-indigo-400 transition">
-                    <span class="text-blue-950"><i class="fa-solid fa-shop mr-1.5 text-indigo-500"></i> Open Live
-                        Shop</span>
+                    <span class="text-blue-950"><i class="fa-solid fa-shop mr-1.5 text-indigo-500"></i> Open Live Shop</span>
                     <i class="fa-solid fa-arrow-up-right-from-square text-slate-400 text-[9px]"></i>
                 </a>
             </div>
         </aside>
+
         <!-- Main -->
         <main class="ml-64 flex-1 p-8">
 
             <!-- Header -->
-
             <div class="flex justify-between items-center mb-8">
-
                 <div>
-                    <h2 class="text-3xl font-bold text-slate-800">
-                        Product Management
-                    </h2>
-                    <p class="text-sm text-slate-500">
-                        Add, edit and manage all products
-                    </p>
+                    <h2 class="text-3xl font-bold text-slate-800">Product Management</h2>
+                    <p class="text-sm text-slate-500">Add, edit and delete book products</p>
                 </div>
-
-                <button class="bg-blue-950 text-white px-5 py-3 rounded-xl font-semibold">
-                    Publish Changes
-                </button>
-
+                <button class="bg-blue-950 text-white px-5 py-3 rounded-xl font-semibold">Publish Changes</button>
             </div>
 
             <!-- Statistics -->
-
             <div class="grid md:grid-cols-4 gap-5 mb-8">
-
                 <div class="bg-white p-6 rounded-2xl shadow-sm">
                     <p class="text-sm text-gray-500">Total Products</p>
                     <h3 id="totalProducts" class="text-3xl font-bold mt-2">0</h3>
                 </div>
-
                 <div class="bg-white p-6 rounded-2xl shadow-sm">
                     <p class="text-sm text-gray-500">In Stock</p>
                     <h3 id="inStock" class="text-3xl font-bold mt-2 text-green-600">0</h3>
                 </div>
-
                 <div class="bg-white p-6 rounded-2xl shadow-sm">
                     <p class="text-sm text-gray-500">Out Of Stock</p>
                     <h3 id="outOfStock" class="text-3xl font-bold mt-2 text-red-500">0</h3>
                 </div>
-
                 <div class="bg-white p-6 rounded-2xl shadow-sm">
                     <p class="text-sm text-gray-500">Categories</p>
                     <h3 id="totalCategories" class="text-3xl font-bold mt-2">0</h3>
                 </div>
-
             </div>
 
             <!-- Add Product Form -->
-
             <div class="bg-white rounded-2xl shadow-sm p-6 mb-8">
-
-                <h3 class="text-xl font-bold mb-6">
-                    Add New Product
-                </h3>
+                <h3 id="formTitle" class="text-xl font-bold mb-6">Add New Product</h3>
 
                 <form id="productForm">
-
                     <div class="grid md:grid-cols-2 gap-5">
-
+                        <!-- Book Details fields -->
                         <div>
-                            <label class="block mb-2 text-sm font-semibold">
-                                Product Name
-                            </label>
-
+                            <label class="block mb-2 text-sm font-semibold">Book Title</label>
                             <input id="productName" type="text" class="w-full border rounded-xl p-3" required>
                         </div>
-
                         <div>
-                            <label class="block mb-2 text-sm font-semibold">
-                                SKU
-                            </label>
-
+                            <label class="block mb-2 text-sm font-semibold">Author Name</label>
+                            <input id="author" type="text" class="w-full border rounded-xl p-3" required placeholder="Margarita Perez">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold">SKU</label>
                             <input id="sku" type="text" class="w-full border rounded-xl p-3" required>
                         </div>
-
                         <div>
-                            <label class="block mb-2 text-sm font-semibold">
-                                Category
-                            </label>
-
-                            <select id="category" class="w-full border rounded-xl p-3" required>
-                            </select>
+                            <label class="block mb-2 text-sm font-semibold">Category</label>
+                            <select id="category" class="w-full border rounded-xl p-3" required></select>
                         </div>
-
                         <div>
-                            <label class="block mb-2 text-sm font-semibold">
-                                Stock Quantity
-                            </label>
-
+                            <label class="block mb-2 text-sm font-semibold">Stock Quantity</label>
                             <input id="stock" type="number" class="w-full border rounded-xl p-3" required>
                         </div>
-
                         <div>
-                            <label class="block mb-2 text-sm font-semibold">
-                                Price
-                            </label>
-
+                            <label class="block mb-2 text-sm font-semibold">Price (₹)</label>
                             <input id="price" type="number" class="w-full border rounded-xl p-3" required>
                         </div>
-
                         <div>
-                            <label class="block mb-2 text-sm font-semibold">
-                                Discount Price
-                            </label>
-
-                            <input id="discountPrice" type="number" class="w-full border rounded-xl p-3">
+                            <label class="block mb-2 text-sm font-semibold">Language</label>
+                            <input id="language" type="text" class="w-full border rounded-xl p-3" required value="English">
                         </div>
-
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold">Number of Pages</label>
+                            <input id="pages" type="number" class="w-full border rounded-xl p-3" required placeholder="384">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block mb-2 text-sm font-semibold">Delivery Information</label>
+                            <input id="deliveryInfo" type="text" class="w-full border rounded-xl p-3" required value="Free Delivery on orders above ₹499">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block mb-2 text-sm font-semibold">Return Policy</label>
+                            <input id="returnPolicy" type="text" class="w-full border rounded-xl p-3" required value="7 Day Return & Replacement">
+                        </div>
                     </div>
 
                     <div class="mt-5">
-
-                        <label class="block mb-2 text-sm font-semibold">
-                            Description
-                        </label>
-
-                        <textarea id="description" rows="5" class="w-full border rounded-xl p-3"></textarea>
-
+                        <label class="block mb-2 text-sm font-semibold">Short Description</label>
+                        <textarea id="description" rows="4" class="w-full border rounded-xl p-3" required placeholder="Enter a brief description of the book..."></textarea>
                     </div>
 
                     <div class="mt-5">
-                        <label class="block mb-2 text-sm font-semibold">
-                            Product Image
-                        </label>
+                        <label class="block mb-2 text-sm font-semibold">Book Cover Image</label>
                         <div class="flex items-center gap-4">
-                            <input id="productImage" type="file" class="flex-1 border rounded-xl p-3">
+                            <input id="productImage" type="file" class="flex-1 border rounded-xl p-3 bg-white">
                             <div id="imagePreviewContainer" class="hidden">
-                                <img id="imagePreview" src="" alt="Preview" class="w-16 h-16 rounded-xl border object-cover shadow-sm bg-slate-50">
+                                <img id="imagePreview" src="" alt="Preview" class="w-16 h-20 rounded border object-contain bg-slate-50 p-1">
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-6">
-
-                        <button type="submit" class="bg-blue-950 text-white px-6 py-3 rounded-xl font-semibold">
-
-                            <i class="fa-solid fa-plus mr-2"></i>
-                            Add Product
-
+                    <div class="mt-6 flex justify-end gap-3 border-t pt-6">
+                        <button type="button" id="cancelEditBtn" class="hidden border border-slate-200 text-slate-600 px-6 py-3 rounded-xl font-semibold hover:bg-slate-50 transition">Cancel Edit</button>
+                        <button type="submit" class="bg-blue-950 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-900 transition">
+                            <i class="fa-solid fa-plus mr-2"></i><span id="submitBtnText">Add Product</span>
                         </button>
-
                     </div>
-
                 </form>
-
             </div>
 
             <!-- Product List -->
-
             <div class="bg-white rounded-2xl shadow-sm">
-
                 <div class="p-5 border-b flex justify-between items-center">
-
-                    <h3 class="font-bold text-lg">
-                        Product List
-                    </h3>
-
+                    <h3 class="font-bold text-lg">Product List</h3>
                     <div class="flex gap-3">
-
-                        <input type="text" placeholder="Search Product..." class="border rounded-xl px-4 py-2">
-
-                        <button class="border px-4 py-2 rounded-xl">
-
-                            <i class="fa-solid fa-filter"></i>
-
-                        </button>
-
+                        <input type="text" id="searchInput" placeholder="Search Product..." class="border rounded-xl px-4 py-2 text-sm">
+                        <button class="border px-4 py-2 rounded-xl text-slate-500 hover:bg-slate-50"><i class="fa-solid fa-filter"></i></button>
                     </div>
-
                 </div>
 
                 <div class="overflow-x-auto">
-
                     <table class="w-full">
-
                         <thead class="bg-slate-50">
-
                             <tr>
-
                                 <th class="p-4 text-left">Image</th>
-<th class="p-4 text-left">Product</th>
+                                <th class="p-4 text-left">Product</th>
                                 <th class="p-4 text-left">SKU</th>
                                 <th class="p-4 text-left">Category</th>
                                 <th class="p-4 text-left">Stock</th>
                                 <th class="p-4 text-left">Price</th>
                                 <th class="p-4 text-left">Status</th>
                                 <th class="p-4 text-center">Actions</th>
-
                             </tr>
-
                         </thead>
-
-                        <tbody id="productTableBody">
-
-
-</tbody>
-
+                        <tbody id="productTableBody"></tbody>
                     </table>
-
                 </div>
 
                 <div class="p-4 border-t flex justify-between items-center">
-
-                    <p class="text-sm text-gray-500">
-                        Showing 1-2 Products
-                    </p>
-
-                    <div class="flex gap-2">
-
-                        <button class="border px-3 py-1 rounded">
-                            1
-                        </button>
-
-                        <button class="border px-3 py-1 rounded">
-                            2
-                        </button>
-
-                        <button class="border px-3 py-1 rounded">
-                            3
-                        </button>
-
-                    </div>
-
+                    <p class="text-sm text-gray-500" id="showingCount">Showing 0-0 Products</p>
+                    <div class="flex gap-2" id="paginationControls"></div>
                 </div>
-
             </div>
-
         </main>
 
     </div>
-
 
     <!-- Custom Premium Confirmation Modal -->
     <div id="confirmModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] opacity-0 transition-opacity duration-300">
@@ -497,6 +396,7 @@
         }
 
         let editingProductId = null;
+        let originalCoverUrl = "";
 
         // Image Preview Listener
         document.getElementById("productImage").addEventListener("change", function(e) {
@@ -511,6 +411,9 @@
                     previewContainer.classList.remove("hidden");
                 };
                 reader.readAsDataURL(file);
+            } else if (originalCoverUrl) {
+                previewImage.src = originalCoverUrl;
+                previewContainer.classList.remove("hidden");
             } else {
                 previewImage.src = "";
                 previewContainer.classList.add("hidden");
@@ -526,15 +429,13 @@
                 categorySelect.innerHTML = '<option value="">Select Category</option>';
                 categories.forEach(category => {
                     categorySelect.innerHTML += `
-                        <option value="${category._id}">
-                            ${category.name}
-                        </option>
+                        <option value="${category._id}">${category.name}</option>
                     `;
                 });
 
                 document.getElementById("totalCategories").innerText = categories.length;
             } catch (error) {
-                console.log(error);
+                console.error("Error loading categories:", error);
             }
         }
 
@@ -543,7 +444,6 @@
                 const response = await fetch(`${API_BASE_URL}/api/products`);
                 const products = await response.json();
 
-                // Compute dynamic metrics
                 const totalProducts = products.length;
                 const inStock = products.filter(p => p.stock > 0).length;
                 const outOfStock = products.filter(p => p.stock === 0).length;
@@ -555,58 +455,95 @@
                 const tableBody = document.getElementById("productTableBody");
                 tableBody.innerHTML = "";
 
+                if (products.length === 0) {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="8" class="p-8 text-center text-slate-400 text-sm">No books registered yet.</td>
+                        </tr>
+                    `;
+                    document.getElementById("showingCount").innerText = "Showing 0-0 Products";
+                    return;
+                }
+
                 products.forEach(product => {
                     let stockStatus = "";
                     if (product.stock === 0) {
-                        stockStatus = `<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full">Out of Stock</span>`;
+                        stockStatus = `<span class="bg-rose-50 text-rose-700 px-3 py-1 rounded-full text-xs font-semibold">Out of Stock</span>`;
                     } else if (product.stock < 5) {
-                        stockStatus = `<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">Low Stock</span>`;
+                        stockStatus = `<span class="bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-xs font-semibold">Low Stock (${product.stock})</span>`;
                     } else {
-                        stockStatus = `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full">In Stock</span>`;
+                        stockStatus = `<span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-semibold">In Stock (${product.stock})</span>`;
                     }
 
                     tableBody.innerHTML += `
-                        <tr class="border-t">
+                        <tr class="border-t hover:bg-slate-50/50 transition">
                             <td class="p-4">
-                                <img src="${product.image || 'https://via.placeholder.com/50'}" class="w-12 h-12 rounded-lg object-cover border">
+                                <img src="${product.image || 'https://via.placeholder.com/50'}" class="w-10 h-14 rounded object-contain border bg-slate-50 p-1">
                             </td>
-                            <td class="p-4">${product.name}</td>
-                            <td class="p-4">${product.sku}</td>
-                            <td class="p-4">${product.category?.name || "-"}</td>
-                            <td class="p-4">${product.stock}</td>
-                            <td class="p-4">₹${product.price}</td>
+                            <td class="p-4">
+                                <div class="font-bold text-slate-800">${product.name}</div>
+                                <div class="text-xs text-slate-400">by ${product.author || 'Unknown'}</div>
+                            </td>
+                            <td class="p-4 font-mono text-xs text-slate-500">${product.sku}</td>
+                            <td class="p-4 text-sm text-slate-600">${product.category?.name || "-"}</td>
+                            <td class="p-4 text-sm font-semibold">${product.stock}</td>
+                            <td class="p-4 font-bold text-slate-800">₹${product.price}</td>
                             <td class="p-4">${stockStatus}</td>
                             <td class="p-4 text-center">
-                                <button onclick="editProduct('${product._id}')" class="text-blue-600 mr-3">
+                                <button onclick="editProduct('${product._id}')" class="text-indigo-600 hover:text-indigo-950 p-2 transition mr-2" title="Edit book details">
                                     <i class="fa-solid fa-pen"></i>
                                 </button>
-                                <button onclick="deleteProduct('${product._id}')" class="text-red-600">
+                                <button onclick="deleteProduct('${product._id}')" class="text-rose-600 hover:text-rose-950 p-2 transition" title="Delete book">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </td>
                         </tr>
                     `;
                 });
+
+                document.getElementById("showingCount").innerText = `Showing 1-${totalProducts} of ${totalProducts} Products`;
             } catch (error) {
-                console.log(error);
+                console.error("Error loading products:", error);
             }
         }
 
+        function resetForm() {
+            editingProductId = null;
+            originalCoverUrl = "";
+
+            document.getElementById("productForm").reset();
+            document.getElementById("formTitle").innerText = "Add New Product";
+            document.getElementById("submitBtnText").innerText = "Add Product";
+            document.getElementById("cancelEditBtn").classList.add("hidden");
+
+            document.getElementById("imagePreviewContainer").classList.add("hidden");
+            document.getElementById("imagePreview").src = "";
+        }
+
+        document.getElementById("cancelEditBtn").addEventListener("click", resetForm);
+
+        // Submit form (Add or Edit)
         document.getElementById("productForm").addEventListener("submit", async (e) => {
             e.preventDefault();
 
             const formData = new FormData();
-            formData.append("name", document.getElementById("productName").value);
-            formData.append("sku", document.getElementById("sku").value);
+            formData.append("name", document.getElementById("productName").value.trim());
+            formData.append("sku", document.getElementById("sku").value.trim());
             formData.append("category", document.getElementById("category").value);
             formData.append("stock", document.getElementById("stock").value);
             formData.append("price", document.getElementById("price").value);
-            formData.append("discountPrice", document.getElementById("discountPrice").value);
-            formData.append("description", document.getElementById("description").value);
+            formData.append("author", document.getElementById("author").value.trim());
+            formData.append("language", document.getElementById("language").value.trim());
+            formData.append("pages", document.getElementById("pages").value || "0");
+            formData.append("deliveryInfo", document.getElementById("deliveryInfo").value.trim());
+            formData.append("returnPolicy", document.getElementById("returnPolicy").value.trim());
+            formData.append("description", document.getElementById("description").value.trim());
 
-            const fileInput = document.getElementById("productImage");
-            if (fileInput.files[0]) {
-                formData.append("image", fileInput.files[0]);
+            const coverInput = document.getElementById("productImage");
+            if (coverInput.files[0]) {
+                formData.append("image", coverInput.files[0]);
+            } else if (originalCoverUrl) {
+                formData.append("image", originalCoverUrl);
             }
 
             try {
@@ -626,64 +563,61 @@
                 const data = await response.json();
                 if (response.ok) {
                     showToast(data.message || "Product saved successfully");
+                    resetForm();
+                    loadProducts();
                 } else {
                     showToast(data.message || "Failed to save product", "error");
                 }
-
-                // Reset editing state and form
-                editingProductId = null;
-                document.getElementById("productForm").reset();
-                document.getElementById("imagePreviewContainer").classList.add("hidden");
-                document.getElementById("imagePreview").src = "";
-                document.querySelector("#productForm button").innerHTML = '<i class="fa-solid fa-plus mr-2"></i> Add Product';
-
-                loadProducts();
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 showToast("Cannot connect to server", "error");
             }
         });
 
         async function editProduct(id) {
+            resetForm();
             editingProductId = id;
+            document.getElementById("formTitle").innerText = "Edit Book Details";
+            document.getElementById("submitBtnText").innerText = "Update Product";
+            document.getElementById("cancelEditBtn").classList.remove("hidden");
+
             try {
                 const response = await fetch(`${API_BASE_URL}/api/products/${id}`);
                 const product = await response.json();
 
                 document.getElementById("productName").value = product.name;
                 document.getElementById("sku").value = product.sku;
-                document.getElementById("category").value = product.category._id;
-                document.getElementById("stock").value = product.stock;
-                document.getElementById("price").value = product.price;
-                document.getElementById("discountPrice").value = product.discountPrice;
-                document.getElementById("description").value = product.description;
+                document.getElementById("category").value = product.category?._id || "";
+                document.getElementById("stock").value = product.stock || 0;
+                document.getElementById("price").value = product.price || 0;
+                document.getElementById("author").value = product.author || "";
+                document.getElementById("language").value = product.language || "English";
+                document.getElementById("pages").value = product.pages || 0;
+                document.getElementById("deliveryInfo").value = product.deliveryInfo || "";
+                document.getElementById("returnPolicy").value = product.returnPolicy || "";
+                document.getElementById("description").value = product.description || "";
 
-                // Show preview of current image
-                const previewContainer = document.getElementById("imagePreviewContainer");
-                const previewImage = document.getElementById("imagePreview");
-                if (product.image) {
-                    previewImage.src = product.image;
-                    previewContainer.classList.remove("hidden");
-                } else {
-                    previewImage.src = "";
-                    previewContainer.classList.add("hidden");
+                originalCoverUrl = product.image || "";
+
+                if (originalCoverUrl) {
+                    document.getElementById("imagePreview").src = originalCoverUrl;
+                    document.getElementById("imagePreviewContainer").classList.remove("hidden");
                 }
-
-                document.querySelector("#productForm button").innerHTML = '<i class="fa-solid fa-pen mr-2"></i> Update Product';
 
                 window.scrollTo({
                     top: 0,
                     behavior: "smooth"
                 });
             } catch (err) {
-                console.log(err);
+                console.error("Error fetching product details for editing:", err);
+                showToast("Error loading product details", "error");
             }
         }
 
         async function deleteProduct(id) {
             showConfirmModal(
-                "Delete Product",
-                "Are you sure you want to delete this product? This action cannot be undone.",
+                "Delete Book",
+                "Are you sure you want to delete this book? This action cannot be undone.",
                 async () => {
                     try {
                         const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
@@ -692,12 +626,12 @@
                         const data = await response.json();
                         if (response.ok) {
                             showToast(data.message || "Product deleted successfully");
+                            loadProducts();
                         } else {
                             showToast(data.message || "Failed to delete product", "error");
                         }
-                        loadProducts();
                     } catch (error) {
-                        console.log(error);
+                        console.error("Error deleting product:", error);
                         showToast("Error deleting product", "error");
                     }
                 }
@@ -708,8 +642,6 @@
         loadCategories();
         loadProducts();
     </script>
-
-
 
     <script src="admin-responsive.js"></script>
 </body>

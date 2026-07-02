@@ -299,20 +299,39 @@
         }
     `;
 
-    const styleEl = document.createElement('style');
-    styleEl.innerHTML = styles;
-    document.head.appendChild(styleEl);
+    // Defer body-dependent setup until DOM is ready
+    let toastContainer = null;
 
-    // Initialize Toast Container
-    let toastContainer = document.querySelector('.toast-container');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.className = 'toast-container';
-        document.body.appendChild(toastContainer);
+    function initDOM() {
+        // Inject styles
+        if (!document.getElementById('__readify_alert_styles__')) {
+            const styleEl = document.createElement('style');
+            styleEl.id = '__readify_alert_styles__';
+            styleEl.innerHTML = styles;
+            document.head.appendChild(styleEl);
+        }
+
+        // Create toast container
+        toastContainer = document.querySelector('.toast-container');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.className = 'toast-container';
+            document.body.appendChild(toastContainer);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initDOM);
+    } else {
+        // DOM already ready (script loaded at end of body)
+        initDOM();
     }
 
     // 2. Global Toast Function
     window.showToast = function(message, type = 'success', duration = 3000) {
+        // Ensure container exists (lazy fallback)
+        if (!toastContainer) { initDOM(); }
+
         const toast = document.createElement('div');
         toast.className = `premium-toast toast-${type}`;
 
