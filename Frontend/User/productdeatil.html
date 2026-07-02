@@ -476,6 +476,7 @@
             font-size: 13px;
         }
     </style>
+    <script src="../apiConfig.js"></script>
 </head>
 
 <body>
@@ -620,35 +621,6 @@
             </div>
         </div>
 
-        <!-- Customer Reviews Section -->
-        <section class="reviews-section">
-            <h3 class="font-serif font-bold text-2xl text-slate-800 mb-6">Customer Reviews</h3>
-            
-            <div id="reviewsContainer" style="margin-bottom: 24px;">
-                <!-- Dynamic Reviews -->
-            </div>
-
-            <!-- Write Review Form -->
-            <form id="writeReviewForm" style="max-width: 600px; background: var(--white); padding: 24px; border-radius: 20px; border: 1px solid var(--border-color);">
-                <h4 class="font-bold text-slate-800 mb-4">Write a Review</h4>
-                <div class="mb-4">
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Rating</label>
-                    <div class="flex gap-2 text-2xl cursor-pointer" id="reviewRatingStars">
-                        <span class="star-select text-amber-400" data-rating="1">★</span>
-                        <span class="star-select text-amber-400" data-rating="2">★</span>
-                        <span class="star-select text-amber-400" data-rating="3">★</span>
-                        <span class="star-select text-amber-400" data-rating="4">★</span>
-                        <span class="star-select text-amber-400" data-rating="5">★</span>
-                    </div>
-                    <input type="hidden" id="selectedReviewRating" value="5">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Comment</label>
-                    <textarea id="reviewComment" rows="4" style="width:100%; border:1px solid var(--border-color); border-radius:12px; padding:12px; font-size:14px; outline:none; focus:border-indigo-500" placeholder="Describe your experience with this book..." required></textarea>
-                </div>
-                <button type="submit" class="btn-action-primary" style="width: auto; padding: 10px 24px; font-size: 13.5px; border-radius: 12px;">Submit Review</button>
-            </form>
-        </section>
     </main>
 
     <!-- Modern Footer -->
@@ -868,9 +840,6 @@
             if (count === 0) {
                 document.getElementById("averageRatingText").textContent = "0.0";
                 document.getElementById("starsHeader").style.width = "0%";
-                document.getElementById("reviewsContainer").innerHTML = `
-                    <div style="text-align: center; padding: 24px; color: var(--text-light); font-size: 14px;">No reviews yet. Be the first to review this book!</div>
-                `;
                 return;
             }
 
@@ -878,32 +847,6 @@
             const avg = (sum / count).toFixed(1);
             document.getElementById("averageRatingText").textContent = avg;
             document.getElementById("starsHeader").style.width = `${(avg / 5) * 100}%`;
-
-            const container = document.getElementById("reviewsContainer");
-            container.innerHTML = "";
-
-            reviews.forEach(review => {
-                const starPct = (review.rating / 5) * 100;
-                const reviewDate = new Date(review.createdAt).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
-                
-                container.innerHTML += `
-                    <div class="review-card">
-                        <div class="review-header">
-                            <div>
-                                <strong style="color: var(--text-dark);">${review.userName}</strong>
-                                <span style="margin-left: 8px; font-size: 11px; background: #ECFDF5; color: #10B981; padding: 1px 6px; border-radius: 100px; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Verified Purchase</span>
-                            </div>
-                            <span style="color: var(--text-light);">${reviewDate}</span>
-                        </div>
-                        <div style="margin-bottom: 6px;">
-                            <div class="stars-outer" style="font-size: 13px;">
-                                <div class="stars-inner" style="width: ${starPct}%;"></div>
-                            </div>
-                        </div>
-                        <p style="font-size: 14px; color: var(--text-light);">${review.comment}</p>
-                    </div>
-                `;
-            });
         }
 
         // Qty controls
@@ -922,57 +865,6 @@
             }
             qtyInput.value = qty;
         }
-
-        // Rating select interactive helper
-        let activeSelectRating = 5;
-        document.querySelectorAll(".star-select").forEach(star => {
-            star.addEventListener("click", () => {
-                const rating = parseInt(star.getAttribute("data-rating"));
-                activeSelectRating = rating;
-                document.getElementById("selectedReviewRating").value = rating;
-
-                document.querySelectorAll(".star-select").forEach(s => {
-                    const r = parseInt(s.getAttribute("data-rating"));
-                    s.className = r <= rating ? "star-select text-amber-400" : "star-select text-slate-300";
-                });
-            });
-        });
-
-        // Submit review Form
-        document.getElementById("writeReviewForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const userId = localStorage.getItem("userId");
-            const userName = localStorage.getItem("userName") || "Book Lover";
-
-            if (!userId) {
-                openLoginModal();
-                return;
-            }
-
-            const comment = document.getElementById("reviewComment").value.trim();
-            const rating = parseInt(document.getElementById("selectedReviewRating").value);
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/products/${productId}/reviews`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ userId, userName, rating, comment })
-                });
-
-                if (response.ok) {
-                    showToast("Review submitted successfully!");
-                    document.getElementById("reviewComment").value = "";
-                    loadProduct();
-                } else {
-                    const err = await response.json();
-                    showToast(err.message || "Failed to submit review", "error");
-                }
-            } catch (err) {
-                console.error(err);
-                showToast("Something went wrong", "error");
-            }
-        });
 
         // Add to cart
         document.getElementById("addToCartBtn").addEventListener("click", async () => {

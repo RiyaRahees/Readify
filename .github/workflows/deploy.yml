@@ -32,9 +32,15 @@ jobs:
             echo "Restart backend..."
             pm2 restart readify-backend
 
+            cd ..
+
             echo "Deploy frontend..."
             sudo rm -rf /var/www/readify/*
+
             sudo cp -r /home/ubuntu/Readify/Frontend/User/* /var/www/readify/
+
+            # Copy apiConfig.js
+            sudo cp /home/ubuntu/Readify/Frontend/apiConfig.js /var/www/readify/
 
             echo "Reload nginx..."
             sudo systemctl reload nginx
