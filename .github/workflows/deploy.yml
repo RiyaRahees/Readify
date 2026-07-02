@@ -39,6 +39,9 @@ jobs:
 
             sudo cp -r /home/ubuntu/Readify/Frontend/User/* /var/www/readify/
 
+            # Copy Admin folder
+            sudo cp -r /home/ubuntu/Readify/Frontend/Admin /var/www/readify/
+
             # Copy apiConfig.js
             sudo cp /home/ubuntu/Readify/Frontend/apiConfig.js /var/www/readify/
 
