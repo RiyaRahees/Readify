@@ -317,31 +317,43 @@ body {
         display: none;
     }
     
-    /* Mobile Dashboard Navigation Grid */
+    /* Make the menu items horizontal and scrollable! */
     .sidebar-menu {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-        padding-bottom: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 6px;
+        padding: 8px 4px;
+        overflow-x: visible;
+        white-space: nowrap;
+    }
+    
+    /* Hide scrollbar on mobile */
+    .sidebar-menu::-webkit-scrollbar {
+        display: none;
     }
     
     .menu-item {
-        display: flex;
-        flex-direction: column;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        text-align: center;
-        padding: 10px 4px;
-        font-size: 11px;
-        border-radius: 12px;
-        gap: 5px;
         margin-bottom: 0;
+        padding: 10px !important;
+        font-size: 0 !important; /* Hide text label on mobile screens */
+        border-radius: 12px;
         flex-shrink: 0;
+        transition: var(--transition);
     }
-    
+
+    .menu-item.active {
+        font-size: 13px !important; /* Show active text label */
+        padding: 8px 14px !important;
+        gap: 6px;
+    }
+
     .menu-item i, .menu-item svg {
-        width: 20px;
-        height: 20px;
+        width: 18px !important;
+        height: 18px !important;
     }
     
     .menu-item:hover {
@@ -349,16 +361,9 @@ body {
     }
     
     .logout-item {
-        grid-column: span 3;
-        flex-direction: row;
-        gap: 8px;
-        background: #fef2f2;
-        color: #ef4444;
-        border: 1px dashed rgba(239, 68, 68, 0.2);
-        padding: 8px;
-        justify-content: center;
-        border-radius: 12px;
-        margin-top: 4px;
+        border-top: none;
+        padding: 10px !important;
+        margin-top: 0;
     }
     
     /* Stats Grid spacing */
