@@ -551,6 +551,11 @@ async function loadAddresses() {
     const addresses =
         await response.json();
 
+    if (addresses.length === 1 && !addresses[0].isDefault) {
+        setDefaultAddress(addresses[0]._id);
+        return;
+    }
+
     const container =
         document.getElementById("addressContainer");
 
@@ -579,8 +584,9 @@ async function loadAddresses() {
                 <button
                     class="action-btn text-danger"
                     onclick="deleteAddress('${address._id}')"
-                    style="color: #ef4444 !important;">
-                    Delete
+                    style="color: #ef4444 !important;"
+                    title="Delete Address">
+                    <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
                 </button>
 
                 ${!isDefault ? `
@@ -602,6 +608,8 @@ async function loadAddresses() {
         `;
     }).join("");
 
+    // Parse dynamic Lucide icons
+    lucide.createIcons();
 }
 
 async function setDefaultAddress(id) {

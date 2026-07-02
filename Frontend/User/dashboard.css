@@ -324,22 +324,15 @@ body {
         gap: 10px;
         overflow-x: auto;
         white-space: nowrap;
-        padding-bottom: 12px;
+        padding-bottom: 8px;
         -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Hide scrollbar in Firefox */
+        -ms-overflow-style: none;  /* Hide scrollbar in IE/Edge */
     }
     
-    /* Sleek visible scrollbar for horizontal mobile tabs */
+    /* Hide scrollbar on mobile */
     .sidebar-menu::-webkit-scrollbar {
-        height: 5px;
-        display: block;
-    }
-    .sidebar-menu::-webkit-scrollbar-track {
-        background: #f1f5f9;
-        border-radius: 10px;
-    }
-    .sidebar-menu::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 10px;
+        display: none;
     }
     
     .menu-item {
